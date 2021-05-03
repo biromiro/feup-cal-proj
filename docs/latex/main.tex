@@ -43,9 +43,9 @@
 \subtitle{Algorithm Design and Analysis}
 %\department{Department of Anything but Psychology}
 \title{Looking for a parking place}
-\author{\textit{Authors}\\André \textsc{Moreira}
-        \\Nuno \textsc{Alves}
-        \\Nuno \textsc{Costa}}
+\author{\textit{Authors}\\André \textsc{Moreira}, 201904721
+        \\Nuno \textsc{Alves}, 201908250
+        \\Nuno \textsc{Costa}, 201906272}
 %\supervisor{Linus \textsc{Torvalds}}
 %\context{Well, I was bored...}
 \date{\today}
@@ -95,9 +95,9 @@
     
     Furthermore, people don't always know where the parking spots are located and which ones are available, which may result in congested city traffic, parking allocation inefficiency or time wasted in the inevitable task of finding a parking place.
     
-    The problem analysed in this project derives from the Travelling Salesman Problem. Given the starting and destination locations, a suitable parking spot, as well as the path to it, should be found. For this, the chosen solution must account for a set of variables and restrictions. The chosen parking spot must be available, close to the destination location - within reasonable walking distance -, should be as cheap as possible and the path's distance must also be as short as possible.
+    The problem that will be analysed in this project derives from the Travelling Salesman Problem. Given the origin and destination locations, a suitable parking spot, as well as the path to it that goes through all chosen points of interest, should be found. For this, the chosen solution must account for a set of variables and restrictions. The chosen parking spot must be available, close to the destination location - within reasonable walking distance -, should be as cheap as possible and the path's distance must also be as short as possible.
     
-    However, meeting all these conditions and obtaining the best solution possible can become costly, especially as the problem's size grows. Time complexity is an important measure to calculate the viability of an algorithm and solution.
+    However, meeting all these conditions and obtaining the best solution possible can become time costly, especially as the problem's size grows. Time complexity is an important measure to calculate the viability of an algorithm and should be also accounted for.
     
     With all of this in mind, the following report seeks to solve this problem and all of its intricacies, aiming for a real-life solution to the problem.
     
@@ -110,7 +110,8 @@
     
     \section{Input Data} \label{idata}
     
-    All the needed information to compute a solution for the problem is defined below.
+    All the needed information to compute a solution for the problem is defined below. It should be noted that the following structures represent the input data needed - additional parameters may be added to the structures defined below for the algorithms that need them.
+    
     \subsection{Definition}
     
     \begin{enumerate}
@@ -135,7 +136,7 @@
                 \end{enumerate}
                 \item If N is not a parking lot, $P_{info}(N_k) = (r_{parking})$, where
                 \begin{enumerate}
-                    \item $r_{parking}$ is a boolean that defines whether or not this node requires nearby parking, in case of it being a POI for the user, 
+                    \item $r_{parking}$ is a boolean that defines whether or not this node requires nearby parking, in case of it being a POI for the user.
                 \end{enumerate}
             \end{enumerate}
         \end{enumerate}
@@ -151,6 +152,7 @@
         \item $D$ is the destination node, $D \in N$.
         \item $POI$ are the nodes/points of interest which the traveler must visit before reaching node $D$, $POI \subseteq N$.
         \item $t_{parking}$ is the array with the parking times of each POI/Destination.
+        \item $d_{threshold}$ is the distance the user is willing to walk at most.
     \end{enumerate}
     
     \subsection{Constraints}
@@ -172,6 +174,7 @@
         \item $O \neq D$
         \item $\forall \: t_k \in t_{parking}: \: t_k > 0$
         \item $|t_{parking}| = |POI| + 1$, which means that every park chosen must have a parking time associated to it (for each POI and destination).
+        \item $d_{threshold}$ > 0.
     \end{enumerate}
     
     \pagebreak
@@ -245,7 +248,7 @@
     
     As explained above, the intention is to minimize the cost, which means that the objective function is also defined by $min(cost_2(d_v))$. This can be simplified to $min(d_v)$.
     
-    Lastly, we need to join both this approaches and apply them to each origin-POI, POI-POI or POI-destination (origin-destination if no POI exist) path. There's two way to look at the problem given: either the user already gives an order to search each POI towards the destination node, or the application must be capable of choosing a fitting order (as it must pass through all of them).
+    Lastly, we need to join both this approaches and apply them to each origin-POI, POI-POI or POI-destination (origin-destination if no POI exist) path. There's two ways to look at the problem given: either the user already gives an order to search each POI towards the destination node, or the application must be capable of choosing a fitting order (as it must pass through all of them).
     
     If the first situation is at hand, the problem is reduced to applying the first two objective functions to each pair. 
     
@@ -276,15 +279,88 @@
     
     Secondly, having the selected parking spot defined, a simple Shortest Path algorithm can be used to find the shortest path between that and the origin node. With that path defined, the solution for the sub-path of the total tour is found. As such, this solution must be applied to all sub-paths of the tour, which is defined either by input or by using a TSP solving algorithm. When all sub-paths are solved, the complete solution is finally defined.
     
+    However, it is important to firstly check that the graph given is connected, so that it is assured that a solution can be found.
+    
+    \subsection{Verifying Graph's Connectivity}
+    
+    For this solution, it is important that the given graph is strongly connected. In fact, a weakly connected graph would not be enough for the purposes of this problem since it would be possible to select a node that had no path to another selected node. Even if the given graph was unilaterally connected, it wouldn't be enough since the user should have the liberty to travel the opposite direction. As such, a strongly connected graph, which has a path between any pair of nodes (u,v), both from u to v and from v to u, must be given as input.
+    
+    To verify this condition, a pre-processing algorithm must be run on the graph.
+    
+    \subsubsection{Strongly Connected Components}
+    
+    A SSC (short for Strongly Connected Component) is defined as a graph's cycle in which any node can reach any other node in the same SSC.
+    
+    As explained previously, we must guarantee that the graph is strongly connected. A smart way to do that is to assure that the graph has one and only one SSC. To do this, we can use a SSC algorithm.
+    
+    There are several algorithms for this purpose, such as the Kosaraju's algorithm and Path-Based strong component algorithm, but we'll focus on the Tarjan's algorithm, due to its $O(|V|+|E|)$ linear time complexity.
+    
+    \subsubsection{Tarjan's Algorithm}
+    
+    To understand Tarjan's algorithm, one must first understand the concept of \textbf{low-link values}. A low-link value of a node is the smallest node ID reachable when doing a Depth First Search algorithm from that same node (including itself).
+    
+    After calculating each node's low-link, it is possible to infer what SSC exist in a graph, since every node in a given SSC will have the same low-link value.
+    
+    However, this might not be true for every case. This low-link calculation for each node is highly dependent on the Depth First Search algorithm. Diferent traversals will most likely result in diferent results, which can't be true since an unchanged graph should still have the same SSC, no matter the traversal \cite{tarjan}.
+    
+    To fix this flaw, the Tarjan's algorithm uses what is called the \textbf{stack invariant}. This invariant keeps the valid nodes from which to update low-link values from. As such, nodes are added when they are first encountered and removed when a new SCC is found. With this, the SCC aren't 'contaminated' by other SCC upon the Depth First Search since it is possible to check whether or not the node we're currently comparing to belongs to an already closed SCC (that is, if it isn't on the stack).
+    
+    The pseudo-code for this algorithm can be defined as follows:
+    
+    \begin{algorithm}[H]
+    	\caption{Tarjan's Algorithm Adaptation} 
+	    \begin{algorithmic}[1]
+	    \State $sccs \leftarrow 0$
+	    \State $currentID \leftarrow 0$
+	    \State $stack \leftarrow emptystack()$
+	    \State
+	    \For{$node \in N$}
+	        \State $visited(node) \leftarrow false$
+	    \EndFor
+	    \For{$node \in N$}
+	        \If{not $visited(node)$}
+	            \State $dfs(node)$
+	        \EndIf
+	    \EndFor
+		\State \textbf{return} $sccs$ equals $1$
+	    \end{algorithmic} 
+    \end{algorithm}
+    \begin{algorithm}[H]
+    	\caption{DFS function}
+    	\begin{algorithmic}[1]
+	        \State $push(stack, node)$
+	        \State $id(node) \leftarrow currentID$
+	        \State $lowlink(node) \leftarrow currentID$
+	        \State $currentId \leftarrow currentID + 1$
+	        \State
+	        \For{\textbf{each} $adj \in adj(node)$}
+	            \If{not $visited(adj)$}
+	                \State $dfs(adj)$
+	            \EndIf
+	            \If{$adj \in stack$}
+	                \State $lowlink(adj) \leftarrow min(lowlink(adj), lowlink(node))$
+	            \EndIf
+	        \EndFor
+	        
+	        \State
+	        \If{$id(node)$ equals $lowlink(node)$}
+	            \While{$pop(stack)$ differs from $node$}
+	            \EndWhile
+	            \State $sccs \leftarrow sccs + 1$
+	        \EndIf
+	    \end{algorithmic} 
+    \end{algorithm}
+
+        
+    With the return value of the previously shown function, it is possible to confirm whether or not the graph is strongly connected. It must be noted, however, that this algorithm opens up possibilities for the solution: if the graph given by input is not strongly connected, but if the nodes given as Origin, points of interest and Destination by the user belong to the same SCC, the algorithm can still run normally (assuming that the SCC has parking spots, which is problem that may be detected later on). This will be taken into consideration upon the implementation.
+    
     \subsection{Selecting the best parking spot}  \label{selectpark}
     
     As mentioned, an SSSP algorithm must be used for this part of the solution. For that, a Dijkstra Shortest Path algorithm was chosen (with a time complexity of $O(|E| + |V|log(|V|))$ - using a priority queue).
     
     In order to fulfill the needs of the problem at hand, the algorithm must be modified. As previously mentioned, the user must set a threshold that defines the maximum distance he's willing to walk. The use of a priority queue makes it easier to know when that threshold was surpassed (by definition, we will work with a strictly increasing distance between the source node and current node). 
     
-    However, setting only one threshold might not be correct. In a less crowded place, one might find a lot of parking spots in just under 300 meters of the destination, while in some other places with great turnout, there might be fewer spots throughout a much greater area. As such, to better solve these cases, two thresholds were set, according to the user's max threshold choice.
-    
-    \pagebreak
+    However, setting only one threshold might not be correct. In a less crowded place, one might find a lot of parking spots in just under 300 meters of the destination, while in some other places with great turnout, there might be fewer available spots throughout a much greater area. As such, to better solve these cases, two thresholds were set, according to the user's max threshold choice.
     
     The following algorithm pseudo-code solves the presented problem.
     
@@ -355,7 +431,7 @@
         h(node) & an approximation of the distance from the current node to the destination node \\
     \end{conditions}
     
-    This approximation distance can be calculated in one of many ways. An easy way to do that would be to consider the remaining distance to the destination node to be the straight line that connects the current node and the destination node. In fact, choosing this distance will make A* always achieve the best solution possible, since it is never an overestimating heuristic of the real remaining distance (as proven in \cite{heuristics}, it is an \textit{admissable} heuristic). However, to make a straight line length calculation, one must use the square root operation, which may not be as efficient. As such, one can use the Manhattan distance, which can be an overestimation of the result in this problem (since it is not a grid map, the user can in fact travel in the shortest diagonal between the two points), and may in fact not lead to the most optimal solution.
+    This approximation distance can be calculated in one of many ways. An easy way to do that would be to consider the remaining distance to the destination node to be the straight line that connects the current node and the destination node. In fact, choosing this distance will make A* always achieve the best solution possible, since it is never an overestimating heuristic of the real remaining distance (as proven in \cite{heuristics}\cite{adaixo}, it is an \textit{admissable} heuristic). However, to make a straight line length calculation, one must use the square root operation, which may not be as efficient. As such, one can use the Manhattan distance, which can be an overestimation of the result in this problem (since it is not a grid map, the user can in fact travel in the shortest diagonal between the two points), and may in fact not lead to the most optimal solution.
     
     With this in mind, it possible to define several distance functions. Since we're given (latitude, longitude) pairs for each node, and the calculation of geodesic distances with the Haversine or Great-circle distance functions is not properly efficient, a variation was found. As such, the straight line distance function can be defined as ($d_{meridian}$ and $d_{equator}$ explained in \cite{distance}):
     
@@ -600,8 +676,8 @@
             \node[main] (5) [above left of=4] {$p3$};
         
             \draw[ultra thick] (1) -- node[midway, above, sloped]{$w_1$} (2);
-            \draw[ultra thick] (3) -- node[midway, right]{$w_2$} (5);
-            \draw[ultra thick] (4) -- node[midway, above, sloped]{$w_3$} (5);
+            \draw[ultra thick] (3) -- node[midway, right]{$w_3$} (5);
+            \draw[ultra thick] (4) -- node[midway, above, sloped]{$w_6$} (5);
             \draw[ultra thick] (2) -- node[midway, above, sloped]{$w_4$} (3);
             \draw[dashed] (5) -- (1);
             
@@ -622,7 +698,7 @@
             \node[main] (5) [above left of=4] {$p3$};
         
             \draw[ultra thick] (1) -- node[midway, above, sloped]{$w_2$} (3);
-            \draw[ultra thick] (3) -- node[midway, left]{$w_2$} (5);
+            \draw[ultra thick] (3) -- node[midway, left]{$w_3$} (5);
             \draw[ultra thick] (2) -- node[midway, right]{$w_5$} (5);
             \draw[ultra thick] (2) -- node[midway, below, sloped]{$w_4$} (4);
             \draw[dashed] (2) -- (1);
@@ -652,7 +728,7 @@
 
 	    \State $tour \leftarrow \{\}$
         \State $tree \leftarrow generateMst(O) \ // \ Either\ Kruskal's\ or\ Prim's\ algorithm,\ with\ O\ as\ root$ 
-        \State $dfsVisit(tour, current)$
+        \State $dfsVisit(tour, O)$
         \State $push(tour, D)$
 		
 	    \end{algorithmic} 
@@ -673,8 +749,8 @@
     The applicability of this project is based on user cooperation and shared information, but an admin is also needed.
         
     \begin{enumerate}
-        \item \textbf{User} - The application is centralized on the user. It will be him who will use the application to travel around the city and choose parameters to have a customized trip.
-        \item \textbf{Admin} - The admin account has the ability to manage parking spots, like adding or removing information to/from the map. 
+        \item \textbf{User} - The application is centralized on the user. It will be him who will use the application to travel around the city and choose parameters to have a customized trip. It will be also the user who'll make it possible to have relatively updated information concerning a park's current capacity.
+        \item \textbf{Admin} - The admin account has the ability to manage available parking spots and edit the map for unavailable streets, for example, adding or removing information to/from the map. 
     \end{enumerate}
     
     \section{Project Functionalities}
@@ -705,6 +781,22 @@
     Nevertheless, some issues may need to be addressed such as the work-around used to circumvent the impossibility of using directed graphs with the \textit{Minimum Spanning Trees} heuristic (subsection \ref{heuristics}) which can worsen its accuracy. In addition, finding the perfect compromise between complexity and accuracy (Subsection \ref{solution}), in choosing which algorithms to use in the Travelling Salesman Adaptation, can become hard as the line between what is considered a low or high amount of points of interest can be blurry.
     
     Despite these issues, the break down of the problem assigned to the group allowed a more organized, thought-out and coordinated solution which will surely reduce the complexity and time needed to fulfill the goals of the project.
+    
+    \pagebreak
+    
+    \chapter{Contributions}
+    
+    All members of the group worked together to come up with this solution and its report. The effort was distributed evenly and, as such, each member has a 33.3\% contribution rate. 
+    
+    All members were equally involved in the formalization of the problem and definition of the input data, output data, restrictions and objective functions.
+    
+    André Moreira took a deeper approach to the TSP problem, formalizing its heuristics and possible algorithms.
+    
+    Nuno Alves formalized the Dijkstra solution and its intricacies, as well as the use cases and main considerations to take from this project.
+    
+    Nuno Costa approached the graph connectivity problem and the A* adaptation for the path problem.
+    
+    It must be noted, however, that even though all members were involved in distinct parts in a deeper manner, the cooperation in all aspects and chapters of this report existed and was maintained throughout. 
     
     \pagebreak
     

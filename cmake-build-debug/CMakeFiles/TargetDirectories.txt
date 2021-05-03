@@ -1,0 +1,3 @@
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/cmake-build-debug/CMakeFiles/feup_cal_proj.dir
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/cmake-build-debug/CMakeFiles/rebuild_cache.dir
