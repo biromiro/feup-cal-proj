@@ -3,3 +3,7 @@
 
 CMakeFiles/feup_cal_proj.dir/main.cpp.obj
  C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/main.cpp
+ C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp
+ C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Graph.tpp
+ C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/MutablePriorityQueue.tpp
+ C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Node.tpp

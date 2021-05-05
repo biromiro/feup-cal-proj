@@ -87,6 +87,24 @@
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/main.cpp">
 			<Option target="feup_cal_proj"/>
 		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/algorithm/Connectivity.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Graph.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/MutablePriorityQueue.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Node.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graphLoad/GraphLoader.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

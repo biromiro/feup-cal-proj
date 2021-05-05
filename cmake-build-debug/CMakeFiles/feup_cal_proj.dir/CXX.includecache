@@ -7,4 +7,34 @@
 #IncludeRegexTransform: 
 
 C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/main.cpp
+src/utils/graph/Graph.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Graph.tpp
+
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp
+
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Graph.tpp
+Node.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Node.tpp
+Edge.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp
+vector
+-
+queue
+-
+limits
+-
+iostream
+-
+MutablePriorityQueue.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/MutablePriorityQueue.tpp
+
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/MutablePriorityQueue.tpp
+vector
+-
+
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Node.tpp
+Edge.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp
+MutablePriorityQueue.tpp
+C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/MutablePriorityQueue.tpp
 
