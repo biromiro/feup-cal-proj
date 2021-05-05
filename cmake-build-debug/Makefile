@@ -168,6 +168,60 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/utils/algorithm/Distances.obj: src/utils/algorithm/Distances.cpp.obj
+
+.PHONY : src/utils/algorithm/Distances.obj
+
+# target to build an object file
+src/utils/algorithm/Distances.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj
+.PHONY : src/utils/algorithm/Distances.cpp.obj
+
+src/utils/algorithm/Distances.i: src/utils/algorithm/Distances.cpp.i
+
+.PHONY : src/utils/algorithm/Distances.i
+
+# target to preprocess a source file
+src/utils/algorithm/Distances.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.i
+.PHONY : src/utils/algorithm/Distances.cpp.i
+
+src/utils/algorithm/Distances.s: src/utils/algorithm/Distances.cpp.s
+
+.PHONY : src/utils/algorithm/Distances.s
+
+# target to generate assembly for a file
+src/utils/algorithm/Distances.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.s
+.PHONY : src/utils/algorithm/Distances.cpp.s
+
+src/utils/graph/Position.obj: src/utils/graph/Position.cpp.obj
+
+.PHONY : src/utils/graph/Position.obj
+
+# target to build an object file
+src/utils/graph/Position.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj
+.PHONY : src/utils/graph/Position.cpp.obj
+
+src/utils/graph/Position.i: src/utils/graph/Position.cpp.i
+
+.PHONY : src/utils/graph/Position.i
+
+# target to preprocess a source file
+src/utils/graph/Position.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.i
+.PHONY : src/utils/graph/Position.cpp.i
+
+src/utils/graph/Position.s: src/utils/graph/Position.cpp.s
+
+.PHONY : src/utils/graph/Position.s
+
+# target to generate assembly for a file
+src/utils/graph/Position.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\feup_cal_proj.dir\build.make CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.s
+.PHONY : src/utils/graph/Position.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -180,6 +234,12 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... src/utils/algorithm/Distances.obj
+	@echo ... src/utils/algorithm/Distances.i
+	@echo ... src/utils/algorithm/Distances.s
+	@echo ... src/utils/graph/Position.obj
+	@echo ... src/utils/graph/Position.i
+	@echo ... src/utils/graph/Position.s
 .PHONY : help
 
 

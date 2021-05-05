@@ -23,39 +23,20 @@ class Graph {
     std::vector<Node<T> *> nodeSet;
 
 public:
-    Node<T>* findNode(const T &inf) const;
+    Node<T>* findNode(int id) const;
     std::vector<Node<T> *> getNodeSet() const;
-    Node<T> *addNode(const T &in);
-    Edge<T> *addEdge(const T &sourc, const T &dest, double capacity, double cost, double flow=0);
+    Node<T> *addNode(int ID, const T &in, Position pos);
+    Edge<T> *addEdge(int srcID, int destID, double cost);
 };
 
 template <class T>
-Node<T> * Graph<T>::addNode(const T &in) {
-    Node<T> *v = findNode(in);
+Node<T> * Graph<T>::addNode(int ID, const T &in, Position pos) {
+    Node<T> *v = findNode(ID);
     if (v != nullptr)
         return v;
-    v = new Node<T>(in);
+    v = new Node<T>(ID, in, pos);
     nodeSet.push_back(v);
     return v;
-}
-
-template <class T>
-Edge<T> * Graph<T>::addEdge(const T &sourc, const T &dest, double capacity, double cost, double flow) {
-    auto s = findNode(sourc);
-    auto d = findNode(dest);
-    if (s == nullptr || d == nullptr)
-        return nullptr;
-    Edge<T> *e = new Edge<T>(s, d, capacity, cost, flow);
-    s->addEdge(e);
-    return e;
-}
-
-template <class T>
-Node<T>* Graph<T>::findNode(const T & inf) const {
-    for (auto v : nodeSet)
-        if (v->info == inf)
-            return v;
-    return nullptr;
 }
 
 template <class T>
@@ -63,6 +44,24 @@ std::vector<Node<T> *> Graph<T>::getNodeSet() const {
     return nodeSet;
 }
 
+template<class T>
+Node<T> *Graph<T>::findNode(int id) const {
+    for (Node<T>* v : nodeSet)
+        if (v->getID() == id)
+            return v;
+    return nullptr;
+}
+
+template<class T>
+Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
+    auto s = findNode(srcID);
+    auto d = findNode(destID);
+    if (s == nullptr || d == nullptr)
+        return nullptr;
+    auto *e = new Edge<T>(s, d, cost);
+    s->addEdge(e);
+    return e;
+}
 
 
 #endif //FEUP_CAL_PROJ_GRAPH_TPP

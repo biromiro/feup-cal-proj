@@ -4,6 +4,7 @@
 #include "Edge.tpp"
 #include <limits>
 #include "MutablePriorityQueue.tpp"
+#include "Position.h"
 
 template <class T> class Graph;
 
@@ -17,19 +18,19 @@ constexpr auto INF = std::numeric_limits<double>::max();
 
 template <class T>
 class Node {
+    Node(int id, T in, Position pos);
     T info;
     std::vector<Edge<T> *> outgoing;
     std::vector<Edge<T> *> incoming;
-
     bool visited = false;
     Edge<T> *path;
     double dist = INF;
-    int id = 0;
+    int ID = 0;
+    int sccsID = 0;
     int queueIndex = 0;
     int lowlink = 0;
     bool inStack = false;
-
-    Node(T in);
+    Position pos;
     void addEdge(Edge<T> *e);
     bool operator<(Node<T> & node) const;
 
@@ -43,19 +44,38 @@ public:
     bool isVisited() const;
     Edge<T> *getPath() const;
     double getDist() const;
-    void setId(int id);
-    int getId() const;
+    void setID(int newID);
+    int getID() const;
+    int getSCCSID() const;
+    void setSCCSID(int sccsId);
     int getLowlink() const;
     void setLowlink(int lowlink);
     bool isInStack() const;
     void setInStack(bool inStack);
+    const Position &getPos() const;
+    void setPos(const Position &pos);
     friend class Graph<T>;
     friend class MutablePriorityQueue<Node<T>>;
 };
 
+template<class T>
+Node<T> *Edge<T>::getOrig() const {
+    return orig;
+}
+
+template<class T>
+Node<T> *Edge<T>::getDest() const {
+    return dest;
+}
+
+template<class T>
+double Edge<T>::getCost() const {
+    return cost;
+}
+
 
 template <class T>
-Node<T>::Node(T in): info(in) {}
+Node<T>::Node(int id, T in, Position pos): ID(id), info(in), pos(pos) {}
 
 template <class T>
 void Node<T>::addEdge(Edge<T> *e) {
@@ -114,13 +134,13 @@ double Node<T>::getDist() const {
 }
 
 template<class T>
-void Node<T>::setId(int id) {
-    Node::id = id;
+void Node<T>::setID(int newID) {
+    Node::ID = newID;
 }
 
 template<class T>
-int Node<T>::getId() const {
-    return id;
+int Node<T>::getID() const {
+    return ID;
 }
 
 template<class T>
@@ -141,6 +161,26 @@ bool Node<T>::isInStack() const {
 template<class T>
 void Node<T>::setInStack(bool inStack) {
     Node::inStack = inStack;
+}
+
+template<class T>
+int Node<T>::getSCCSID() const {
+    return sccsID;
+}
+
+template<class T>
+void Node<T>::setSCCSID(int sccsId) {
+    sccsID = sccsId;
+}
+
+template<class T>
+const Position &Node<T>::getPos() const {
+    return pos;
+}
+
+template<class T>
+void Node<T>::setPos(const Position &pos) {
+    Node::pos = pos;
 }
 
 

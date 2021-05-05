@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/feup_cal_proj.dir/main.cpp.obj"
+  "CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj"
+  "CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj"
   "feup_cal_proj.exe"
   "feup_cal_proj.exe.manifest"
   "feup_cal_proj.pdb"

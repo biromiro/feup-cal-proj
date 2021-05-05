@@ -36,6 +36,7 @@
 				<Compiler>
 					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/."/>
 					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src"/>
+					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
@@ -59,6 +60,7 @@
 				<Compiler>
 					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/."/>
 					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src"/>
+					<Add directory="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
 					<Add directory="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
@@ -90,6 +92,12 @@
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/algorithm/Connectivity.tpp">
 			<Option target="feup_cal_proj"/>
 		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/algorithm/Distances.cpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/algorithm/Distances.h">
+			<Option target="feup_cal_proj"/>
+		</Unit>
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Edge.tpp">
 			<Option target="feup_cal_proj"/>
 		</Unit>
@@ -102,7 +110,16 @@
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Node.tpp">
 			<Option target="feup_cal_proj"/>
 		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Position.cpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graph/Position.h">
+			<Option target="feup_cal_proj"/>
+		</Unit>
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graphLoad/GraphLoader.tpp">
+			<Option target="feup_cal_proj"/>
+		</Unit>
+		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/src/utils/graphLoad/NodeMode.h">
 			<Option target="feup_cal_proj"/>
 		</Unit>
 		<Unit filename="C:/Users/nrtc/Desktop/FEUP/feup-cal-proj/CMakeLists.txt">

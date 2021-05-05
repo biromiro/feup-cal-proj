@@ -15,7 +15,7 @@ public:
     bool isConnected();
     int getNumConnectedComponents();
 private:
-    int sccs = INF;
+    int sccs = -1;
     Graph<T> currentGraph;
     bool calculateTarjan();
     void dfs(int& currentID, Node<T> *node, std::stack<Node<T>*>& stack);
@@ -33,7 +33,7 @@ bool Connectivity<T>::isConnected() {
 
 template<class T>
 int Connectivity<T>::getNumConnectedComponents() {
-    if(sccs == INF) calculateTarjan();
+    if(sccs == -1) calculateTarjan();
     return sccs;
 }
 
@@ -41,13 +41,13 @@ template<class T>
 bool Connectivity<T>::calculateTarjan() {
     sccs = 0;
     int currentID = 0;
-    std::stack<Node<T>*> stack = std::stack<T>();
+    std::stack<Node<T>*> stack = std::stack<Node<T>*>();
 
     for(Node<T>* node: currentGraph.getNodeSet())
         node->setVisited(false);
 
     for(Node<T>* node: currentGraph.getNodeSet())
-        if(node->isVisited()) dfs(currentID, node, stack);
+        if(!(node->isVisited())) dfs(currentID, node, stack);
 
     return sccs == 1;
 }
@@ -55,21 +55,23 @@ bool Connectivity<T>::calculateTarjan() {
 template<class T>
 void Connectivity<T>::dfs(int &currentID, Node<T> *node, std::stack<Node<T>*> &stack) {
     stack.push(node);
+    node->setVisited(true);
     node->setInStack(true);
-    node->setId(currentID);
+    node->setSCCSID(currentID);
     node->setLowlink(currentID);
     currentID++;
 
-    for(Node<T>* adjacent: node->getOutgoing()){
-        if(adjacent->isVisited()) dfs(currentID, adjacent, stack);
-        if(node->isInStack()) adjacent->setLowlink(std::min(adjacent->getLowlink(), node->getLowlink()));
+    for(Edge<T>* adjacent: node->getOutgoing()){
+        Node<T>* adj = adjacent->getDest();
+        if(!(adj->isVisited())) dfs(currentID, adj, stack);
+        if(adj->isInStack()) node->setLowlink(std::min(adj->getLowlink(), node->getLowlink()));
     }
 
-    if(node->getId() == node->getLowlink()){
+    if(node->getSCCSID() == node->getLowlink()){
         Node<T> * cur;
         while((cur = stack.top()) != node){
             cur->setInStack(false);
-            stack.pop()
+            stack.pop();
         }
         cur->setInStack(false);
         stack.pop();

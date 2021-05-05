@@ -89,19 +89,51 @@ CMakeFiles/feup_cal_proj.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/feup_cal_proj.dir/main.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\main.cpp -o CMakeFiles\feup_cal_proj.dir\main.cpp.s
 
+CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj: CMakeFiles/feup_cal_proj.dir/flags.make
+CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj: CMakeFiles/feup_cal_proj.dir/includes_CXX.rsp
+CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj: ../src/utils/graph/Position.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\feup_cal_proj.dir\src\utils\graph\Position.cpp.obj -c C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\graph\Position.cpp
+
+CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\graph\Position.cpp > CMakeFiles\feup_cal_proj.dir\src\utils\graph\Position.cpp.i
+
+CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\graph\Position.cpp -o CMakeFiles\feup_cal_proj.dir\src\utils\graph\Position.cpp.s
+
+CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj: CMakeFiles/feup_cal_proj.dir/flags.make
+CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj: CMakeFiles/feup_cal_proj.dir/includes_CXX.rsp
+CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj: ../src/utils/algorithm/Distances.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\feup_cal_proj.dir\src\utils\algorithm\Distances.cpp.obj -c C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\algorithm\Distances.cpp
+
+CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\algorithm\Distances.cpp > CMakeFiles\feup_cal_proj.dir\src\utils\algorithm\Distances.cpp.i
+
+CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\src\utils\algorithm\Distances.cpp -o CMakeFiles\feup_cal_proj.dir\src\utils\algorithm\Distances.cpp.s
+
 # Object files for target feup_cal_proj
 feup_cal_proj_OBJECTS = \
-"CMakeFiles/feup_cal_proj.dir/main.cpp.obj"
+"CMakeFiles/feup_cal_proj.dir/main.cpp.obj" \
+"CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj" \
+"CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj"
 
 # External object files for target feup_cal_proj
 feup_cal_proj_EXTERNAL_OBJECTS =
 
 feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/main.cpp.obj
+feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/src/utils/graph/Position.cpp.obj
+feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/src/utils/algorithm/Distances.cpp.obj
 feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/build.make
 feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/linklibs.rsp
 feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/objects1.rsp
 feup_cal_proj.exe: CMakeFiles/feup_cal_proj.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable feup_cal_proj.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\nrtc\Desktop\FEUP\feup-cal-proj\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable feup_cal_proj.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\feup_cal_proj.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
