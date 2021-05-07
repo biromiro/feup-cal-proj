@@ -14,8 +14,8 @@ int main(){
                                 "resources/Espinho/SCC/espinho_strong_edges.txt",
                                 NodeMode::GRID);*/
 
-    GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
-                                "resources/OtherMaps/GridGraphs/4x4/edges.txt",
+    GraphLoader<string> gLoader("../resources/OtherMaps/GridGraphs/4x4/nodes.txt",
+                                "../resources/OtherMaps/GridGraphs/4x4/edges.txt",
                                 NodeMode::GRID);
     g = gLoader.getGraph();
 
