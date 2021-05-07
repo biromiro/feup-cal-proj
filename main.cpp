@@ -14,12 +14,12 @@ int main(){
                                 "resources/Espinho/SCC/espinho_strong_edges.txt",
                                 NodeMode::GRID);*/
 
-    /*GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
+    GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
                                 "resources/OtherMaps/GridGraphs/4x4/edges.txt",
                                 NodeMode::GRID);
-    g = gLoader.getGraph();*/
+    g = gLoader.getGraph();
 
-    g.addNode(1, " ", Position(NodeMode::GRID, 1, 1));
+    /*g.addNode(1, " ", Position(NodeMode::GRID, 1, 1));
     g.addNode(2, " ", Position(NodeMode::GRID, 2, 2));
     g.addNode(3, " ", Position(NodeMode::GRID, 3, 3));
     g.addNode(4, " ", Position(NodeMode::GRID, 4, 4));
@@ -35,7 +35,7 @@ int main(){
     g.addEdge(3, 5, 1.0);
     g.addEdge(5, 4, 2.0);
     g.addEdge(6, 7, 1.0);
-    g.addEdge(7, 6, 1.0);
+    g.addEdge(7, 6, 1.0);*/
 
     Connectivity<string> connect = Connectivity<string>(g);
     std::cout << connect.getNumConnectedComponents();
