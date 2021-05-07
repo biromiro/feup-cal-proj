@@ -14,7 +14,7 @@ public:
     void static dijkstraAdaptation(Graph<T>& graph, Node<T>* origin);
 
     template <class T>
-    void static aStarAdapatation(Graph<T>& graph, Node<T>* origin, Node<T>* dest);
+    void static aStarAdaptation(Graph<T>& graph, Node<T>* origin, Node<T>* dest);
 };
 
 template<class T>
@@ -23,7 +23,7 @@ void Pathfinding::dijkstraAdaptation(Graph<T> &graph, Node<T> *origin) {
 }
 
 template<class T>
-void Pathfinding::aStarAdapatation(Graph<T> &graph, Node<T> *origin, Node<T> *dest) {
+void Pathfinding::aStarAdaptation(Graph<T> &graph, Node<T> *origin, Node<T> *dest) {
 
 }
 
