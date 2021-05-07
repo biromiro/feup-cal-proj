@@ -6,7 +6,7 @@
 #include "src/utils/graph/Graph.tpp"
 #include <iostream>
 #include <algorithm/Connectivity.tpp>
-
+#include <algorithm/Pathfinding.h>
 int main(){
     Graph<string> g;
 
@@ -38,6 +38,7 @@ int main(){
     g.addEdge(7, 6, 1.0);*/
 
     Connectivity<string> connect = Connectivity<string>(g);
-    std::cout << connect.getNumConnectedComponents();
+    std::cout << connect.getNumConnectedComponents() << std::endl;
+    std::cout << Pathfinding::aStarAdaptation(g, 1, 23);
     return 0;
 }

@@ -58,21 +58,6 @@ public:
     friend class MutablePriorityQueue<Node<T>>;
 };
 
-template<class T>
-Node<T> *Edge<T>::getOrig() const {
-    return orig;
-}
-
-template<class T>
-Node<T> *Edge<T>::getDest() const {
-    return dest;
-}
-
-template<class T>
-double Edge<T>::getCost() const {
-    return cost;
-}
-
 
 template <class T>
 Node<T>::Node(int id, T in, Position pos): ID(id), info(in), pos(pos) {}

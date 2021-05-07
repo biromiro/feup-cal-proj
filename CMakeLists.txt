@@ -18,4 +18,4 @@ add_executable(feup_cal_proj
         src/utils/graph/Position.h
         src/utils/graphLoad/NodeMode.h
         src/utils/algorithm/Distances.cpp
-        src/utils/algorithm/Distances.h src/utils/algorithm/Pathfinding.cpp src/utils/algorithm/Pathfinding.h)
+        src/utils/algorithm/Distances.h src/utils/algorithm/Pathfinding.cpp src/utils/algorithm/Pathfinding.h src/utils/utilitaryStructures/HeuristicNode.h)
