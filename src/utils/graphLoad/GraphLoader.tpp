@@ -8,6 +8,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 #include <utils/graph/Graph.tpp>
 #include <utils/algorithm/Distances.h>
 #include "NodeMode.h"
@@ -17,23 +19,31 @@
 template <class T>
 class GraphLoader {
 public:
-    GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode);
+    GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode, const std::string& parks = "");
     Graph<T> getGraph();
 private:
     std::string nodePath;
     std::string edgePath;
+    std::string parksPath;
     NodeMode mode;
+    bool randomParkingMode = false;
+
+    void setRandomParkingMode();
 };
 
 template <class T>
-GraphLoader<T>::GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode) {
+GraphLoader<T>::GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode, const std::string& parks) {
     this->nodePath = nodes;
     this->edgePath = edges;
     this->mode = mode;
+    this->parksPath = parks;
+    if(parks == "") setRandomParkingMode();
 }
 
 template <class T>
 Graph<T> GraphLoader<T>::getGraph() {
+    if(this->randomParkingMode) srand((int)time(0));
+
     Graph<T> graph;
     std::ifstream nodeFile(nodePath);
     std::ifstream edgeFile(edgePath);
@@ -41,16 +51,17 @@ Graph<T> GraphLoader<T>::getGraph() {
 
     if(!nodeFile || !edgeFile) throw std::invalid_argument("Invalid file paths!");
 
-    int nodeNumber, nodeID;
+    int nodeNumber, nodeNumberCopy, nodeID;
     char sep;
     double x, y;
 
     nodeFile >> nodeNumber;
+    nodeNumberCopy = nodeNumber;
     std::getline(nodeFile, line);
 
-    T var;
-
     for(; nodeNumber > 0; nodeNumber--){
+        std::string var = "";
+        if(this->randomParkingMode && ((rand() % 10 + 1) == 1)) var = "PARKING";
         std::getline(nodeFile, line);
         std::stringstream s(line);
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
@@ -74,7 +85,16 @@ Graph<T> GraphLoader<T>::getGraph() {
         graph.addEdge(node1, node2, cost);
     }
 
+    if(!this->randomParkingMode) {
+        // Todo , read from file parking lots and info
+    }
+
     return graph;
+}
+
+template<class T>
+void GraphLoader<T>::setRandomParkingMode() {
+    this->randomParkingMode = true;
 }
 
 
