@@ -13,8 +13,6 @@
 #include <utils/graph/Graph.tpp>
 #include <utils/algorithm/Distances.h>
 #include "NodeMode.h"
-#include <direct.h>
-#include <windows.h>
 
 template <class T>
 class GraphLoader {
