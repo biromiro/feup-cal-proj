@@ -7,6 +7,7 @@
 #include "Position.h"
 
 template <class T> class Graph;
+template <class T> class UndirectedGraph;
 
 constexpr auto INF = std::numeric_limits<double>::max();
 
@@ -54,6 +55,8 @@ public:
     void setInStack(bool inStack);
     const Position &getPos() const;
     void setPos(const Position &pos);
+
+    friend class UndirectedGraph<T>;
     friend class Graph<T>;
     friend class MutablePriorityQueue<Node<T>>;
 };

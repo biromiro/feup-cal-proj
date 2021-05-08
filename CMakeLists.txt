@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(GOOGLETEST_PATH googletest)
 add_subdirectory(${GOOGLETEST_PATH})
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 include_directories(.)
 include_directories(src)
@@ -29,12 +29,12 @@ add_library(cal_lib
         src/utils/disjointSet/SetType.h
         src/utils/disjointSet/DisjointSet.h
         src/utils/algorithm/MinimumSpanningTrees.h
-        src/utils/disjointSet/DisjointSet.tpp)
+        src/utils/disjointSet/DisjointSet.tpp src/utils/graph/UndirectedGraph.tpp)
 
 add_executable(feup_cal_proj main.cpp)
 
 add_executable(feup_cal_proj_tests tests.cpp
-        test/DisjointSetTest.cpp)
+        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp)
 
 target_link_libraries(feup_cal_proj cal_lib)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)

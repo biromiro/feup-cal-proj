@@ -7,6 +7,7 @@
 
 template <class T> class Node;
 template <class T> class Graph;
+template <class T> class UndirectedGraph;
 
 /* ================================================================================================
  * Class Edge
@@ -28,6 +29,7 @@ public:
 
     double getCost() const;
 
+    friend class UndirectedGraph<T>;
     friend class Graph<T>;
     friend class Node<T>;
 };
