@@ -7,6 +7,8 @@ include_directories(.)
 include_directories(src)
 include_directories(src/utils)
 
+file(COPY resources DESTINATION .)
+
 add_executable(feup_cal_proj
         main.cpp
         src/utils/algorithm/Connectivity.tpp
