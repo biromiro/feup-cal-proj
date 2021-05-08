@@ -18,7 +18,6 @@ constexpr auto INF = std::numeric_limits<double>::max();
 
 template <class T>
 class Node {
-    Node(int id, T in, Position pos);
     T info;
     std::vector<Edge<T> *> outgoing;
     std::vector<Edge<T> *> incoming;
@@ -35,6 +34,7 @@ class Node {
     bool operator<(Node<T> & node) const;
 
 public:
+    Node(int id, T in, Position pos);
     T getInfo() const;
     std::vector<Edge<T> *> getIncoming() const;
     std::vector<Edge<T> *> getOutgoing() const;
