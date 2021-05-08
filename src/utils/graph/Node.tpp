@@ -76,6 +76,21 @@ double Edge<T>::getCost() const {
     return cost;
 }
 
+template<class T>
+void Edge<T>::select() {
+    this->selected = true;
+}
+
+template<class T>
+bool Edge<T>::isSelected() const {
+    return this->selected;
+}
+
+template<class T>
+Edge<T> *Edge<T>::getReverse() const {
+    return reverse;
+}
+
 
 template <class T>
 Node<T>::Node(int id, T in, Position pos): ID(id), info(in), pos(pos) {}

@@ -29,12 +29,12 @@ add_library(cal_lib
         src/utils/disjointSet/SetType.h
         src/utils/disjointSet/DisjointSet.h src/utils/disjointSet/DisjointSet.cpp
         src/utils/algorithm/MinimumSpanningTrees.h
-        src/utils/graph/UndirectedGraph.tpp)
+        src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp)
 
 add_executable(feup_cal_proj main.cpp)
 
 add_executable(feup_cal_proj_tests tests.cpp
-        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp)
+        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp)
 
 target_link_libraries(feup_cal_proj cal_lib)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)

@@ -36,6 +36,12 @@ public:
 
     double getCost() const;
 
+    Edge<T>* getReverse() const;
+
+    void select();
+
+    bool isSelected() const;
+
     friend class UndirectedGraph<T>;
 
     friend class Graph<T>;

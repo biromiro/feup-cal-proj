@@ -22,4 +22,8 @@ TEST(UndirectedGraph, addEdge) {
 
     EXPECT_EQ(node->getOutgoing().size(), node2->getOutgoing().size());
     EXPECT_EQ(node->getIncoming().size(), node2->getIncoming().size());
+    EXPECT_EQ(node, node->getOutgoing().at(0)->getOrig());
+    EXPECT_EQ(node2, node->getOutgoing().at(0)->getDest());
+    EXPECT_EQ(node2, node2->getOutgoing().at(0)->getOrig());
+    EXPECT_EQ(node, node2->getOutgoing().at(0)->getDest());
 }
