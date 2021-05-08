@@ -13,6 +13,7 @@
 #include <utils/graph/Graph.tpp>
 #include <utils/algorithm/Distances.h>
 #include "NodeMode.h"
+#include "MapData.h"
 
 template <class T>
 class GraphLoader {
@@ -58,13 +59,22 @@ Graph<T> GraphLoader<T>::getGraph() {
     std::getline(nodeFile, line);
 
     for(; nodeNumber > 0; nodeNumber--){
-        std::string var = "";
-        if(this->randomParkingMode && ((rand() % 10 + 1) == 1)) var = "PARKING";
+
+        node_data_t info;
+        info.nodeType = node_type_t::NORMAL;
+        if(this->randomParkingMode && ((rand() % 10 + 1) == 1)) {
+            info.nodeType = node_type_t::PARK;
+            info.nodeInfo.currentCapacity = 10;
+            info.nodeInfo.maxCapacity = 5;
+            info.nodeInfo.priceFunction = [this](int duration, int capacity, int currentCapacity) {
+                return 0;
+            };
+        }
         std::getline(nodeFile, line);
         std::stringstream s(line);
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
-        graph.addNode(nodeID, var, pos);
+        graph.addNode(nodeID, info, pos);
     }
 
     int edgeNumber;

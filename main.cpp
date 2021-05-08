@@ -8,13 +8,13 @@
 #include <algorithm/Connectivity.tpp>
 
 int main(){
-    Graph<string> g;
+    Graph<node_data_t> g;
 
     /*GraphLoader<string> gLoader("resources/Espinho/SCC/espinho_strong_nodes_xy.txt",
                                 "resources/Espinho/SCC/espinho_strong_edges.txt",
                                 NodeMode::GRID);*/
 
-    GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
+    GraphLoader<node_data_t> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
                                 "resources/OtherMaps/GridGraphs/4x4/edges.txt",
                                 NodeMode::GRID);
     g = gLoader.getGraph();
@@ -37,7 +37,7 @@ int main(){
     g.addEdge(6, 7, 1.0);
     g.addEdge(7, 6, 1.0);*/
 
-    Connectivity<string> connect = Connectivity<string>(g);
+    Connectivity<node_data_t> connect = Connectivity<node_data_t>(g);
     std::cout << connect.getNumConnectedComponents();
     return 0;
 }
