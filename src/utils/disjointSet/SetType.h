@@ -5,24 +5,23 @@
 #ifndef FEUP_CAL_PROJ_SETTYPE_H
 #define FEUP_CAL_PROJ_SETTYPE_H
 
-template <class T> class DisjointSet;
+class DisjointSet;
 
-template <class T>
 class SetType {
 private:
-    T value;
-    SetType<T>* path;
+    int id;
+    SetType* path;
     int rank;
 public:
-    SetType(T _value) : value(_value) {
+    SetType(int _value) : id(_value) {
         path = this;
         rank = 0;
     }
-    const T getValue() const { return value; }
-    const SetType<T>* getPath() const { return path; }
+    const int getId() const { return id; }
+    const SetType* getPath() const { return path; }
     int getRank() const { return rank; }
 
-    friend class DisjointSet<T>;
+    friend class DisjointSet;
 };
 
 #endif //FEUP_CAL_PROJ_SETTYPE_H

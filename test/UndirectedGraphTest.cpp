@@ -20,6 +20,6 @@ TEST(UndirectedGraph, addEdge) {
     auto node = graph.findNode(0);
     auto node2 = graph.findNode(1);
 
-    EXPECT_EQ(node->getOutgoing(), node2->getOutgoing());
-    EXPECT_EQ(node2->getOutgoing(), node->getOutgoing());
+    EXPECT_EQ(node->getOutgoing().size(), node2->getOutgoing().size());
+    EXPECT_EQ(node->getIncoming().size(), node2->getIncoming().size());
 }

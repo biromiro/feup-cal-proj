@@ -21,7 +21,11 @@ Edge<T> *UndirectedGraph<T>::addEdge(int srcID, int destID, double cost) {
         return nullptr;
     auto *e = new Edge<T>(s, d, cost);
     s->addEdge(e);
-    d->addEdge(e);
+    auto *e2 = new Edge<T>(d,s,cost);
+    d->addEdge(e2);
+
+    e->reverse = e2;
+    e2->reverse = e;
     return e;
 }
 

@@ -33,9 +33,9 @@ class Node {
     Position pos;
     void addEdge(Edge<T> *e);
     bool operator<(Node<T> & node) const;
+    Node(int id, T in, Position pos);
 
 public:
-    Node(int id, T in, Position pos);
     T getInfo() const;
     std::vector<Edge<T> *> getIncoming() const;
     std::vector<Edge<T> *> getOutgoing() const;

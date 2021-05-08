@@ -9,23 +9,20 @@
 #include <vector>
 #include "SetType.h"
 
-template <class T>
 class DisjointSet {
 private:
-    std::vector<SetType<T>*> values;
+    std::vector<SetType*> values;
 public:
-    DisjointSet() {values = std::vector<SetType<T>*>();};
+    DisjointSet() {values = std::vector<SetType*>();};
     ~DisjointSet() {
-        for(SetType<T>* value : values) {
+        for(SetType* value : values) {
             delete value;
         }
     }
 
-    SetType<T>* createSet(T value);
-    void linkSets(SetType<T>* first, SetType<T>* second);
-    SetType<T>* findSet(SetType<T>* value);
+    SetType* createSet(int id);
+    void linkSets(SetType* first, SetType* second);
+    SetType* findSet(int id);
 };
-
-#include "DisjointSet.tpp"
 
 #endif //FEUP_CAL_PROJ_DISJOINTSET_H

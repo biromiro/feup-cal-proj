@@ -27,9 +27,9 @@ add_library(cal_lib
         src/utils/algorithm/Distances.cpp src/utils/algorithm/Distances.h
         src/utils/algorithm/Pathfinding.cpp src/utils/algorithm/Pathfinding.h
         src/utils/disjointSet/SetType.h
-        src/utils/disjointSet/DisjointSet.h
+        src/utils/disjointSet/DisjointSet.h src/utils/disjointSet/DisjointSet.cpp
         src/utils/algorithm/MinimumSpanningTrees.h
-        src/utils/disjointSet/DisjointSet.tpp src/utils/graph/UndirectedGraph.tpp)
+        src/utils/graph/UndirectedGraph.tpp)
 
 add_executable(feup_cal_proj main.cpp)
 
