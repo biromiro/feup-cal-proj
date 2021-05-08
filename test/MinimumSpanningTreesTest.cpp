@@ -30,4 +30,10 @@ TEST(MinimumSpanningTrees, kruskal) {
     MinimumSpanningTrees<int> mst = MinimumSpanningTrees(graph);
 
     mst.calculateTreeKruskal(0);
+
+    EXPECT_EQ(4, graph.findNode(2)->getPath()->getOrig()->getID());
+    EXPECT_EQ(1, graph.findNode(4)->getPath()->getOrig()->getID());
+    EXPECT_EQ(0, graph.findNode(1)->getPath()->getOrig()->getID());
+    EXPECT_EQ(nullptr, graph.findNode(0)->getPath());
+    EXPECT_EQ(0, graph.findNode(3)->getPath()->getOrig()->getID());
 }

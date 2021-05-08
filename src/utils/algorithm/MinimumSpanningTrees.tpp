@@ -20,9 +20,6 @@ void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
     while(edgesAccepted < graph.getNodeSet().size() - 1) {
         Edge<T>* edge = queue.top();
 
-        std::cout << "edge from " << edge->getOrig()->getID() << " to "
-        << edge->getDest()->getID() << " with cost " << edge->getCost() << std::endl;
-
         SetType* originSet = sets.findSet(edge->getOrig()->getID());
         SetType* destSet = sets.findSet(edge->getDest()->getID());
 
