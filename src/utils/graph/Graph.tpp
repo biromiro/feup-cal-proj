@@ -10,6 +10,7 @@
 #include <vector>
 #include <queue>
 #include <iostream>
+#include <graphLoad/MapData.h>
 #include "MutablePriorityQueue.tpp"
 
 

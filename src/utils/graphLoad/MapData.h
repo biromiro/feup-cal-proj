@@ -6,23 +6,65 @@
 #define FEUP_CAL_PROJ_MAPDATA_H
 
 #include <functional>
+#include <utility>
 
-typedef double (*parkingPriceFunction)(int duration, int capacity, int currentCapacity);
-
-typedef enum node_type {
+enum NodeType {
     NORMAL,
     PARK
-} node_type_t;
+};
 
-typedef struct node_info_t {
+class NodeInfo {
+public:
+
+    NodeInfo():
+            type (NodeType::NORMAL),
+            maxCapacity(-1),
+            currentCapacity(-1),
+            priceFunction(nullptr){};
+
+    NodeInfo(int maxCap, int currCap, std::function<double(int,int,int)> priceFunc):
+        type (NodeType::PARK),
+        maxCapacity(maxCap),
+        currentCapacity(currCap),
+        priceFunction(std::move(priceFunc)){};
+
+    NodeType getType() const {
+        return type;
+    }
+
+    void setType(NodeType type) {
+        this->type = type;
+    }
+
+    int getMaxCapacity() const {
+        return maxCapacity;
+    }
+
+    void setMaxCapacity(int maxCapacity) {
+        this->maxCapacity = maxCapacity;
+    }
+
+    int getCurrentCapacity() const {
+        return currentCapacity;
+    }
+
+    void setCurrentCapacity(int currentCapacity) {
+        this->currentCapacity = currentCapacity;
+    }
+
+    double getPirce(int time) const {
+        return priceFunction(time, currentCapacity, maxCapacity);
+    }
+
+    void setPriceFunction(const function<double(int, int, int)> &priceFunction) {
+        NodeInfo::priceFunction = priceFunction;
+    }
+
+private:
     int maxCapacity;
     int currentCapacity;
     std::function<double(int,int,int)> priceFunction;
-};
-
-typedef struct node_data_t {
-    node_type_t nodeType;
-    node_info_t nodeInfo;
+    NodeType type;
 };
 
 #endif //FEUP_CAL_PROJ_MAPDATA_H

@@ -26,7 +26,7 @@ private:
     std::string parksPath;
     NodeMode mode;
     bool randomParkingMode = false;
-
+    NodeInfo genRandomPark();
     void setRandomParkingMode();
 };
 
@@ -59,22 +59,16 @@ Graph<T> GraphLoader<T>::getGraph() {
     std::getline(nodeFile, line);
 
     for(; nodeNumber > 0; nodeNumber--){
-
-        node_data_t info;
-        info.nodeType = node_type_t::NORMAL;
-        if(this->randomParkingMode && ((rand() % 10 + 1) == 1)) {
-            info.nodeType = node_type_t::PARK;
-            info.nodeInfo.currentCapacity = 10;
-            info.nodeInfo.maxCapacity = 5;
-            info.nodeInfo.priceFunction = [this](int duration, int capacity, int currentCapacity) {
-                return 0;
-            };
-        }
         std::getline(nodeFile, line);
         std::stringstream s(line);
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
-        graph.addNode(nodeID, info, pos);
+
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
+                    ? genRandomPark() : NodeInfo();
+
+        graph.addNode(nodeID, nodeInfo, pos);
+
     }
 
     int edgeNumber;
@@ -103,6 +97,22 @@ Graph<T> GraphLoader<T>::getGraph() {
 template<class T>
 void GraphLoader<T>::setRandomParkingMode() {
     this->randomParkingMode = true;
+}
+
+template<class T>
+NodeInfo GraphLoader<T>::genRandomPark() {
+    int maxCap = rand() % 40 +1;
+    int currCap = rand() % maxCap + 1;
+
+    NodeInfo info(maxCap, currCap,
+                  [](int x, int y, int z) {
+                      double priceFactor = (rand() % 10) / 100; // Euro per minute [0, 10] cents
+                      double capPrice = (rand() % 10) / 100; // Extra Euro per capacity percentage [0, 10] cents
+
+                      return priceFactor*x + capPrice*y/z;
+                  });
+    return info;
+
 }
 
 
