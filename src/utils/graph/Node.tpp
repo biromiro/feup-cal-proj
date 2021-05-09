@@ -183,5 +183,12 @@ void Node<T>::setPos(const Position &pos) {
     Node::pos = pos;
 }
 
+template<class T>
+struct CmpNodePtrs {
+    bool operator()(const Node<T> * lhs, const Node<T> * rhs) const {
+        return lhs->getDist() > rhs->getDist();
+    }
+};
+
 
 #endif //FEUP_CAL_PROJ_NODE_TPP
