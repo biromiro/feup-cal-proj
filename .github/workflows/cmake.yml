@@ -28,5 +28,5 @@ jobs:
 
       - name: Build
         # Build your program with the given configuration
-        run: git submodule update --init --recursive && cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} && ./cmake-build-debug/feup_cal_proj_tests
+        run: git submodule update --init --recursive && cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} && ./build/feup_cal_proj_tests
 
