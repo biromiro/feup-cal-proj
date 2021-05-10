@@ -5,24 +5,23 @@
 #ifndef FEUP_CAL_PROJ_DISJOINTSET_H
 #define FEUP_CAL_PROJ_DISJOINTSET_H
 
-
-#include <vector>
-#include "SetType.h"
+class DisjointSetGroup;
 
 class DisjointSet {
 private:
-    std::vector<SetType*> values;
+    int id;
+    DisjointSet* path;
+    int rank;
 public:
-    DisjointSet() {values = std::vector<SetType*>();};
-    ~DisjointSet() {
-        for(SetType* value : values) {
-            delete value;
-        }
+    DisjointSet(int _value) : id(_value) {
+        path = this;
+        rank = 0;
     }
+    const int getId() const { return id; }
+    const DisjointSet* getPath() const { return path; }
+    int getRank() const { return rank; }
 
-    SetType* createSet(int id);
-    void linkSets(SetType* first, SetType* second);
-    SetType* findSet(int id);
+    friend class DisjointSetGroup;
 };
 
 #endif //FEUP_CAL_PROJ_DISJOINTSET_H

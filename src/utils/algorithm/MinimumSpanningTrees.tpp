@@ -20,8 +20,8 @@ void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
     while(edgesAccepted < graph.getNodeSet().size() - 1) {
         Edge<T>* edge = queue.top();
 
-        SetType* originSet = sets.findSet(edge->getOrig()->getID());
-        SetType* destSet = sets.findSet(edge->getDest()->getID());
+        DisjointSet* originSet = sets.findSet(edge->getOrig()->getID());
+        DisjointSet* destSet = sets.findSet(edge->getDest()->getID());
 
         if (originSet != destSet) {
             edgesAccepted++;
@@ -52,8 +52,8 @@ priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpannin
 }
 
 template<class T>
-DisjointSet MinimumSpanningTrees<T>::createSet() {
-    DisjointSet result;
+DisjointSetGroup MinimumSpanningTrees<T>::createSet() {
+    DisjointSetGroup result;
 
     for(Node<T>* node : graph.getNodeSet()) {
         result.createSet(node->getID());

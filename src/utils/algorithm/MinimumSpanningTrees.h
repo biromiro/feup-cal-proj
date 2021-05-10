@@ -6,7 +6,7 @@
 #define FEUP_CAL_PROJ_MINIMUMSPANNINGTREES_H
 
 #include "graph/UndirectedGraph.tpp"
-#include "disjointSet/DisjointSet.h"
+#include "disjointSet/DisjointSetGroup.h"
 
 template<class T>
 struct CmpEdgePtrs {
@@ -22,7 +22,7 @@ private:
 
     void dfs(int originID);
     std::priority_queue<Edge<T>*, std::vector<Edge<T>*>, CmpEdgePtrs<T>> graphToQueue();
-    DisjointSet createSet();
+    DisjointSetGroup createSet();
 public:
     explicit MinimumSpanningTrees(UndirectedGraph<T> &graph);
 

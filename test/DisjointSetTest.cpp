@@ -3,17 +3,17 @@
 //
 
 #include <gtest/gtest.h>
-#include "src/utils/disjointSet/SetType.h"
 #include "src/utils/disjointSet/DisjointSet.h"
+#include "src/utils/disjointSet/DisjointSetGroup.h"
 #include "src/utils/graph/Node.tpp"
 
 /// TESTS ///
 
 TEST(DisjointSet, SetType) {
-    auto type = SetType(1);
+    auto type = DisjointSet(1);
 
     EXPECT_EQ(0, type.getRank());
-    EXPECT_EQ((const SetType*) &type, type.getPath());
+    EXPECT_EQ((const DisjointSet*) &type, type.getPath());
     EXPECT_EQ(1, type.getId());
 }
 
@@ -28,13 +28,13 @@ TEST(DisjointSet, DisjointSet) {
     nodes.push_back(node2);
     nodes.push_back(node3);
     nodes.push_back(node4);
-    std::vector<SetType*> sets;
+    std::vector<DisjointSet*> sets;
 
-    DisjointSet nodeSet = DisjointSet();
+    DisjointSetGroup nodeSet = DisjointSetGroup();
 
     for(int pNode : nodes) {
         sets.push_back(nodeSet.createSet(pNode));
-        EXPECT_EQ(typeid(SetType*), typeid(sets.back()));
+        EXPECT_EQ(typeid(DisjointSet*), typeid(sets.back()));
         EXPECT_EQ(0, sets.back()->getRank());
         EXPECT_EQ(sets.back(), sets.back()->getPath());
         EXPECT_EQ(pNode, sets.back()->getId());
