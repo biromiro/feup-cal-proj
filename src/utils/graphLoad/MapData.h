@@ -56,7 +56,7 @@ public:
         return priceFunction(time, currentCapacity, maxCapacity);
     }
 
-    void setPriceFunction(const function<double(int, int, int)> &priceFunction) {
+    void setPriceFunction(const std::function<double(int, int, int)> &priceFunction) {
         NodeInfo::priceFunction = priceFunction;
     }
 

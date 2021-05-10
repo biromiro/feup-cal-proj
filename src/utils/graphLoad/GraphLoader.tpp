@@ -67,7 +67,10 @@ Graph<T> GraphLoader<T>::getGraph() {
         NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
                     ? genRandomPark() : NodeInfo();
 
-        graph.addNode(nodeID, nodeInfo, pos);
+        if constexpr (std::is_same<T, NodeInfo>::value)
+            graph.addNode(nodeID, nodeInfo, pos);
+        else
+            graph.addNode(nodeID, T(), pos);
 
     }
 

@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 # Build the Google tests
 set(GOOGLETEST_PATH googletest)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+add_subdirectory(${GOOGLETEST_PATH})
+
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 include_directories(.)
 include_directories(src)
@@ -25,8 +27,16 @@ add_library(cal_lib
         src/utils/graphLoad/NodeMode.h
         src/utils/algorithm/Distances.cpp src/utils/algorithm/Distances.h
         src/utils/algorithm/Pathfinding.cpp src/utils/algorithm/Pathfinding.h
-        src/utils/graphLoad/MapData.h)
+        src/utils/graphLoad/MapData.h
+        src/utils/disjointSet/DisjointSet.h
+        src/utils/disjointSet/DisjointSetGroup.h src/utils/disjointSet/DisjointSetGroup.cpp
+        src/utils/algorithm/MinimumSpanningTrees.h
+        src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp)
 
 add_executable(feup_cal_proj main.cpp)
 
+add_executable(feup_cal_proj_tests tests.cpp
+        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp)
+
 target_link_libraries(feup_cal_proj cal_lib)
+target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)
