@@ -26,5 +26,4 @@ TEST(UndirectedGraph, addEdge) {
     EXPECT_EQ(node2, node->getOutgoing().at(0)->getDest());
     EXPECT_EQ(node2, node2->getOutgoing().at(0)->getOrig());
     EXPECT_EQ(node, node2->getOutgoing().at(0)->getDest());
-    EXPECT_EQ(true, false);
 }
