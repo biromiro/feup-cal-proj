@@ -8,6 +8,7 @@
 
 #include <graph/Graph.tpp>
 #include <utils/utilitaryStructures/HeuristicNode.h>
+#include <algorithm>
 
 class Pathfinding {
 public:
@@ -16,6 +17,9 @@ public:
 
     template <class T>
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
+
+    template <class T>
+            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Edge<T>*>& result);
 };
 
 template<class T>
@@ -49,6 +53,19 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
         }
     }
     return false;
+}
+
+template<class T>
+bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Edge<T>*>& result) {
+    if(!aStarAdaptation(graph, origin, dest)) return false;
+    Node<T>* destination = graph.findNode(dest);
+    Edge<T>* currentEdge = destination->getPath();
+    while(currentEdge != nullptr){
+        result.push_back(currentEdge);
+        currentEdge = currentEdge->getOrig()->getPath();
+    }
+    std::reverse(result.begin(), result.end());
+    return true;
 }
 
 

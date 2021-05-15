@@ -39,6 +39,7 @@ int main(){
 
     Connectivity<string> connect = Connectivity<string>(g);
     std::cout << connect.getNumConnectedComponents() << std::endl;
-    std::cout << Pathfinding::aStarAdaptation(g, 1, 23);
+    std::vector<Edge<string>*> vector1;
+    std::cout << Pathfinding::getOrderedPath(g, 1, 23, vector1);
     return 0;
 }
