@@ -13,7 +13,7 @@
 class Pathfinding {
 public:
     template <class T>
-    void static dijkstraAdaptation(Graph<T>& graph, Node<T>* origin);
+    void static dijkstraAdaptation(Graph<NodeInfo>& graph, std::vector<Node<NodeInfo>*>& parks, int orig, int maxRadius);
 
     template <class T>
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
@@ -23,14 +23,53 @@ public:
 };
 
 template<class T>
-void Pathfinding::dijkstraAdaptation(Graph<T> &graph, Node<T> *origin) {
+void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<NodeInfo>*>& parks, int orig, int maxRadius) {
+    Node<T>* origin = graph.findNode(orig);
 
+    if (origin == nullptr)
+        throw std::invalid_argument("Dijkstra Origin Node");
+    if (maxRadius < 0)
+        throw std::invalid_argument("Dijkstra Radius");
+
+
+    for(Node<T>* node: graph.getNodeSet()){
+        node->setDist(INF);
+        node->setPath(nullptr);
+        node->setVisited(false);
+    }
+
+    std::priority_queue<Node<T> *, std::vector<Node<T> *>, CmpNodePtrs<T>> queue;
+    Node<T>* curr = origin;
+
+    curr->setDist(0);
+    queue.push(curr);
+
+    while (!queue.empty() && curr->getDist() < maxRadius) {
+        curr = queue.top(); queue.pop();
+        NodeInfo info = (NodeInfo)curr->getInfo();
+        if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
+            parks.push_back(curr);
+
+        for (auto edge : curr->getOutgoing()) {
+            Node<T>* dest = edge->getDest();
+            auto newDist = curr->getDist() + edge->getCost();
+            if (newDist < dest->getDist()) {
+                dest->setDist(newDist);
+                dest->setPath(edge);
+                queue.push(dest);
+            }
+        }
+    }
+    return;
 }
 
 template<class T>
 bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     Node<T>* origin = graph.findNode(orig);
     Node<T>* destination = graph.findNode(dest);
+
+    if(origin == nullptr || destination == nullptr) throw "Invalid Origin/Destination points!";
+
     for(Node<T>* node: graph.getNodeSet()){
         node->setDist(INF);
         node->setPath(nullptr);

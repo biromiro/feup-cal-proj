@@ -7,17 +7,18 @@
 #include <iostream>
 #include <algorithm/Connectivity.tpp>
 #include <algorithm/Pathfinding.h>
+#include <graphviewer.h>
+
 int main(){
-    Graph<string> g;
+    Graph<struct NodeInfo> g2;
 
-    /*GraphLoader<string> gLoader("resources/Espinho/SCC/espinho_strong_nodes_xy.txt",
+    GraphLoader<NodeInfo> gLoader("resources/Espinho/SCC/espinho_strong_nodes_xy.txt",
                                 "resources/Espinho/SCC/espinho_strong_edges.txt",
-                                NodeMode::GRID);*/
-
-    GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
+                                NodeMode::GRID);
+/*
+    GraphLoader<NodeInfo> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
                                 "resources/OtherMaps/GridGraphs/4x4/edges.txt",
                                 NodeMode::GRID);
-    g = gLoader.getGraph();
 
     /*g.addNode(1, " ", Position(NodeMode::GRID, 1, 1));
     g.addNode(2, " ", Position(NodeMode::GRID, 2, 2));
@@ -36,10 +37,31 @@ int main(){
     g.addEdge(5, 4, 2.0);
     g.addEdge(6, 7, 1.0);
     g.addEdge(7, 6, 1.0);*/
+/*
+    Connectivity<string> connect = Connectivity<std::string>(g1);
+    std::cout << connect.getNumConnectedComponents() << std::endl;*/
 
-    Connectivity<string> connect = Connectivity<string>(g);
-    std::cout << connect.getNumConnectedComponents() << std::endl;
-    std::vector<Edge<string>*> vector1;
-    std::cout << Pathfinding::getOrderedPath(g, 1, 23, vector1);
+    g2 = gLoader.getGraph();
+    std::vector<Edge<NodeInfo>*> vector1, vector2;
+    // g = gLoader.getGraph();
+
+
+    Connectivity<NodeInfo> connect = Connectivity<NodeInfo>(g2);
+    std::cout << connect.getNumConnectedComponents();
+
+    vector<Node<NodeInfo> *> parks;
+
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, 10121, 3000);
+    if(parks.empty()) return -1;
+    std::cout << Pathfinding::getOrderedPath(g2, 3617, parks[0]->getID(), vector1);
+    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(),10121, vector2);
+
+    GraphViewer gf;
+
+    gf.setCenter(sf::Vector2f(-877/2, -941/2));
+    gf.setBackground("resources/Espinho/SCC/espinho_strong_component.png");
+
+    gf.createWindow(877,941);
+    gf.join();
     return 0;
 }

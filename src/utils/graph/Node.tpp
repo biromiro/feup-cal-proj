@@ -7,6 +7,7 @@
 #include "Position.h"
 
 template <class T> class Graph;
+template <class T> class UndirectedGraph;
 
 constexpr auto INF = std::numeric_limits<double>::max();
 
@@ -18,7 +19,6 @@ constexpr auto INF = std::numeric_limits<double>::max();
 
 template <class T>
 class Node {
-    Node(int id, T in, Position pos);
     T info;
     std::vector<Edge<T> *> outgoing;
     std::vector<Edge<T> *> incoming;
@@ -33,6 +33,7 @@ class Node {
     Position pos;
     void addEdge(Edge<T> *e);
     bool operator<(Node<T> & node) const;
+    Node(int id, T in, Position pos);
 
 public:
     T getInfo() const;
@@ -54,10 +55,27 @@ public:
     void setInStack(bool inStack);
     const Position &getPos() const;
     void setPos(const Position &pos);
+
+    friend class UndirectedGraph<T>;
     friend class Graph<T>;
     friend class MutablePriorityQueue<Node<T>>;
 };
 
+
+template<class T>
+void Edge<T>::select() {
+    this->selected = true;
+}
+
+template<class T>
+bool Edge<T>::isSelected() const {
+    return this->selected;
+}
+
+template<class T>
+Edge<T> *Edge<T>::getReverse() const {
+    return reverse;
+}
 
 template <class T>
 Node<T>::Node(int id, T in, Position pos): ID(id), info(in), pos(pos) {}
@@ -167,6 +185,13 @@ template<class T>
 void Node<T>::setPos(const Position &pos) {
     Node::pos = pos;
 }
+
+template<class T>
+struct CmpNodePtrs {
+    bool operator()(const Node<T> * lhs, const Node<T> * rhs) const {
+        return lhs->getDist() > rhs->getDist();
+    }
+};
 
 
 #endif //FEUP_CAL_PROJ_NODE_TPP
