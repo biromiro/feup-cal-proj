@@ -8,6 +8,7 @@
 #include <algorithm/Connectivity.tpp>
 #include <algorithm/Pathfinding.h>
 #include <graphviewer.h>
+#include <graphLoad/GraphManager.h>
 
 int main(){
     Graph<struct NodeInfo> g2;
@@ -56,12 +57,9 @@ int main(){
     std::cout << Pathfinding::getOrderedPath(g2, 3617, parks[0]->getID(), vector1);
     std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(),10121, vector2);
 
-    GraphViewer gf;
-
-    gf.setCenter(sf::Vector2f(-877/2, -941/2));
-    gf.setBackground("resources/Espinho/SCC/espinho_strong_component.png");
-
-    gf.createWindow(877,941);
-    gf.join();
+    GraphManager gv(877, 941,"resources/Espinho/SCC/espinho_strong_component.png");
+    gv.buildPath(vector1);
+    gv.buildPath(vector2);
+    gv.show();
     return 0;
 }

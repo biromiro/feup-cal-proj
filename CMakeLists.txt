@@ -3,6 +3,11 @@ project(feup_cal_proj)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if (WIN32)
+    include_directories("$ENV{SFML_PATH}/include")
+    link_directories("$ENV{SFML_PATH}/lib")
+endif()
+
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
@@ -42,7 +47,9 @@ add_library(cal_lib
         src/utils/disjointSet/DisjointSetGroup.h src/utils/disjointSet/DisjointSetGroup.cpp
         src/utils/algorithm/MinimumSpanningTrees.h
         src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp
-        GraphViewerCpp/include/graphviewer.h)
+        GraphViewerCpp/include/graphviewer.h
+        src/utils/graphLoad/GraphManager.h
+        src/utils/graphLoad/GraphManager.cpp)
 
 add_executable(feup_cal_proj main.cpp)
 
