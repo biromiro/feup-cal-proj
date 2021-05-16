@@ -5,14 +5,16 @@
 #include "GraphManager.h"
 
 GraphManager::GraphManager(int height, int width, std::string path): imgHeight(height), imgWidth(width), imagePath(path) {
-    this->gv.setCenter(sf::Vector2f(height/2, width/2));
-    this->gv.setBackground("resources/Espinho/SCC/espinho_strong_component.png");
+    // this->gv.setCenter(sf::Vector2f(height/2, width/2));
+    this->gv.setBackground("resources/Espinho/SCC/espinho_strong_component.png", sf::Vector2f(-height/2, -width/2));
+    this->gv.setScale(10);
 }
 
-void GraphManager::buildPath(const vector<Edge<struct NodeInfo> *> &edges) {
+void GraphManager::buildPath(const vector<Edge<struct NodeInfo> *> &edges, GraphViewer::Color color) {
     if(edges.empty()) return;
     Node<struct NodeInfo>* origin = edges.at(0)->getOrig();
     GraphViewer::Node* orig, * dest;
+    int factor = 20;
     try{
         orig = &gv.addNode(origin->getID(), sf::Vector2f(origin->getPos().getX(), origin->getPos().getY()));
     } catch (std::invalid_argument &e) {
@@ -28,14 +30,31 @@ void GraphManager::buildPath(const vector<Edge<struct NodeInfo> *> &edges) {
             dest = &gv.getNode(edge->getDest()->getID());
         }
         try{
-            gv.addEdge(numEdges++, *orig, *dest, GraphViewer::Edge::EdgeType::DIRECTED);
+            GraphViewer::Edge gvedge = gv.addEdge(numEdges++, *orig, *dest, GraphViewer::Edge::EdgeType::DIRECTED);
+            // gvedge.setColor(color);
         } catch (std::invalid_argument &e) {}
-        dest->setColor(GraphViewer::YELLOW);
+        dest->setColor(color);
+        dest->setSize(10);
     }
 }
 
 void GraphManager::show() {
+    GraphViewer::Node node = gv.addNode(0, sf::Vector2f(1402, 10));
+    node.setColor(GraphViewer::ORANGE);
+    node.setSize(50);
     this->gv.createWindow(imgHeight,imgWidth);
     this->gv.join();
+}
+
+void GraphManager::drawPark(Node<NodeInfo> *&pNode) {
+    GraphViewer::Node node = gv.getNode(pNode->getID());
+    node.setColor(GraphViewer::PINK);
+    node.setSize(50);
+}
+
+void GraphManager::drawDest(int dest) {
+    GraphViewer::Node node = gv.getNode(dest);
+    node.setColor(GraphViewer::YELLOW);
+    node.setSize(50);
 }
 

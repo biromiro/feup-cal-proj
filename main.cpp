@@ -52,14 +52,18 @@ int main(){
 
     vector<Node<NodeInfo> *> parks;
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, 10121, 3000);
+    int destId = 10121;
+
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destId, 500);
     if(parks.empty()) return -1;
     std::cout << Pathfinding::getOrderedPath(g2, 3617, parks[0]->getID(), vector1);
-    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(),10121, vector2);
+    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destId, vector2);
 
     GraphManager gv(877, 941,"resources/Espinho/SCC/espinho_strong_component.png");
-    gv.buildPath(vector1);
-    gv.buildPath(vector2);
+    gv.buildPath(vector1, GraphViewer::BLUE);
+    gv.buildPath(vector2, GraphViewer::ORANGE);
+    gv.drawPark(parks[0]);
+    gv.drawDest(destId);
     gv.show();
     return 0;
 }
