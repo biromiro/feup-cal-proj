@@ -11,36 +11,13 @@
 #include <graphLoad/GraphManager.h>
 
 int main(){
+    srand(time(NULL));
+
     Graph<struct NodeInfo> g2;
 
-    GraphLoader<NodeInfo> gLoader("resources/Espinho/SCC/espinho_strong_nodes_xy.txt",
-                                "resources/Espinho/SCC/espinho_strong_edges.txt",
+    GraphLoader<NodeInfo> gLoader("resources/Penafiel/SCC/penafiel_strong_nodes_xy.txt",
+                                "resources/Penafiel/SCC/penafiel_strong_edges.txt",
                                 NodeMode::GRID);
-/*
-    GraphLoader<NodeInfo> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
-                                "resources/OtherMaps/GridGraphs/4x4/edges.txt",
-                                NodeMode::GRID);
-
-    /*g.addNode(1, " ", Position(NodeMode::GRID, 1, 1));
-    g.addNode(2, " ", Position(NodeMode::GRID, 2, 2));
-    g.addNode(3, " ", Position(NodeMode::GRID, 3, 3));
-    g.addNode(4, " ", Position(NodeMode::GRID, 4, 4));
-    g.addNode(5, " ", Position(NodeMode::GRID, 5, 5));
-    g.addNode(6, " ", Position(NodeMode::GRID, 6, 6));
-    g.addNode(7, " ", Position(NodeMode::GRID, 7, 7));
-
-
-    g.addEdge(1,3,1.0);
-    g.addEdge(3,2,2.0);
-    g.addEdge(2,1,1.0);
-    g.addEdge(4,4,1.0);
-    g.addEdge(3, 5, 1.0);
-    g.addEdge(5, 4, 2.0);
-    g.addEdge(6, 7, 1.0);
-    g.addEdge(7, 6, 1.0);*/
-/*
-    Connectivity<string> connect = Connectivity<std::string>(g1);
-    std::cout << connect.getNumConnectedComponents() << std::endl;*/
 
     g2 = gLoader.getGraph();
     std::vector<Edge<NodeInfo>*> vector1, vector2;
@@ -52,18 +29,22 @@ int main(){
 
     vector<Node<NodeInfo> *> parks;
 
-    int destId = 10121;
+    int destId = 2000;
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destId, 500);
+    GraphManager gv(877, 941,"resources/Espinho/SCC/penafiel_strong_component.png");
+
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destId, 1000);
     if(parks.empty()) return -1;
-    std::cout << Pathfinding::getOrderedPath(g2, 3617, parks[0]->getID(), vector1);
     std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destId, vector2);
 
-    GraphManager gv(877, 941,"resources/Espinho/SCC/espinho_strong_component.png");
+    Pathfinding::aStarAdaptation(g2, 1000, parks[0]->getID());
+    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), 3617, vector1);
+
     gv.buildPath(vector1, GraphViewer::BLUE);
     gv.buildPath(vector2, GraphViewer::ORANGE);
     gv.drawPark(parks[0]);
-    gv.drawDest(destId);
+    Node<NodeInfo> * pNode = g2.findNode(destId);
+    gv.drawDest(pNode);
     gv.show();
     return 0;
 }

@@ -96,10 +96,13 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
 
 template<class T>
 bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Edge<T>*>& result) {
-    if(!aStarAdaptation(graph, origin, dest)) return false;
+    // if(!aStarAdaptation(graph, origin, dest)) return false;
     Node<T>* destination = graph.findNode(dest);
-    Edge<T>* currentEdge = destination->getPath();
+    Node<T>* source = graph.findNode(origin);
+    Edge<T>* currentEdge = source->getPath();
     while(currentEdge != nullptr){
+        if (currentEdge->getDest() == destination)
+            break;
         result.push_back(currentEdge);
         currentEdge = currentEdge->getOrig()->getPath();
     }

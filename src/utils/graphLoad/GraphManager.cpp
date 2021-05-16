@@ -47,14 +47,24 @@ void GraphManager::show() {
 }
 
 void GraphManager::drawPark(Node<NodeInfo> *&pNode) {
-    GraphViewer::Node node = gv.getNode(pNode->getID());
-    node.setColor(GraphViewer::PINK);
-    node.setSize(50);
+    GraphViewer::Node* node;
+    int factor = 20;
+    try{
+        node = &gv.addNode(pNode->getID(), sf::Vector2f(pNode->getPos().getX(), pNode->getPos().getY()));
+    } catch (std::invalid_argument &e) {
+        node = &gv.getNode(pNode->getID());
+    }
+    node->setColor(GraphViewer::PINK);
 }
 
-void GraphManager::drawDest(int dest) {
-    GraphViewer::Node node = gv.getNode(dest);
-    node.setColor(GraphViewer::YELLOW);
-    node.setSize(50);
+void GraphManager::drawDest(Node<struct NodeInfo> *pNode) {
+    GraphViewer::Node* node;
+    int factor = 20;
+    try{
+        node = &gv.addNode(pNode->getID(), sf::Vector2f(pNode->getPos().getX(), pNode->getPos().getY()));
+    } catch (std::invalid_argument &e) {
+        node = &gv.getNode(pNode->getID());
+    }
+    node->setColor(GraphViewer::YELLOW);
 }
 

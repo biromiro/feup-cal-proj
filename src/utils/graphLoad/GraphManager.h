@@ -16,7 +16,7 @@ public:
 
     void drawPark(Node<NodeInfo> *&pNode);
 
-    void drawDest(int i);
+    void drawDest(Node<struct NodeInfo> *i);
 
 private:
     GraphViewer gv;
