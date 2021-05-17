@@ -15,13 +15,15 @@ public:
     void show();
 
     void drawPark(Node<NodeInfo> *&pNode);
-
+    void finish();
     void drawDest(Node<struct NodeInfo> *i);
+    void showPath(const vector<Edge<NodeInfo> *> &edges, TravelType type);
 
 private:
     GraphViewer gv;
     int imgHeight, imgWidth;
     std::string imagePath;
+    std::map<Edge<NodeInfo>*, id_t> edgeIDs;
 };
 
 #endif //FEUP_CAL_PROJ_GRAPHMANAGER_H

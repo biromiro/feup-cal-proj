@@ -48,4 +48,13 @@ double HeuristicNode<T>::getHeuristicDist() const {
     return heuristicDist;
 }
 
+struct compare
+{
+    template<class T>
+    bool operator()(const HeuristicNode<T> & a, const HeuristicNode<T> & b)
+    {
+        return b < a;
+    }
+};
+
 #endif //FEUP_CAL_PROJ_HEURISTICNODE_H

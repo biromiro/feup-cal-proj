@@ -33,22 +33,24 @@ int main(){
 
     vector<Node<NodeInfo> *> parks;
 
-    int destId = 107;
+    int destID = 27022, originID = 594;
 
-    GraphManager gv(877, 941,"resources/Espinho/SCC/penafiel_strong_component.png");
+    GraphManager gv(877, 941,"resources/Penafiel/SCC/penafiel_strong_component.png");
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destId, 1000);
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destID, 200);
     if(parks.empty()) return -1;
-    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destId, vector2);
+    std::cout << Pathfinding::getOrderedPath(g2, originID, parks[0]->getID(), vector2);
 
-    Pathfinding::aStarAdaptation(g2, 26822, parks[0]->getID());
-    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destId, vector1);
+    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destID, vector1);
 
     gv.buildPath(vector1, GraphViewer::BLUE);
     gv.buildPath(vector2, GraphViewer::ORANGE);
     gv.drawPark(parks[0]);
-    Node<NodeInfo> * pNode = g2.findNode(destId);
+    Node<NodeInfo> * pNode = g2.findNode(destID);
     gv.drawDest(pNode);
     gv.show();
+    gv.showPath(vector2, TRAVEL);
+    gv.showPath(vector1, WALKING);
+    gv.finish();
     return 0;
 }

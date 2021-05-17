@@ -49,7 +49,7 @@ add_library(cal_lib
         src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp
         GraphViewerCpp/include/graphviewer.h
         src/utils/graphLoad/GraphManager.h
-        src/utils/graphLoad/GraphManager.cpp)
+        src/utils/graphLoad/GraphManager.cpp src/utils/utilitaryStructures/utilFunctions.cpp src/utils/utilitaryStructures/utilFunctions.h)
 
 add_executable(feup_cal_proj main.cpp)
 

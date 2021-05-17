@@ -75,7 +75,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
         node->setPath(nullptr);
     }
     origin->setDist(0);
-    std::priority_queue<HeuristicNode<T>> pq{};
+    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
     pq.push(HeuristicNode<T>(origin, destination));
     while(!pq.empty()){
         HeuristicNode<T> current = pq.top();
@@ -96,12 +96,12 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
 
 template<class T>
 bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Edge<T>*>& result) {
-    // if(!aStarAdaptation(graph, origin, dest)) return false;
+    if(!aStarAdaptation(graph, origin, dest)) return false;
     Node<T>* destination = graph.findNode(dest);
     Node<T>* source = graph.findNode(origin);
-    Edge<T>* currentEdge = source->getPath();
+    Edge<T>* currentEdge = destination->getPath();
     while(currentEdge != nullptr){
-        if (currentEdge->getDest() == destination)
+        if (currentEdge->getOrig() == source)
             break;
         result.push_back(currentEdge);
         currentEdge = currentEdge->getOrig()->getPath();
