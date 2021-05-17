@@ -68,7 +68,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     Node<T>* origin = graph.findNode(orig);
     Node<T>* destination = graph.findNode(dest);
 
-    if(origin == nullptr || destination == nullptr) throw "Invalid Origin/Destination points!";
+    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
 
     for(Node<T>* node: graph.getNodeSet()){
         node->setDist(INF);

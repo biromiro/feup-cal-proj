@@ -64,7 +64,7 @@ Graph<T> GraphLoader<T>::getGraph() {
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
 
-        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 40 + 1) == 1)
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
                     ? genRandomPark() : NodeInfo();
 
         if constexpr (std::is_same<T, NodeInfo>::value)

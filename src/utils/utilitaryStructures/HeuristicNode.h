@@ -35,7 +35,7 @@ HeuristicNode<T>::HeuristicNode(Node<T> *node, Node<T>* dest) {
 
 template<class T>
 void HeuristicNode<T>::calculateHeuristicDist(Node<T>* destinationNode) {
-    heuristicDist = currentNode->getDist() + Distances::getEuclideanDistance(currentNode->getPos(), destinationNode->getPos());
+    heuristicDist = Distances::getEuclideanDistance(currentNode->getPos(), destinationNode->getPos());
 }
 
 template<class T>

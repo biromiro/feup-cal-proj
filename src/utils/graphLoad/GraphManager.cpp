@@ -6,7 +6,7 @@
 
 GraphManager::GraphManager(int height, int width, std::string path): imgHeight(height), imgWidth(width), imagePath(path) {
     // this->gv.setCenter(sf::Vector2f(height/2, width/2));
-    this->gv.setBackground("resources/Espinho/SCC/espinho_strong_component.png", sf::Vector2f(-height/2, -width/2));
+    this->gv.setBackground(path, sf::Vector2f(-height/2, -width/2));
     this->gv.setScale(10);
 }
 
@@ -14,7 +14,6 @@ void GraphManager::buildPath(const vector<Edge<struct NodeInfo> *> &edges, Graph
     if(edges.empty()) return;
     Node<struct NodeInfo>* origin = edges.at(0)->getOrig();
     GraphViewer::Node* orig, * dest;
-    int factor = 20;
     try{
         orig = &gv.addNode(origin->getID(), sf::Vector2f(origin->getPos().getX(), origin->getPos().getY()));
     } catch (std::invalid_argument &e) {
@@ -31,7 +30,7 @@ void GraphManager::buildPath(const vector<Edge<struct NodeInfo> *> &edges, Graph
         }
         try{
             GraphViewer::Edge gvedge = gv.addEdge(numEdges++, *orig, *dest, GraphViewer::Edge::EdgeType::DIRECTED);
-            // gvedge.setColor(color);
+             gvedge.setColor(color);
         } catch (std::invalid_argument &e) {}
         dest->setColor(color);
         dest->setSize(10);
@@ -48,7 +47,6 @@ void GraphManager::show() {
 
 void GraphManager::drawPark(Node<NodeInfo> *&pNode) {
     GraphViewer::Node* node;
-    int factor = 20;
     try{
         node = &gv.addNode(pNode->getID(), sf::Vector2f(pNode->getPos().getX(), pNode->getPos().getY()));
     } catch (std::invalid_argument &e) {
@@ -59,7 +57,6 @@ void GraphManager::drawPark(Node<NodeInfo> *&pNode) {
 
 void GraphManager::drawDest(Node<struct NodeInfo> *pNode) {
     GraphViewer::Node* node;
-    int factor = 20;
     try{
         node = &gv.addNode(pNode->getID(), sf::Vector2f(pNode->getPos().getX(), pNode->getPos().getY()));
     } catch (std::invalid_argument &e) {
