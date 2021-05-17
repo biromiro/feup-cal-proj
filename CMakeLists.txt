@@ -31,7 +31,8 @@ add_library(cal_lib
         src/utils/disjointSet/DisjointSet.h
         src/utils/disjointSet/DisjointSetGroup.h src/utils/disjointSet/DisjointSetGroup.cpp
         src/utils/algorithm/MinimumSpanningTrees.h
-        src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp src/utils/algorithm/NearestNeighbour.h)
+        src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp
+        src/utils/algorithm/NearestNeighbour.h)
 
 add_executable(feup_cal_proj main.cpp)
 

@@ -22,7 +22,7 @@ std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, No
 
     while(!poi.empty()) {
         double minDist = std::numeric_limits<double>::infinity();
-        typename std::vector<Node<T>*>::iterator next = poi.end();
+        auto next = poi.end();
 
         for(auto nodeIt = poi.begin(); nodeIt != poi.end(); nodeIt++) {
             double dist = Distances::getEuclideanDistance(last->getPos(), (*nodeIt)->getPos());
