@@ -27,9 +27,7 @@ TEST(MinimumSpanningTrees, kruskal) {
     graph.addEdge(2, 3, 3);
     graph.addEdge(0, 3, 2);
 
-    MinimumSpanningTrees<int> mst = MinimumSpanningTrees(graph);
-
-    mst.calculateTreeKruskal(0);
+    MinimumSpanningTrees<int>::calculateTreeKruskal(graph, 0);
 
     EXPECT_EQ(4, graph.findNode(2)->getPath()->getOrig()->getID());
     EXPECT_EQ(1, graph.findNode(4)->getPath()->getOrig()->getID());

@@ -6,16 +6,11 @@
 #include "MinimumSpanningTrees.h"
 
 template<class T>
-MinimumSpanningTrees<T>::MinimumSpanningTrees(UndirectedGraph<T> &graph) {
-    this->graph = graph;
-}
-
-template<class T>
-void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
+void MinimumSpanningTrees<T>::calculateTreeKruskal(UndirectedGraph<T> &graph, int originID) {
     int edgesAccepted = 0;
 
-    auto queue = this->graphToQueue();
-    auto sets = this->createSet();
+    auto queue = MinimumSpanningTrees<T>::graphToQueue(graph);
+    auto sets = MinimumSpanningTrees<T>::createSet(graph);
 
     while(edgesAccepted < graph.getNodeSet().size() - 1) {
         Edge<T>* edge = queue.top();
@@ -35,14 +30,14 @@ void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
         queue.pop();
     }
 
-    dfs(originID);
+    MinimumSpanningTrees<int>::dfs(graph, originID);
 }
 
 template<class T>
-priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpanningTrees<T>::graphToQueue() {
+priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpanningTrees<T>::graphToQueue(UndirectedGraph<T> &graph) {
     auto queue = std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>();
 
-    for(Node<T>* node : this->graph.getNodeSet()) {
+    for(Node<T>* node : graph.getNodeSet()) {
         for(Edge<T>* edge : node->getOutgoing()) {
             queue.push(edge);
         }
@@ -52,7 +47,7 @@ priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpannin
 }
 
 template<class T>
-DisjointSetGroup MinimumSpanningTrees<T>::createSet() {
+DisjointSetGroup MinimumSpanningTrees<T>::createSet(UndirectedGraph<T> &graph) {
     DisjointSetGroup result;
 
     for(Node<T>* node : graph.getNodeSet()) {
@@ -63,7 +58,7 @@ DisjointSetGroup MinimumSpanningTrees<T>::createSet() {
 }
 
 template<class T>
-void MinimumSpanningTrees<T>::dfs(int originID) {
+void MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, int originID) {
     Node<T>* v = graph.findNode(originID);
     if(v == nullptr) return;
 
