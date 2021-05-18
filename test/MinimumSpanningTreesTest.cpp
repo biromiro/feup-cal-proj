@@ -8,13 +8,13 @@
 /// TESTS ///
 
 TEST(MinimumSpanningTrees, kruskal) {
-    UndirectedGraph<int> graph;
+    UndirectedGraph<int> graph = UndirectedGraph<int>({});
 
-    graph.addNode(0, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(1, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(2, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(3, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(4, 1, Position(NodeMode::COORDS, 0, 0));
+    graph.addNode(0, 1, Position(NodeMode::GRID, 0, 0));
+    graph.addNode(1, 1, Position(NodeMode::GRID, 1, 2));
+    graph.addNode(2, 1, Position(NodeMode::GRID, 3, 5));
+    graph.addNode(3, 1, Position(NodeMode::GRID, -1, 5));
+    graph.addNode(4, 1, Position(NodeMode::GRID, -2, 4));
 
 
     graph.addEdge(0, 1, 2);
@@ -22,10 +22,10 @@ TEST(MinimumSpanningTrees, kruskal) {
     graph.addEdge(3, 1, 5);
     graph.addEdge(2, 4, 1);
     graph.addEdge(1, 4, 2);
-    graph.addEdge(3, 4, 6);
-    graph.addEdge(0, 4, 3);
-    graph.addEdge(2, 3, 3);
-    graph.addEdge(0, 3, 2);
+    graph.addEdge(3, 4, 1);
+    graph.addEdge(0, 4, 4);
+    graph.addEdge(2, 3, 0);
+    graph.addEdge(0, 3, 5);
 
     MinimumSpanningTrees<int>::calculateTreeKruskal(graph, 0);
 
