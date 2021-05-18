@@ -12,12 +12,12 @@
 template <class T>
 class NearestNeighbour {
 public:
-    static std::vector<Node<T>*> getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination);
+    static std::vector<int> getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination);
 };
 
 template <class T>
-std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination) {
-    std::vector<Node<T>*> tour = {origin};
+std::vector<int> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination) {
+    std::vector<int> tour = {origin->getID()};
     Node<T>* last = origin;
 
     while(!poi.empty()) {
@@ -32,12 +32,12 @@ std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, No
             }
         }
 
-        tour.push_back(*next);
+        tour.push_back((*next)->getID());
         last = *next;
         poi.erase(next);
     }
 
-    tour.push_back(destination);
+    tour.push_back(destination->getID());
     return tour;
 }
 

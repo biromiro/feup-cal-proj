@@ -26,12 +26,12 @@ TEST(NearestNeigbour, nb) {
     poi.push_back(graph.findNode(3));
     poi.push_back(graph.findNode(4));
 
-    std::vector<Node<int>*> tour = NearestNeighbour<int>::getTour(poi, graph.findNode(1), graph.findNode(5));
+    std::vector<int> tour = NearestNeighbour<int>::getTour(poi, graph.findNode(1), graph.findNode(5));
 
-    ASSERT_EQ(1, tour.at(0)->getID());
-    ASSERT_EQ(2, tour.at(1)->getID());
-    ASSERT_EQ(4, tour.at(2)->getID());
-    ASSERT_EQ(0, tour.at(3)->getID());
-    ASSERT_EQ(3, tour.at(4)->getID());
-    ASSERT_EQ(5, tour.at(5)->getID());
+    ASSERT_EQ(1, tour.at(0));
+    ASSERT_EQ(2, tour.at(1));
+    ASSERT_EQ(4, tour.at(2));
+    ASSERT_EQ(0, tour.at(3));
+    ASSERT_EQ(3, tour.at(4));
+    ASSERT_EQ(5, tour.at(5));
 }
