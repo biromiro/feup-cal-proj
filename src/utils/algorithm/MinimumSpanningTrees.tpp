@@ -6,7 +6,7 @@
 #include "MinimumSpanningTrees.h"
 
 template<class T>
-std::vector<Node<T> *>
+std::vector<int>
 MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &nodes, Node<T> *origin,
                                               Node<T> *destination) {
     int edgesAccepted = 0;
@@ -36,8 +36,8 @@ MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &node
         }
     }
 
-    std::vector<Node<T>*> result = MinimumSpanningTrees<int>::dfs(graph, graph.findNode(origin->getID()));
-    result.push_back(destination);
+    std::vector<int> result = MinimumSpanningTrees<int>::dfs(graph, graph.findNode(origin->getID()));
+    result.push_back(destination->getID());
 
     return result;
 }
@@ -68,9 +68,9 @@ DisjointSetGroup MinimumSpanningTrees<T>::createSet(UndirectedGraph<T> &graph) {
 }
 
 template<class T>
-std::vector<Node<T> *> MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, Node<T> *origin) {
+std::vector<int> MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, Node<T> *origin) {
     Node<T> *v = origin;
-    std::vector<Node<T> *> nodes;
+    std::vector<int> nodes;
 
     std::stack<Node<T> *> nodeStack;
     Node<T> *curNode, *nextNode;
@@ -82,7 +82,7 @@ std::vector<Node<T> *> MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, N
 
     while (!nodeStack.empty()) {
         curNode = nodeStack.top();
-        if(!curNode->isVisited()) nodes.push_back(curNode);
+        if(!curNode->isVisited()) nodes.push_back(curNode->getID());
         curNode->setVisited(true);
 
         nodeStack.pop();

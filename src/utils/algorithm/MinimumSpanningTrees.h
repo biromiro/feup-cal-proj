@@ -18,7 +18,7 @@ struct CmpEdgePtrs {
 template<class T>
 class MinimumSpanningTrees {
 private:
-    static std::vector<Node<T> *> dfs(UndirectedGraph<T> &graph, Node<T> *originID);
+    static std::vector<int> dfs(UndirectedGraph<T> &graph, Node<T> *originID);
 
     static std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
     graphToQueue(UndirectedGraph<T> &graph);
@@ -26,7 +26,7 @@ private:
     static DisjointSetGroup createSet(UndirectedGraph<T> &graph);
 
 public:
-    static std::vector<Node<T> *>
+    static std::vector<int>
     calculateTreeKruskal(const std::vector<Node<T> *> &nodes, Node<T> *origin, Node<T> *destination);
 };
 

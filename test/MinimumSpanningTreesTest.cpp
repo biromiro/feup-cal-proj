@@ -20,13 +20,13 @@ TEST(MinimumSpanningTrees, kruskal) {
 
     std::vector<Node<int>*> nodes = {graph.findNode(1), graph.findNode(2), graph.findNode(3), graph.findNode(4)};
 
-    nodes = MinimumSpanningTrees<int>::calculateTreeKruskal(nodes, graph.findNode(0), graph.findNode(5));
+    std::vector<int> result  = MinimumSpanningTrees<int>::calculateTreeKruskal(nodes, graph.findNode(0), graph.findNode(5));
 
-    ASSERT_EQ(0, nodes.at(0)->getID());
-    ASSERT_EQ(4, nodes.at(1)->getID());
-    ASSERT_EQ(1, nodes.at(2)->getID());
-    ASSERT_EQ(3, nodes.at(3)->getID());
-    ASSERT_EQ(2, nodes.at(4)->getID());
-    ASSERT_EQ(5, nodes.at(5)->getID());
+    ASSERT_EQ(0, result.at(0));
+    ASSERT_EQ(4, result.at(1));
+    ASSERT_EQ(1, result.at(2));
+    ASSERT_EQ(3, result.at(3));
+    ASSERT_EQ(2, result.at(4));
+    ASSERT_EQ(5, result.at(5));
 
 }
