@@ -12,11 +12,11 @@
 template <class T>
 class NearestNeighbour {
 public:
-    static std::vector<Node<T>*> getTour(std::vector<Node<T>*> poi, Node<T>* origin);
+    static std::vector<Node<T>*> getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination);
 };
 
 template <class T>
-std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, Node<T>* origin) {
+std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination) {
     std::vector<Node<T>*> tour = {origin};
     Node<T>* last = origin;
 
@@ -37,6 +37,7 @@ std::vector<Node<T>*> NearestNeighbour<T>::getTour(std::vector<Node<T>*> poi, No
         poi.erase(next);
     }
 
+    tour.push_back(destination);
     return tour;
 }
 
