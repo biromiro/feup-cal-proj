@@ -21,24 +21,30 @@ std::vector<int> TravelingSalesman<T>::bruteForce(std::vector<Node<T>*> poi, Nod
     std::vector<Node<T>*> shortest_path;
     double shortest_distance = std::numeric_limits<double>::infinity();
 
+    if(poi.empty()) return {};
+
     do {
-        poi.insert(poi.begin(), origin);
-        poi.push_back(destination);
+        Node<T>* firstNode,* secondNode;
 
         double distance = 0;
+        firstNode = origin;
+        secondNode = poi.front();
+        distance +=  Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
         for(size_t i = 0; i < poi.size() - 1; i++) {
-            Node<T>* firstNode = poi.at(i), *secondNode = poi.at(i+1);
+            firstNode = poi.at(i);
+            secondNode = poi.at(i+1);
 
             distance += Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
         }
+        firstNode = poi.back();
+        secondNode = destination;
+        distance +=  Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
 
         if(distance <= shortest_distance) {
             shortest_distance = distance;
             shortest_path = poi;
         }
 
-        poi.erase(poi.begin());
-        poi.erase(poi.end() - 1);
     } while(std::next_permutation(poi.begin(), poi.end()));
 
     std::vector<int> shortest_id;

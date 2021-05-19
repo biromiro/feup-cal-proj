@@ -21,6 +21,32 @@ TEST(TravelingSalesman, bruteForce) {
 
     std::vector<Node<int>*> poi = {graph.findNode(1), graph.findNode(2), graph.findNode(3), graph.findNode(4), graph.findNode(5)};
 
-    TravelingSalesman<int>::bruteForce(poi, graph.findNode(0), graph.findNode(6));
+    std::vector<int> shortestPath = TravelingSalesman<int>::bruteForce(poi, graph.findNode(0), graph.findNode(6));
 
+    ASSERT_EQ(3, shortestPath.at(0));
+    ASSERT_EQ(2, shortestPath.at(1));
+    ASSERT_EQ(1, shortestPath.at(2));
+    ASSERT_EQ(4, shortestPath.at(3));
+    ASSERT_EQ(5, shortestPath.at(4));
+
+    graph.addNode(7, 1, Position(NodeMode::GRID, 6, 2));
+
+    shortestPath = TravelingSalesman<int>::bruteForce(poi, graph.findNode(0), graph.findNode(7));
+
+    ASSERT_EQ(1, shortestPath.at(0));
+    ASSERT_EQ(4, shortestPath.at(1));
+    ASSERT_EQ(5, shortestPath.at(2));
+    ASSERT_EQ(2, shortestPath.at(3));
+    ASSERT_EQ(3, shortestPath.at(4));
+
+    graph.addNode(8, 1, Position(NodeMode::GRID, 0,4));
+    graph.addNode(9, 1, Position(NodeMode::GRID, 0,4));
+
+    shortestPath = TravelingSalesman<int>::bruteForce(poi, graph.findNode(8), graph.findNode(9));
+
+    ASSERT_EQ(3, shortestPath.at(0));
+    ASSERT_EQ(4, shortestPath.at(1));
+    ASSERT_EQ(5, shortestPath.at(2));
+    ASSERT_EQ(1, shortestPath.at(3));
+    ASSERT_EQ(2, shortestPath.at(4));
 }
