@@ -34,7 +34,7 @@ public:
 
     Node<T> *getDest() const;
 
-    double getCost() const;
+    [[nodiscard]] double getCost() const;
 
     Edge<T>* getReverse() const;
 
@@ -53,7 +53,22 @@ public:
 
 template<class T>
 Edge<T>::Edge(Node<T> *o, Node<T> *d, double cost):
-        orig(o), dest(d), cost(cost), selected(false), reverse(nullptr) {}
+orig(o), dest(d), cost(cost), selected(false), reverse(nullptr) {}
 
+template<class T>
+Node<T> *Edge<T>::getOrig() const {
+    return orig;
+}
+
+
+template<class T>
+Node<T> *Edge<T>::getDest() const {
+    return dest;
+}
+
+template<class T>
+double Edge<T>::getCost() const {
+    return cost;
+}
 
 #endif //FEUP_CAL_PROJ_EDGE_TPP

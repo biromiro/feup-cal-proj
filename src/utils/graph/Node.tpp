@@ -42,18 +42,18 @@ public:
     void setVisited(bool visited);
     void setPath(Edge<T> *path);
     void setDist(double dist);
-    bool isVisited() const;
+    [[nodiscard]] bool isVisited() const;
     Edge<T> *getPath() const;
-    double getDist() const;
+    [[nodiscard]] double getDist() const;
     void setID(int newID);
-    int getID() const;
-    int getSCCSID() const;
+    [[nodiscard]] int getID() const;
+    [[nodiscard]] int getSCCSID() const;
     void setSCCSID(int sccsId);
-    int getLowlink() const;
+    [[nodiscard]] int getLowlink() const;
     void setLowlink(int lowlink);
-    bool isInStack() const;
+    [[nodiscard]] bool isInStack() const;
     void setInStack(bool inStack);
-    const Position &getPos() const;
+    [[nodiscard]] const Position &getPos() const;
     void setPos(const Position &pos);
 
     friend class UndirectedGraph<T>;
@@ -61,20 +61,6 @@ public:
     friend class MutablePriorityQueue<Node<T>>;
 };
 
-template<class T>
-Node<T> *Edge<T>::getOrig() const {
-    return orig;
-}
-
-template<class T>
-Node<T> *Edge<T>::getDest() const {
-    return dest;
-}
-
-template<class T>
-double Edge<T>::getCost() const {
-    return cost;
-}
 
 template<class T>
 void Edge<T>::select() {

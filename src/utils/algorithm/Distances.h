@@ -15,8 +15,12 @@ public:
     double static getEuclideanDistance(Position pos1, Position pos2);
     double static getManhattanDistance(Position pos1, Position pos2);
 private:
+    double static dMeridian;
+    double static dEquator;
     double static getEuclideanDistanceCoords(Position pos1, Position pos2);
     double static getEuclideanDistanceGrid(Position pos1, Position pos2);
+    double static getManhattanDistanceCoords(Position pos1, Position pos2);
+    double static getManhattanDistanceGrid(Position pos1, Position pos2);
 };
 
 

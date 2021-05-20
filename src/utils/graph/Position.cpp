@@ -10,11 +10,11 @@ Position::Position(NodeMode mode, double val1, double val2) {
     this->mode = mode;
 }
 
-double Position::getX() {
+double Position::getX() const{
     return val1;
 }
 
-double Position::getY() {
+double Position::getY() const{
     return val2;
 }
 
