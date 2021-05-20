@@ -23,7 +23,7 @@ private:
     GraphViewer gv;
     int imgHeight, imgWidth;
     std::string imagePath;
-    std::map<Edge<NodeInfo>*, id_t> edgeIDs;
+    std::map<Edge<NodeInfo>*, GraphViewer::id_t> edgeIDs;
 };
 
 #endif //FEUP_CAL_PROJ_GRAPHMANAGER_H

@@ -31,9 +31,8 @@ void GraphManager::buildPath(const vector<Edge<NodeInfo> *> &edges, GraphViewer:
         }
         try{
             GraphViewer::Edge gvedge = gv.addEdge(numEdges, *orig, *dest, GraphViewer::Edge::EdgeType::DIRECTED);
-            edgeIDs[edge] = numEdges;
-            numEdges++;
-             gvedge.setColor(color);
+            edgeIDs[edge] = numEdges++;
+            //gvedge.setColor(color);
         } catch (std::invalid_argument &e) {}
         dest->setColor(color);
         dest->setSize(10);
@@ -44,21 +43,18 @@ void GraphManager::buildPath(const vector<Edge<NodeInfo> *> &edges, GraphViewer:
 void GraphManager::showPath(const vector<Edge<NodeInfo> *> &edges, TravelType type){
     int speed = (type == TRAVEL) ? 50 : 200;
     GraphViewer::Node* orig, *dest;
-    GraphViewer::Edge* gvedge;
     for(Edge<NodeInfo>* edge: edges){
         orig = &gv.getNode(edge->getOrig()->getID());
         dest = &gv.getNode(edge->getDest()->getID());
-        gvedge = &gv.getEdge(edgeIDs[edge]);
-
         this->gv.lock();
-        dest->setSize(100);
-        orig->setSize(10);
+        dest->setSize(100.0);
+        orig->setSize(10.0);
         this->gv.unlock();
 
         ms_sleep(speed);
     }
     this->gv.lock();
-    dest->setSize(10);
+    dest->setSize(10.0);
     this->gv.unlock();
 
 }
