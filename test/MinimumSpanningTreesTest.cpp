@@ -8,32 +8,25 @@
 /// TESTS ///
 
 TEST(MinimumSpanningTrees, kruskal) {
-    UndirectedGraph<int> graph;
+    Graph<int> graph;
 
-    graph.addNode(0, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(1, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(2, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(3, 1, Position(NodeMode::COORDS, 0, 0));
-    graph.addNode(4, 1, Position(NodeMode::COORDS, 0, 0));
+    graph.addNode(0, 1, Position(NodeMode::GRID, 0, 0));
+    graph.addNode(1, 1, Position(NodeMode::GRID, 1, 2));
+    graph.addNode(2, 1, Position(NodeMode::GRID, 3, 5));
+    graph.addNode(3, 1, Position(NodeMode::GRID, -1, 5));
+    graph.addNode(4, 1, Position(NodeMode::GRID, -2, 1));
 
+    graph.addNode(5, 1, Position(NodeMode::GRID, 0,1));
 
-    graph.addEdge(0, 1, 2);
-    graph.addEdge(1, 2, 3);
-    graph.addEdge(3, 1, 5);
-    graph.addEdge(2, 4, 1);
-    graph.addEdge(1, 4, 2);
-    graph.addEdge(3, 4, 6);
-    graph.addEdge(0, 4, 3);
-    graph.addEdge(2, 3, 3);
-    graph.addEdge(0, 3, 2);
+    std::vector<Node<int>*> nodes = {graph.findNode(1), graph.findNode(2), graph.findNode(3), graph.findNode(4)};
 
-    MinimumSpanningTrees<int> mst = MinimumSpanningTrees(graph);
+    std::vector<int> result  = MinimumSpanningTrees<int>::calculateTreeKruskal(nodes, graph.findNode(0), graph.findNode(5));
 
-    mst.calculateTreeKruskal(0);
+    ASSERT_EQ(0, result.at(0));
+    ASSERT_EQ(4, result.at(1));
+    ASSERT_EQ(1, result.at(2));
+    ASSERT_EQ(3, result.at(3));
+    ASSERT_EQ(2, result.at(4));
+    ASSERT_EQ(5, result.at(5));
 
-    EXPECT_EQ(4, graph.findNode(2)->getPath()->getOrig()->getID());
-    EXPECT_EQ(1, graph.findNode(4)->getPath()->getOrig()->getID());
-    EXPECT_EQ(0, graph.findNode(1)->getPath()->getOrig()->getID());
-    EXPECT_EQ(nullptr, graph.findNode(0)->getPath());
-    EXPECT_EQ(0, graph.findNode(3)->getPath()->getOrig()->getID());
 }

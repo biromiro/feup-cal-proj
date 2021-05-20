@@ -6,22 +6,25 @@
 #include "MinimumSpanningTrees.h"
 
 template<class T>
-MinimumSpanningTrees<T>::MinimumSpanningTrees(UndirectedGraph<T> &graph) {
-    this->graph = graph;
-}
-
-template<class T>
-void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
+std::vector<int>
+MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &nodes, Node<T> *origin,
+                                              Node<T> *destination) {
     int edgesAccepted = 0;
+    std::vector<Node<T>*> origNodes = nodes;
+    origNodes.push_back(origin);
+    UndirectedGraph<T> graph = UndirectedGraph<T>(origNodes);
 
-    auto queue = this->graphToQueue();
-    auto sets = this->createSet();
+    auto queue = MinimumSpanningTrees<T>::graphToQueue(graph);
+    auto sets = MinimumSpanningTrees<T>::createSet(graph);
 
-    while(edgesAccepted < graph.getNodeSet().size() - 1) {
-        Edge<T>* edge = queue.top();
+    while (edgesAccepted < graph.getNodeSet().size() - 1) {
+        Edge<T> *edge = queue.top();
+        queue.pop();
 
-        DisjointSet* originSet = sets.findSet(edge->getOrig()->getID());
-        DisjointSet* destSet = sets.findSet(edge->getDest()->getID());
+        if(edge->isSelected()) continue;
+
+        DisjointSet *originSet = sets.findSet(edge->getOrig()->getID());
+        DisjointSet *destSet = sets.findSet(edge->getDest()->getID());
 
         if (originSet != destSet) {
             edgesAccepted++;
@@ -31,19 +34,21 @@ void MinimumSpanningTrees<T>::calculateTreeKruskal(int originID) {
 
             sets.linkSets(originSet, destSet);
         }
-
-        queue.pop();
     }
 
-    dfs(originID);
+    std::vector<int> result = MinimumSpanningTrees<int>::dfs(graph, graph.findNode(origin->getID()));
+    result.push_back(destination->getID());
+
+    return result;
 }
 
 template<class T>
-priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpanningTrees<T>::graphToQueue() {
+priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
+MinimumSpanningTrees<T>::graphToQueue(UndirectedGraph<T> &graph) {
     auto queue = std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>();
 
-    for(Node<T>* node : this->graph.getNodeSet()) {
-        for(Edge<T>* edge : node->getOutgoing()) {
+    for (Node<T> *node : graph.getNodeSet()) {
+        for (Edge<T> *edge : node->getOutgoing()) {
             queue.push(edge);
         }
     }
@@ -52,10 +57,10 @@ priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>> MinimumSpannin
 }
 
 template<class T>
-DisjointSetGroup MinimumSpanningTrees<T>::createSet() {
+DisjointSetGroup MinimumSpanningTrees<T>::createSet(UndirectedGraph<T> &graph) {
     DisjointSetGroup result;
 
-    for(Node<T>* node : graph.getNodeSet()) {
+    for (Node<T> *node : graph.getNodeSet()) {
         result.createSet(node->getID());
     }
 
@@ -63,35 +68,34 @@ DisjointSetGroup MinimumSpanningTrees<T>::createSet() {
 }
 
 template<class T>
-void MinimumSpanningTrees<T>::dfs(int originID) {
-    Node<T>* v = graph.findNode(originID);
-    if(v == nullptr) return;
+std::vector<int> MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, Node<T> *origin) {
+    Node<T> *v = origin;
+    std::vector<int> nodes;
 
-    v->setPath(nullptr);
-
-    std::stack<Node<T>*> nodeStack;
-    Node<T>* curNode, * nextNode;
+    std::stack<Node<T> *> nodeStack;
+    Node<T> *curNode, *nextNode;
     nodeStack.push(v);
 
-    for(Node<T>* node : graph.getNodeSet()) {
-        node->setPath(nullptr);
+    for (Node<T> *node : graph.getNodeSet()) {
         node->setVisited(false);
     }
 
-    while(!nodeStack.empty()) {
+    while (!nodeStack.empty()) {
         curNode = nodeStack.top();
+        if(!curNode->isVisited()) nodes.push_back(curNode->getID());
         curNode->setVisited(true);
 
         nodeStack.pop();
 
-        for(Edge<T>* edge : curNode->getOutgoing()) {
-            if(edge->isSelected()) {
+        for (Edge<T> *edge : curNode->getOutgoing()) {
+            if (edge->isSelected()) {
                 nextNode = edge->getDest();
-                if(nextNode->isVisited()) continue;
+                if (nextNode->isVisited()) continue;
 
-                nextNode->setPath(edge);
                 nodeStack.push(nextNode);
             }
         }
     }
+
+    return nodes;
 }

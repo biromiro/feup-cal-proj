@@ -7,6 +7,8 @@
 
 
 #include <graph/Graph.tpp>
+#include <utils/utilitaryStructures/HeuristicNode.h>
+#include <algorithm>
 
 class Pathfinding {
 public:
@@ -14,7 +16,10 @@ public:
     void static dijkstraAdaptation(Graph<NodeInfo>& graph, std::vector<Node<NodeInfo>*>& parks, int orig, int maxRadius);
 
     template <class T>
-    void static aStarAdapatation(Graph<T>& graph, Node<T>* origin, Node<T>* dest);
+    bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
+
+    template <class T>
+            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Edge<T>*>& result);
 };
 
 template<class T>
@@ -59,8 +64,49 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
 }
 
 template<class T>
-void Pathfinding::aStarAdapatation(Graph<T> &graph, Node<T> *origin, Node<T> *dest) {
+bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
+    Node<T>* origin = graph.findNode(orig);
+    Node<T>* destination = graph.findNode(dest);
 
+    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
+
+    for(Node<T>* node: graph.getNodeSet()){
+        node->setDist(INF);
+        node->setPath(nullptr);
+    }
+    origin->setDist(0);
+    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
+    pq.push(HeuristicNode<T>(origin, destination));
+    while(!pq.empty()){
+        HeuristicNode<T> current = pq.top();
+        pq.pop();
+        if(current.getCurrentNode() == destination) return true;
+        for(Edge<T>* edge: current.getCurrentNode()->getOutgoing()){
+            Node<T>* to = edge->getDest();
+            double cost = current.getCurrentNode()->getDist() + edge->getCost();
+            if(to->getDist() == INF || to->getDist() > cost){
+                to->setDist(cost);
+                to->setPath(edge);
+                pq.push(HeuristicNode<T>(to, destination));
+            }
+        }
+    }
+    return false;
+}
+
+template<class T>
+bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Edge<T>*>& result) {
+    Node<T>* destination = graph.findNode(dest);
+    Node<T>* source = graph.findNode(origin);
+    Edge<T>* currentEdge = destination->getPath();
+    while(currentEdge != nullptr){
+        if (currentEdge->getOrig() == source)
+            break;
+        result.push_back(currentEdge);
+        currentEdge = currentEdge->getOrig()->getPath();
+    }
+    std::reverse(result.begin(), result.end());
+    return true;
 }
 
 
