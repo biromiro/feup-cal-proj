@@ -51,7 +51,17 @@ add_library(cal_lib
         src/utils/algorithm/NearestNeighbour.h
         GraphViewerCpp/include/graphviewer.h
         src/utils/graphLoad/GraphManager.h
-        src/utils/graphLoad/GraphManager.cpp src/utils/utilitaryStructures/utilFunctions.cpp src/utils/utilitaryStructures/utilFunctions.h)
+        src/utils/graphLoad/GraphManager.cpp
+        src/utils/utilitaryStructures/utilFunctions.cpp
+        src/utils/utilitaryStructures/utilFunctions.h
+        src/model/user/user.cpp src/model/user/user.h
+        src/model/admin/admin.cpp src/model/admin/admin.h
+        src/model/admin/adminManager.cpp src/model/admin/adminManager.h
+        src/model/user/userManager.cpp src/model/user/userManager.h
+        src/model/userDatabase.cpp src/model/userDatabase.h
+        src/auth/currentSession.cpp src/auth/currentSession.h
+        src/exception/userAlreadyExists/userAlreadyExists.cpp src/exception/userAlreadyExists/userAlreadyExists.h
+        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h)
 
 add_executable(feup_cal_proj main.cpp)
 
