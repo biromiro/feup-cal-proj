@@ -47,6 +47,7 @@ add_library(cal_lib
         src/utils/disjointSet/DisjointSetGroup.h src/utils/disjointSet/DisjointSetGroup.cpp
         src/utils/algorithm/MinimumSpanningTrees.h
         src/utils/graph/UndirectedGraph.tpp src/utils/algorithm/MinimumSpanningTrees.tpp
+        src/utils/algorithm/NearestNeighbour.h
         GraphViewerCpp/include/graphviewer.h
         src/utils/graphLoad/GraphManager.h
         src/utils/graphLoad/GraphManager.cpp src/utils/utilitaryStructures/utilFunctions.cpp src/utils/utilitaryStructures/utilFunctions.h)
@@ -54,7 +55,7 @@ add_library(cal_lib
 add_executable(feup_cal_proj main.cpp)
 
 add_executable(feup_cal_proj_tests tests.cpp
-        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp)
+        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp test/NearestNeighbourTest.cpp)
 
 target_link_libraries(feup_cal_proj cal_lib graphviewer)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)
