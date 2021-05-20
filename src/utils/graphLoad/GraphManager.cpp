@@ -7,7 +7,7 @@
 
 GraphManager::GraphManager(int height, int width, std::string path): imgHeight(height), imgWidth(width), imagePath(path) {
     // this->gv.setCenter(sf::Vector2f(height/2, width/2));
-    this->gv.setBackground(path, sf::Vector2f(-height/2, -width/2));
+    if(path != "") this->gv.setBackground(path, sf::Vector2f(-height/2, -width/2));
     this->gv.setScale(10);
 }
 

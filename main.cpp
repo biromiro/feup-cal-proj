@@ -9,9 +9,20 @@
 #include <algorithm/Pathfinding.h>
 #include <graphviewer.h>
 #include <graphLoad/GraphManager.h>
+#include <src/model/db/userDatabase.h>
+#include <model/journeyFinder/journeyFinder.h>
 
 int main(){
-    srand(time(NULL));
+
+
+    UserDatabase db("resources/database.txt");
+
+    JourneyFinder jf("resources/Penafiel/SCC/penafiel_strong_nodes_xy.txt",
+                     "resources/Penafiel/SCC/penafiel_strong_edges.txt");
+
+    jf.generateJourney(1, 7100, 5, 500);
+    jf.showJourney();
+    /*srand(time(NULL));
 
     Graph<struct NodeInfo> g2;
 
@@ -50,6 +61,6 @@ int main(){
     gv.showPath(vector1, TRAVEL);
     std::cout << "Second path" << std::endl;
     gv.showPath(vector2, WALKING);
-    gv.finish();
+    gv.finish();*/
     return 0;
 }
