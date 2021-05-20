@@ -7,29 +7,49 @@
 #include <iostream>
 #include <algorithm/Connectivity.tpp>
 #include <algorithm/Pathfinding.h>
+#include <graphviewer.h>
+#include <graphLoad/GraphManager.h>
 
 int main(){
-    Graph<NodeInfo> g;
+    srand(time(NULL));
 
-    GraphLoader<NodeInfo> gLoader("resources/Espinho/SCC/espinho_strong_nodes_xy.txt",
-                                "resources/Espinho/SCC/espinho_strong_edges.txt",
+    Graph<struct NodeInfo> g2;
+
+
+    GraphLoader<NodeInfo> gLoader("resources/Penafiel/SCC/penafiel_strong_nodes_xy.txt",
+                                "resources/Penafiel/SCC/penafiel_strong_edges.txt",
                                 NodeMode::GRID);
-/*
-    GraphLoader<NodeInfo> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
-                                "resources/OtherMaps/GridGraphs/4x4/edges.txt",
-                                NodeMode::GRID);
-  */
-    // g = gLoader.getGraph();
+
+    g2 = gLoader.getGraph();
+    std::vector<Edge<NodeInfo>*> vector1, vector2;
 
 
-    Connectivity<NodeInfo> connect = Connectivity<NodeInfo>(g);
+    Connectivity<NodeInfo> connect = Connectivity<NodeInfo>(g2);
     std::cout << connect.getNumConnectedComponents();
 
     vector<Node<NodeInfo> *> parks;
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g, parks, 1, 3);
+    int destID = 7100, originID = 1;
 
+    GraphManager gv(877, 941,"resources/Penafiel/SCC/penafiel_strong_component.png");
 
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g2, parks, destID, 500);
+    if(parks.empty()) return -1;
+    std::cout << Pathfinding::getOrderedPath(g2, parks[0]->getID(), destID, vector2);
+    gv.buildPath(vector2, GraphViewer::ORANGE);
 
+    if(!Pathfinding::aStarAdaptation(g2, originID, parks[0]->getID())) return -1;
+    std::cout << Pathfinding::getOrderedPath(g2, originID, parks[0]->getID(), vector1);
+    gv.buildPath(vector1, GraphViewer::BLUE);
+
+    gv.drawPark(parks[0]);
+    Node<NodeInfo> * pNode = g2.findNode(destID);
+    gv.drawDest(pNode);
+    gv.show();
+    std::cout << "First path" << std::endl;
+    gv.showPath(vector1, TRAVEL);
+    std::cout << "Second path" << std::endl;
+    gv.showPath(vector2, WALKING);
+    gv.finish();
     return 0;
 }
