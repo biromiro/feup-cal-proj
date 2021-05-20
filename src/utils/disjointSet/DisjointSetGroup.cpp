@@ -7,7 +7,8 @@
 DisjointSet* DisjointSetGroup::createSet(int id) {
     DisjointSet* set = new DisjointSet(id);
 
-    values.insert(values.begin() + id, set);
+    if(id >= values.size()) reserveValues(id+5);
+    values.at(id) = set;
     return set;
 }
 
@@ -26,4 +27,9 @@ void DisjointSetGroup::linkSets(DisjointSet *first, DisjointSet *second) {
         first->path = second;
         if(first->rank == second->rank) second->rank++;
     }
+}
+
+void DisjointSetGroup::reserveValues(size_t size) {
+    values.reserve(size);
+    values.resize(size);
 }

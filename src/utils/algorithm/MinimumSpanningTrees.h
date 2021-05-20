@@ -10,7 +10,7 @@
 
 template<class T>
 struct CmpEdgePtrs {
-    bool operator()(const Edge<T> * lhs, const Edge<T> * rhs) const {
+    bool operator()(const Edge<T> *lhs, const Edge<T> *rhs) const {
         return lhs->getCost() > rhs->getCost();
     }
 };
@@ -18,11 +18,16 @@ struct CmpEdgePtrs {
 template<class T>
 class MinimumSpanningTrees {
 private:
-    static void dfs(UndirectedGraph<T> &graph, int originID);
-    static std::priority_queue<Edge<T>*, std::vector<Edge<T>*>, CmpEdgePtrs<T>> graphToQueue(UndirectedGraph<T> &graph);
+    static std::vector<int> dfs(UndirectedGraph<T> &graph, Node<T> *originID);
+
+    static std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
+    graphToQueue(UndirectedGraph<T> &graph);
+
     static DisjointSetGroup createSet(UndirectedGraph<T> &graph);
+
 public:
-    static void calculateTreeKruskal(UndirectedGraph<T> &graph, int originID);
+    static std::vector<int>
+    calculateTreeKruskal(const std::vector<Node<T> *> &nodes, Node<T> *origin, Node<T> *destination);
 };
 
 #include "MinimumSpanningTrees.tpp"

@@ -40,6 +40,8 @@ public:
 
     void select();
 
+    void unSelect();
+
     bool isSelected() const;
 
     friend class UndirectedGraph<T>;
