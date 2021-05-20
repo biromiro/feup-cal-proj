@@ -13,7 +13,7 @@ class DisjointSetGroup {
 private:
     std::vector<DisjointSet*> values;
 public:
-    DisjointSetGroup() {values = std::vector<DisjointSet*>();};
+    explicit DisjointSetGroup() {values = std::vector<DisjointSet*>();};
     ~DisjointSetGroup() {
         for(DisjointSet* value : values) {
             delete value;
@@ -23,6 +23,7 @@ public:
     DisjointSet* createSet(int id);
     void linkSets(DisjointSet* first, DisjointSet* second);
     DisjointSet* findSet(int id);
+    void reserveValues(size_t size);
 };
 
 #endif //FEUP_CAL_PROJ_DISJOINTSETGROUP_H

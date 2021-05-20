@@ -27,7 +27,8 @@ public:
     Node<T>* findNode(int id) const;
     std::vector<Node<T> *> getNodeSet() const;
     Node<T> *addNode(int ID, const T &in, Position pos);
-    Edge<T> *addEdge(int srcID, int destID, double cost);
+
+    virtual Edge<T> *addEdge(int srcID, int destID, double cost);
 };
 
 template <class T>
