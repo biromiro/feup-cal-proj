@@ -37,7 +37,7 @@ std::vector<int> TravelingSalesman<T>::bruteForce(std::vector<Node<T>*> poi, Nod
     std::unordered_map<std::pair<int, int>, double, intPairHasher> distances;
     double shortest_distance = std::numeric_limits<double>::infinity();
 
-    if(poi.empty()) return {};
+    if(poi.empty()) return {origin->getID(), destination->getID()};
 
     do {
         Node<T>* firstNode,* secondNode;
@@ -58,16 +58,18 @@ std::vector<int> TravelingSalesman<T>::bruteForce(std::vector<Node<T>*> poi, Nod
 
         if(distance <= shortest_distance) {
             shortest_distance = distance;
-            shortest_path = poi;
+            shortest_path = std::vector<Node<int>*>(poi.begin(), poi.end());
         }
 
     } while(std::next_permutation(poi.begin(), poi.end()));
 
     std::vector<int> shortest_id;
 
+    shortest_id.push_back(origin->getID());
     for(Node<T>* node : shortest_path) {
         shortest_id.push_back(node->getID());
     }
+    shortest_id.push_back(destination->getID());
 
     return shortest_id;
 }
