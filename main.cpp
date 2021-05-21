@@ -10,11 +10,14 @@
 #include <graphviewer.h>
 #include <graphLoad/GraphManager.h>
 
+
+#include <random>
+#include <chrono>
+
 int main(){
     srand(time(NULL));
 
     Graph<struct NodeInfo> g2;
-
 
     GraphLoader<NodeInfo> gLoader("resources/Penafiel/SCC/penafiel_strong_nodes_xy.txt",
                                 "resources/Penafiel/SCC/penafiel_strong_edges.txt",
@@ -22,6 +25,8 @@ int main(){
 
     g2 = gLoader.getGraph();
     std::vector<Edge<NodeInfo>*> vector1, vector2;
+
+
 
 
     Connectivity<NodeInfo> connect = Connectivity<NodeInfo>(g2);
