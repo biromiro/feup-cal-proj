@@ -98,37 +98,37 @@ void JourneyFinder::journeyToJSON() {
     journey << "{\n  \"paths\": [\n";
     for(auto pair: paths){
         journey << "    {\n";
-        vector<Edge<NodeInfo>*> pathToDest = pair.first;
-        vector<Edge<NodeInfo>*> pathToPark = pair.second;
+        vector<Edge<NodeInfo>*> pathToPark = pair.first;
+        vector<Edge<NodeInfo>*> pathToDest = pair.second;
         Edge<NodeInfo>
                 *originEdge = pathToPark.at(0),
                 *parkEdge = pathToDest.at(0),
                 *destEdge = pathToDest.at(pathToDest.size() - 1);
 
         journey << "      \"park\": ["
-        << parkEdge->getOrig()->getPos().getX()
-        << ","
         << parkEdge->getOrig()->getPos().getY()
+        << ","
+        << parkEdge->getOrig()->getPos().getX()
         << "],\n";
 
         journey << "      \"orig\": ["
-        << originEdge->getOrig()->getPos().getX()
-        << ","
         << originEdge->getOrig()->getPos().getY()
+        << ","
+        << originEdge->getOrig()->getPos().getX()
         << "],\n";
 
         journey << "      \"dest\": ["
-        << destEdge->getDest()->getPos().getX()
-        << ","
         << destEdge->getDest()->getPos().getY()
+        << ","
+        << destEdge->getDest()->getPos().getX()
         << "],\n";
 
         journey << "      \"origToPark\": [\n";
         for(size_t i = 0; i < pathToPark.size() - 1; i++){
             Edge<NodeInfo>* curEdge = pathToPark.at(i);
             journey << "         ["
-                    << curEdge->getDest()->getPos().getX()
-                    << "," << curEdge->getDest()->getPos().getY()
+                    << curEdge->getDest()->getPos().getY()
+                    << "," << curEdge->getDest()->getPos().getX()
                     << "]";
 
             if(i == pathToPark.size() - 2) journey << "\n";
@@ -140,8 +140,8 @@ void JourneyFinder::journeyToJSON() {
         for(size_t i = 0; i < pathToDest.size() - 1; i++){
             Edge<NodeInfo>* curEdge = pathToDest.at(i);
             journey << "         ["
-                    << curEdge->getDest()->getPos().getX()
-                    << "," << curEdge->getDest()->getPos().getY()
+                    << curEdge->getDest()->getPos().getY()
+                    << "," << curEdge->getDest()->getPos().getX()
                     << "]";
 
             if(i == pathToDest.size() - 2) journey << "\n";
@@ -152,5 +152,9 @@ void JourneyFinder::journeyToJSON() {
         journey << "    }\n";
     }
     journey << "   ]\n}";
+
+}
+
+void JourneyFinder::checkConnectiviy() {
 
 }

@@ -15,6 +15,7 @@ public:
     JourneyFinder(const std::string& nodePath, const std::string& edgePath);
     void addPointOfInterest(size_t newPOI);
     bool generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark);
+    void checkConnectiviy();
 private:
     size_t calculate(Graph<NodeInfo>& graph, size_t origin, size_t destiny, bool final, size_t time, int maxSearchForPark);
     size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);

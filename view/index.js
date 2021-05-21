@@ -12,7 +12,7 @@ async function initMap() {
 }
 
 async function parseFile() {
-    const data = await (await fetch("sample.json")).json();
+    const data = await (await fetch("resources/journey.json")).json();
     console.log(data);
     return data.paths;
 }
