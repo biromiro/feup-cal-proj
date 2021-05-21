@@ -44,7 +44,8 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     curr->setDist(0);
     queue.push(curr);
 
-    while (!queue.empty() && curr->getDist() < maxRadius) {
+    while (!queue.empty()) {
+        if(curr->getDist() > maxRadius && !parks.empty()) break;
         curr = queue.top(); queue.pop();
         NodeInfo info = (NodeInfo)curr->getInfo();
         if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
@@ -105,6 +106,7 @@ bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<E
         result.push_back(currentEdge);
         currentEdge = currentEdge->getOrig()->getPath();
     }
+    result.push_back(currentEdge);
     std::reverse(result.begin(), result.end());
     return true;
 }

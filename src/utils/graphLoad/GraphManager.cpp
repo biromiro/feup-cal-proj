@@ -8,7 +8,9 @@
 GraphManager::GraphManager(int height, int width, std::string path): imgHeight(height), imgWidth(width), imagePath(path) {
     // this->gv.setCenter(sf::Vector2f(height/2, width/2));
     if(path != "") this->gv.setBackground(path, sf::Vector2f(-height/2, -width/2));
-    this->gv.setScale(10);
+    this->gv.setScale(10.0);
+    //this->gv.setCenter(sf::Vector2f(1800,0));
+
 }
 
 void GraphManager::buildPath(const vector<Edge<NodeInfo> *> &edges, GraphViewer::Color color) {
