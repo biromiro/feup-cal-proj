@@ -13,7 +13,8 @@
 
 /// TESTS ///
 
-#define GRAPH_SIZE 250
+#define GRAPH_SIZE 200
+#define SAMPLES 50
 
 Graph<int> genRandomGraph(size_t graph_size) {
     std::uniform_real_distribution<double> distrib(-10000, 10000);
@@ -58,44 +59,47 @@ TEST(ComplexityTest, tspAlgos) {
 
     std::vector<int> bruteResult;
     std::vector<int> comparativeResult;
-    double mst_correctness, nearest_correctness;
+    double mst_correctness, nearest_correctness, sum_mst_correctness, sum_nearest_correctness;
+    std::chrono::duration<double, std::milli> mst_time(0), nearest_time(0), brute_time(0), sum_mst_time(0), sum_nearest_time(0), sum_brute_time(0);
 
     for(size_t i = 2; i <= GRAPH_SIZE; i++) {
-        graph = genRandomGraph(i);
+        sum_mst_correctness = sum_nearest_correctness = 0;
+        sum_mst_time = sum_nearest_time = sum_brute_time = std::chrono::duration<double, std::milli>(0);
 
-        Node<int>* origin = graph.findNode(0);
-        Node<int>* destination = graph.findNode(i-1);
+        for(size_t sample = 0; sample < SAMPLES; sample++) {
+            graph = genRandomGraph(i);
 
-        std::vector<Node<int>*> nodeSet = graph.getNodeSet();
+            Node<int>* origin = graph.findNode(0);
+            Node<int>* destination = graph.findNode(i-1);
 
-        std::vector<Node<int>*> poi = std::vector<Node<int>*>(nodeSet.begin()+1, nodeSet.end()-1);
+            std::vector<Node<int>*> nodeSet = graph.getNodeSet();
 
-        auto t1 = std::chrono::high_resolution_clock::now();
-        comparativeResult = MinimumSpanningTrees<int>::calculateTreeKruskal(poi, origin, destination);
-        auto t2 = std::chrono::high_resolution_clock::now();
+            std::vector<Node<int>*> poi = std::vector<Node<int>*>(nodeSet.begin()+1, nodeSet.end()-1);
 
-        std::chrono::duration<double, std::milli> mst_time  = t2 - t1;
+            auto t1 = std::chrono::high_resolution_clock::now();
+            comparativeResult = MinimumSpanningTrees<int>::calculateTreeKruskal(poi, origin, destination);
+            auto t2 = std::chrono::high_resolution_clock::now();
 
-        std::chrono::duration<double, std::milli> brute_time = std::chrono::duration<double, std::milli>(0);
+            sum_mst_time += t2 - t1;
 
-        bruteResult.clear();
+            bruteResult.clear();
 
-        if(i <= 12) {
-            t1 = std::chrono::high_resolution_clock::now();
-            bruteResult = TravelingSalesman<int>::bruteForce(poi, origin, destination);
-            t2 = std::chrono::high_resolution_clock::now();
+            if(i <= 11) {
+                t1 = std::chrono::high_resolution_clock::now();
+                bruteResult = TravelingSalesman<int>::bruteForce(poi, origin, destination);
+                t2 = std::chrono::high_resolution_clock::now();
 
-            brute_time = (t2 - t1);
+                sum_brute_time += (t2 - t1);
+            }
+
+            if(!bruteResult.empty()) {
+                sum_mst_correctness += compareNodes(graph, bruteResult, comparativeResult);
+            } else {
+                sum_mst_correctness += 0;
+            }
         }
 
-        if(!bruteResult.empty()) {
-            mst_correctness = compareNodes(graph, bruteResult, comparativeResult);
-        } else {
-            mst_correctness = 0;
-        }
-
-
-        file << i-2 << "," << brute_time.count()  << "," << mst_time.count() << "," << mst_correctness  << "\n" << std::flush;
+        file << i-2 << "," << sum_brute_time.count()/SAMPLES  << "," << sum_mst_time.count()/SAMPLES << "," << sum_mst_correctness/SAMPLES  << "\n" << std::flush;
     }
 
     file.close();
