@@ -9,13 +9,25 @@
 #include <algorithm/Pathfinding.h>
 #include <graphviewer.h>
 #include <graphLoad/GraphManager.h>
+#include <src/model/db/userDatabase.h>
+#include <model/journeyFinder/journeyFinder.h>
 
 
 #include <random>
 #include <chrono>
 
 int main(){
-    srand(time(NULL));
+
+
+    UserDatabase db("resources/database.txt");
+
+    JourneyFinder jf("resources/Porto/SCC/porto_strong_nodes_latlng.txt",
+                     "resources/Porto/SCC/porto_strong_edges.txt");
+
+    jf.addPointOfInterest(26);
+
+    jf.generateJourney(1, 26796, 5, 1000);
+    /*srand(time(NULL));
 
     Graph<struct NodeInfo> g2;
 
@@ -55,6 +67,6 @@ int main(){
     gv.showPath(vector1, TRAVEL);
     std::cout << "Second path" << std::endl;
     gv.showPath(vector2, WALKING);
-    gv.finish();
+    gv.finish();*/
     return 0;
 }

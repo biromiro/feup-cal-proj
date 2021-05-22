@@ -52,7 +52,7 @@ public:
         this->currentCapacity = currentCapacity;
     }
 
-    double getPirce(int time) const {
+    double getPrice(int time) const {
         return priceFunction(time, currentCapacity, maxCapacity);
     }
 

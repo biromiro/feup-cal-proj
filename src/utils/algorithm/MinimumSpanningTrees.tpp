@@ -40,7 +40,7 @@ MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &node
         }
     }
 
-    std::vector<int> result = MinimumSpanningTrees<int>::dfs(graph, graph.findNode(origin->getID()));
+    std::vector<int> result = MinimumSpanningTrees<T>::dfs(graph, graph.findNode(origin->getID()));
     result.push_back(destination->getID());
 
     return result;

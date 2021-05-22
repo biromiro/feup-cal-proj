@@ -19,6 +19,10 @@ public:
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
 
     template <class T>
+    bool static dijkstraAdaptation(Graph<T>& graph, int orig, int dest);
+
+
+    template <class T>
             bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Edge<T>*>& result);
 };
 
@@ -44,7 +48,8 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     curr->setDist(0);
     queue.push(curr);
 
-    while (!queue.empty() && curr->getDist() < maxRadius) {
+    while (!queue.empty()) {
+        if(curr->getDist() > maxRadius && !parks.empty()) break;
         curr = queue.top(); queue.pop();
         NodeInfo info = (NodeInfo)curr->getInfo();
         if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
@@ -84,7 +89,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
         for(Edge<T>* edge: current.getCurrentNode()->getOutgoing()){
             Node<T>* to = edge->getDest();
             double cost = current.getCurrentNode()->getDist() + edge->getCost();
-            if(to->getDist() == INF || to->getDist() > cost){
+            if(to->getDist() > cost){
                 to->setDist(cost);
                 to->setPath(edge);
                 pq.push(HeuristicNode<T>(to, destination));
@@ -105,7 +110,44 @@ bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<E
         result.push_back(currentEdge);
         currentEdge = currentEdge->getOrig()->getPath();
     }
+    result.push_back(currentEdge);
     std::reverse(result.begin(), result.end());
+    return true;
+}
+
+template<class T>
+bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
+    Node<T>* origin = graph.findNode(orig);
+    Node<T>* destination = graph.findNode(dest);
+
+    if (origin == nullptr || destination == nullptr)
+        throw std::invalid_argument("Dijkstra Origin/Destination Node");
+
+
+    for(Node<T>* node: graph.getNodeSet()){
+        node->setDist(INF);
+        node->setPath(nullptr);
+    }
+
+    std::priority_queue<Node<T> *, std::vector<Node<T> *>, CmpNodePtrs<T>> queue;
+    Node<T>* curr = origin;
+
+    curr->setDist(0);
+    queue.push(curr);
+
+    while (!queue.empty()) {
+        curr = queue.top(); queue.pop();
+        if(curr == destination) break;
+        for (auto edge : curr->getOutgoing()) {
+            Node<T>* dest = edge->getDest();
+            auto newDist = curr->getDist() + edge->getCost();
+            if (newDist < dest->getDist()) {
+                dest->setDist(newDist);
+                dest->setPath(edge);
+                queue.push(dest);
+            }
+        }
+    }
     return true;
 }
 

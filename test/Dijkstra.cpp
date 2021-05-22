@@ -61,7 +61,7 @@ TEST(Dijkstra, checkPath) {
 
     vector<Node<NodeInfo> *> parks;
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g, parks, 1, INF);
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g, parks, 1, std::numeric_limits<int>::max());
 
     double distances[] = {0, 3, 1, 4, 2, 5, 4};
     int path[] = {-1, 3, 1, 5, 3, 7, 3};
@@ -90,7 +90,7 @@ TEST(Dijkstra, checkParksMaxRadius) {
 
     vector<Node<NodeInfo> *> parks;
 
-    Pathfinding::dijkstraAdaptation<NodeInfo>(g, parks, 1, INF);
+    Pathfinding::dijkstraAdaptation<NodeInfo>(g, parks, 1, std::numeric_limits<int>::max());
 
     ASSERT_EQ(2, parks.size());
     ASSERT_EQ(2, parks.at(0)->getID());
