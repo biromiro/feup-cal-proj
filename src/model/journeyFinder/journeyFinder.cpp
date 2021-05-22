@@ -62,10 +62,10 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     vector<Edge<NodeInfo>*> pathToDest, pathToPark;
     size_t bestPark = selectPark(parks, time);
-    if(!Pathfinding::aStarAdaptation(graph, bestPark, destiny))
-        throw NoFoundPath("Couldn't get the ordered path from a park to the destiny!");
+    //if(!Pathfinding::aStarAdaptation(graph, bestPark, destiny))
+    //     throw NoFoundPath("Couldn't get the ordered path from a park to the destiny!");
 
-    Pathfinding::getOrderedPath(graph, bestPark, destiny, pathToDest);
+    Pathfinding::getOrderedPath(graph, destiny, bestPark, pathToDest);
 
     if(!Pathfinding::aStarAdaptation(graph, origin, bestPark))
         throw NoFoundPath("Couldn't get the ordered path from the origin to the park!");
