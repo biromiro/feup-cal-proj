@@ -25,7 +25,7 @@
 #define BASE_NODES 1000
 #define BASE_EDGES 1000
 #define PARK_PERCENTAGE 20
-#define EDGES_PER_NODE 5
+#define EDGES_PER_NODE 3
 
 Graph<int> genRandomGraph(size_t graph_size) {
     std::uniform_real_distribution<double> distrib(MIN_POS, MAX_POS);
@@ -57,9 +57,6 @@ Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
 
     Graph<NodeInfo> graph;
 
-    if (graph_size == 0) graph_size = BASE_NODES;
-    if (edge_num == 0) edge_num = BASE_EDGES;
-
     for (size_t j = 0; j < graph_size; j++) {
         NodeInfo info;
 
@@ -74,18 +71,10 @@ Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
         graph.addNode(j, info, Position(COORDS, distrib(rng), distrib(rng)));
     }
 
-    for(size_t i = 0; i < graph_size && edge_num > 0; i++) {
-        graph.addEdge(i, edgeDistrib(rng), parkDistrib(rng));
-        edge_num--;
-    }
-
-    for(size_t i = 0; i < graph_size && edge_num > 0; i++) {
-        graph.addEdge(edgeDistrib(rng), i, parkDistrib(rng));
-        edge_num--;
-    }
-
-    for (size_t i = 0; i < edge_num; i++) {
-        graph.addEdge(edgeDistrib(rng), edgeDistrib(rng), parkDistrib(rng));
+    for(size_t i = 0; i < graph_size; i++) {
+        for(size_t j = 0; j < edge_num; j++) {
+            graph.addEdge(i, edgeDistrib(rng), parkDistrib(rng));
+        }
     }
 
     return graph;
@@ -185,24 +174,19 @@ TEST(ComplexityTest, pathfinding) {
 
     file.open("resultspath.csv");
 
-    file << "NODE SIZE,DIJKSTRA TIME,DIJKSTRA EDGES TIME,DIJKSTRA EDGES NODES TIME,ASTAR TIME\n" << std::flush;
+    file << "NODE SIZE,DIJKSTRA TIME,DIJ IT,ASTAR TIME,AST IT\n" << std::flush;
 
     std::vector<Node < NodeInfo>*> parks;
     std::chrono::duration<double, std::milli> sum_dijkstra_time(0),
-    sum_astar_time(0),
-    sum_dijkstra_edges_time(0),
-    sum_dijkstra_edges_nodes_time(0);
+    sum_astar_time(0);
 
     for (size_t i = 2; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
         sum_dijkstra_time = std::chrono::duration<double, std::milli>(0);
         sum_astar_time = std::chrono::duration<double, std::milli>(0);
-        sum_dijkstra_edges_time = std::chrono::duration<double, std::milli>(0);
-        sum_dijkstra_edges_nodes_time = std::chrono::duration<double, std::milli>(0);
 
         for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
-            parks.clear();
             // INCREMENTING NODES
-            graph = genRandomGraphInfo(i, BASE_EDGES);
+            graph = genRandomGraphInfo(i, EDGES_PER_NODE);
             parks.clear();
 
             auto t1 = std::chrono::high_resolution_clock::now();
@@ -211,33 +195,36 @@ TEST(ComplexityTest, pathfinding) {
 
             sum_dijkstra_time += t2 - t1;
 
+            graph.freeGraph();
+            graph = genRandomGraphInfo(i, EDGES_PER_NODE);
+
             t1 = std::chrono::high_resolution_clock::now();
             Pathfinding::aStarAdaptation<NodeInfo>(graph, 0, i-1);
             t2 = std::chrono::high_resolution_clock::now();
 
             sum_astar_time += t2 - t1;
             graph.freeGraph();
-            // INCREMENTING EDGES
-            graph = genRandomGraphInfo(BASE_NODES, i);
-            parks.clear();
-
-            t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
-            t2 = std::chrono::high_resolution_clock::now();
-
-            sum_dijkstra_edges_time += t2 - t1;
-            graph.freeGraph();
-
-            // INCREMENTING EDGES/NODES
-            graph = genRandomGraphInfo(i, i);
-            parks.clear();
-
-            t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
-            t2 = std::chrono::high_resolution_clock::now();
-
-            sum_dijkstra_edges_nodes_time += t2 - t1;
-            graph.freeGraph();
+//            // INCREMENTING EDGES
+//            graph = genRandomGraphInfo(BASE_NODES, i);
+//            parks.clear();
+//
+//            t1 = std::chrono::high_resolution_clock::now();
+//            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
+//            t2 = std::chrono::high_resolution_clock::now();
+//
+//            sum_dijkstra_edges_time += t2 - t1;
+//            graph.freeGraph();
+//
+//            // INCREMENTING EDGES/NODES
+//            graph = genRandomGraphInfo(i, i);
+//            parks.clear();
+//
+//            t1 = std::chrono::high_resolution_clock::now();
+//            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
+//            t2 = std::chrono::high_resolution_clock::now();
+//
+//            sum_dijkstra_edges_nodes_time += t2 - t1;
+//            graph.freeGraph();
 
 
             // KEEP EDGES PER NODE ALWAYS THE SAME
@@ -246,8 +233,6 @@ TEST(ComplexityTest, pathfinding) {
 
         file << i;
         file << "," << sum_dijkstra_time.count() / PATH_SAMPLES;
-        file << "," << sum_dijkstra_edges_time.count() / PATH_SAMPLES;
-        file << "," << sum_dijkstra_edges_nodes_time.count() / PATH_SAMPLES;
         file << "," << sum_astar_time.count() / PATH_SAMPLES;
         file << "\n" << std::flush;
     }
