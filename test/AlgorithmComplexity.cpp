@@ -9,15 +9,25 @@
 
 #include "algorithm/TravelingSalesman.h"
 #include "algorithm/NearestNeighbour.h"
+#include "algorithm/Pathfinding.h"
 #include "src/utils/algorithm/MinimumSpanningTrees.h"
 
 /// TESTS ///
 
 #define GRAPH_SIZE 120
+#define PATH_NODE_MAX 1000
+#define PATH_NODE_INC 5
 #define SAMPLES 25
+#define PATH_SAMPLES 200
+#define MIN_POS -10000
+#define MAX_POS 10000
+#define BASE_RADIUS ((MAX_POS)*2)
+#define BASE_NODES 1000
+#define BASE_EDGES 1000
+#define PARK_PERCENTAGE 20
 
 Graph<int> genRandomGraph(size_t graph_size) {
-    std::uniform_real_distribution<double> distrib(-10000, 10000);
+    std::uniform_real_distribution<double> distrib(MIN_POS, MAX_POS);
     std::random_device rd;
 
     double a = rd() ^(std::chrono::duration_cast<std::chrono::microseconds>(
@@ -28,6 +38,43 @@ Graph<int> genRandomGraph(size_t graph_size) {
 
     for (size_t j = 0; j < graph_size; j++) {
         graph.addNode(j, j, Position(COORDS, distrib(rng), distrib(rng)));
+    }
+
+    return graph;
+}
+
+Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
+    std::uniform_real_distribution<double> distrib(MIN_POS, MAX_POS);
+    std::uniform_real_distribution<double> parkDistrib(0, 100);
+    std::uniform_int_distribution<int> edgeDistrib(0, graph_size-1);
+
+    std::random_device rd;
+
+    double a = rd() ^(std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count());
+    std::mt19937 rng(a);
+
+    Graph<NodeInfo> graph;
+
+    if(graph_size == 0) graph_size = BASE_NODES;
+    if(edge_num == 0) edge_num = BASE_EDGES;
+
+    for (size_t j = 0; j < graph_size; j++) {
+        NodeInfo info;
+
+        info.setCurrentCapacity(parkDistrib(rng));
+        if(parkDistrib(rng) < 100-PARK_PERCENTAGE) info.setType(NodeType::NORMAL);
+        else {
+            info.setType(NodeType::PARK);
+        }
+        info.setMaxCapacity(info.getCurrentCapacity() + parkDistrib(rng));
+        info.setPriceFunction([](int,int,int){return (double) 10;});
+
+        graph.addNode(j, info, Position(COORDS, distrib(rng), distrib(rng)));
+    }
+
+    for(size_t i = 0; i < edge_num; i++) {
+        graph.addEdge(edgeDistrib(rng), edgeDistrib(rng), parkDistrib(rng));
     }
 
     return graph;
@@ -48,9 +95,9 @@ double compareNodes(const Graph<int> &graph, const std::vector<int> &expected, c
     return (double) distanceExpected / distanceActual;
 }
 
-
 TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
+    return;
 
     std::ofstream file;
 
@@ -62,8 +109,8 @@ TEST(ComplexityTest, tspAlgos) {
     std::vector<int> mstResult;
     std::vector<int> nearestResult;
     bool calcBrute;
-    double mst_correctness, nearest_correctness, sum_mst_correctness, sum_nearest_correctness;
-    std::chrono::duration<double, std::milli> mst_time(0), nearest_time(0), brute_time(0), sum_mst_time(
+    double sum_mst_correctness, sum_nearest_correctness;
+    std::chrono::duration<double, std::milli>  sum_mst_time(
             0), sum_nearest_time(0), sum_brute_time(0);
 
     for (size_t i = 2; i <= GRAPH_SIZE; i++) {
@@ -115,6 +162,94 @@ TEST(ComplexityTest, tspAlgos) {
         file << "," << sum_nearest_time.count() / SAMPLES << ",";
         if(calcBrute) file << sum_nearest_correctness / SAMPLES;
         file << "\n" << std::flush;
+    }
+
+    file.close();
+}
+
+TEST(ComplexityTest, pathfinding) {
+    Graph<NodeInfo> graph;
+
+    std::ofstream file;
+
+    file.open("resultspath.csv");
+
+    file << "NODE SIZE,DIJKSTRA TIME,DIJKSTRA EDGES TIME,ASTAR TIME\n" << std::flush;
+
+    std::vector<int> dikstraResult;
+    std::vector<int> astarResult;
+    std::vector<Node<NodeInfo>*> parks;
+    double sum_astar_correctness;
+    std::chrono::duration<double, std::milli>  sum_dijkstra_time(
+            0), sum_astar_time(0), sum_dijkstra_edges_time(0);
+
+    for (size_t i = 2; i <= PATH_NODE_MAX; i+=PATH_NODE_INC) {
+        sum_astar_correctness = 0;
+        sum_dijkstra_time = sum_astar_time = sum_dijkstra_edges_time = std::chrono::duration<double, std::milli>(0);
+
+        for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
+            parks.clear();
+            // INCREMENTING NODES
+            graph = genRandomGraphInfo(i, BASE_EDGES);
+
+            Node<NodeInfo> *origin = graph.findNode(0);
+            Node<NodeInfo> *destination = graph.findNode(i - 1);
+
+            std::vector<Node<NodeInfo> *> nodeSet = graph.getNodeSet();
+
+            std::vector<Node<NodeInfo> *> poi = std::vector<Node<NodeInfo> *>(nodeSet.begin() + 1, nodeSet.end() - 1);
+            parks.clear();
+
+            auto t1 = std::chrono::high_resolution_clock::now();
+            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, origin->getID(), BASE_RADIUS);
+            auto t2 = std::chrono::high_resolution_clock::now();
+
+            sum_dijkstra_time += t2 - t1;
+            // INCREMENTING EDGES
+            graph = genRandomGraphInfo(BASE_NODES, i);
+
+            t1 = std::chrono::high_resolution_clock::now();
+            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
+            t2 = std::chrono::high_resolution_clock::now();
+
+            sum_dijkstra_edges_time += t2 - t1;
+
+            // INCREMENTING EDGES/NODES
+
+
+            // KEEP EDGES PER NODE ALWAYS THE SAME
+
+//
+//            t1 = std::chrono::high_resolution_clock::now();
+//            nearestResult = NearestNeighbour<int>::getTour(poi, origin, destination);
+//            t2 = std::chrono::high_resolution_clock::now();g::dijkstraAdaptation(graph, parks, origin, BASE_RADIUS);
+//
+//            sum_nearest_time += t2 - t1;
+//
+//            bruteResult.clear();
+//
+//            if (calcBrute) {
+//                t1 = std::chrono::high_resolution_clock::now();
+//                bruteResult = TravelingSalesman<int>::bruteForce(poi, origin, destination);
+//                t2 = std::chrono::high_resolution_clock::now();
+//
+//                sum_brute_time += (t2 - t1);
+//
+//                sum_mst_correctness += compareNodes(graph, bruteResult, mstResult);
+//                sum_nearest_correctness += compareNodes(graph, bruteResult, nearestResult);
+//            }
+        }
+
+        file << i;
+        file << "," << sum_dijkstra_time.count() / PATH_SAMPLES;
+        file << "," << sum_dijkstra_edges_time.count() / PATH_SAMPLES;
+        file << "\n" << std::flush;
+//        if(calcBrute) file << sum_brute_time.count() / SAMPLES;
+//        file << "," << sum_mst_time.count() / SAMPLES << ",";
+//        if(calcBrute) file << sum_mst_correctness / SAMPLES;
+//        file << "," << sum_nearest_time.count() / SAMPLES << ",";
+//        if(calcBrute) file << sum_nearest_correctness / SAMPLES;
+//        file << "\n" << std::flush;
     }
 
     file.close();
