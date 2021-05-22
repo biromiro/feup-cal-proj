@@ -56,12 +56,17 @@ Node<T> *Graph<T>::findNode(int id) const {
 
 template<class T>
 Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
-    auto s = findNode(srcID);
-    auto d = findNode(destID);
+    auto s = this->findNode(srcID);
+    auto d = this->findNode(destID);
     if (s == nullptr || d == nullptr)
         return nullptr;
     auto *e = new Edge<T>(s, d, cost);
     s->addEdge(e);
+    auto *e2 = new Edge<T>(d, s, cost);
+    d->addEdge(e2);
+
+    e->reverse = e2;
+    e2->reverse = e;
     return e;
 }
 

@@ -96,10 +96,10 @@ void JourneyFinder::journeyToJSON() {
     std::ofstream journey("view/resources/journey.json");
 
     journey << "{\n  \"paths\": [\n";
-    for(auto pair: paths){
+    for(size_t j = 0; j < paths.size(); j++){
         journey << "    {\n";
-        vector<Edge<NodeInfo>*> pathToPark = pair.first;
-        vector<Edge<NodeInfo>*> pathToDest = pair.second;
+        vector<Edge<NodeInfo>*> pathToPark = paths.at(j).first;
+        vector<Edge<NodeInfo>*> pathToDest = paths.at(j).second;
         Edge<NodeInfo>
                 *originEdge = pathToPark.at(0),
                 *parkEdge = pathToDest.at(0),
@@ -149,7 +149,8 @@ void JourneyFinder::journeyToJSON() {
         }
         journey << "      ]\n";
 
-        journey << "    }\n";
+        if(j == paths.size() - 1) journey << "    }\n";
+        else journey << "    },\n";
     }
     journey << "   ]\n}";
 
