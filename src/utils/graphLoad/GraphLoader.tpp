@@ -90,7 +90,6 @@ Graph<T> GraphLoader<T>::getGraph() {
         if(nodeptr1 == nullptr || nodeptr2 == nullptr) throw IncompatibleNodeToEdgeFile(nodePath, edgePath, "The provided files are not compatible!");
         double cost = Distances::getEuclideanDistance(nodeptr1->getPos(), nodeptr2->getPos());
         graph.addEdge(node1, node2, cost);
-        graph.addEdge(node2, node1, cost);
     }
 
     if(!this->randomParkingMode) {

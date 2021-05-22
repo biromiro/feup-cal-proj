@@ -21,11 +21,12 @@ int main(){
 
     UserDatabase db("resources/database.txt");
 
-    JourneyFinder jf("resources/Penafiel/SCC/penafiel_strong_nodes_xy.txt",
-                     "resources/Penafiel/SCC/penafiel_strong_edges.txt");
+    JourneyFinder jf("resources/Porto/SCC/porto_strong_nodes_latlng.txt",
+                     "resources/Porto/SCC/porto_strong_edges.txt");
 
-    jf.generateJourney(1, 7100, 5, 500);
-    jf.showJourney();
+    jf.addPointOfInterest(26);
+
+    jf.generateJourney(1, 26796, 5, 1000);
     /*srand(time(NULL));
 
     Graph<struct NodeInfo> g2;

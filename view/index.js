@@ -34,7 +34,8 @@ async function initSymbol() {
 }
 
 async function parseFile() {
-    const data = await (await fetch("resources/tsp_test.json")).json();
+
+    const data = await (await fetch("resources/journey.json")).json();
     console.log(data);
     return data.paths;
 }

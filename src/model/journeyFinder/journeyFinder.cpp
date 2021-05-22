@@ -11,8 +11,7 @@
 #include "journeyFinder.h"
 
 JourneyFinder::JourneyFinder(const string &nodePath, const string &edgePath) :
-loader(GraphLoader<NodeInfo>(nodePath, edgePath, NodeMode::GRID)),
-gv(GraphManager(600, 600, "")){}
+loader(GraphLoader<NodeInfo>(nodePath, edgePath, NodeMode::COORDS)) {}
 
 void JourneyFinder::addPointOfInterest(size_t newPOI) {
     Graph<NodeInfo> graph = loader.getGraph();
@@ -49,6 +48,7 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
         else o = calculate(graph, o, d, false, time, maxSearchForPark);
     }
 
+    journeyToJSON();
     return true;
 }
 
@@ -62,20 +62,21 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     vector<Edge<NodeInfo>*> pathToDest, pathToPark;
     size_t bestPark = selectPark(parks, time);
-    int res = Pathfinding::getOrderedPath(graph, bestPark, destiny, pathToDest);
-    if(!res)
-        throw NoFoundPath("Couldn't get the ordered path from a park to the destiny!");
+    //if(!Pathfinding::aStarAdaptation(graph, bestPark, destiny))
+    //     throw NoFoundPath("Couldn't get the ordered path from a park to the destiny!");
 
-    gv.buildPath(pathToDest, GraphViewer::ORANGE);
+    Pathfinding::getOrderedPath(graph, destiny, bestPark, pathToDest);
 
     if(!Pathfinding::aStarAdaptation(graph, origin, bestPark))
         throw NoFoundPath("Couldn't get the ordered path from the origin to the park!");
 
-    std::cout << Pathfinding::getOrderedPath(graph, origin, bestPark, pathToPark);
-    gv.buildPath(pathToPark, GraphViewer::BLUE);
+    Pathfinding::getOrderedPath(graph, origin, bestPark, pathToPark);
 
-    paths.push_back(pathToPark);
-    paths.push_back(pathToDest);
+    std::pair<vector<Edge<NodeInfo>*>, vector<Edge<NodeInfo>*>> pair(pathToPark, pathToDest);
+
+    paths.push_back(pair);
+
+    return bestPark;
 }
 
 size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
@@ -91,14 +92,70 @@ size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
     return bestPark;
 }
 
-void JourneyFinder::showJourney() {
-    for(size_t i = 0; i < paths.size(); i += 2){
-        gv.show();
-        std::cout << "First path" << std::endl;
-        gv.showPath(paths.at(i), TRAVEL);
-        std::cout << "Second path" << std::endl;
-        gv.showPath(paths.at(i+1), WALKING);
-        gv.finish();
+void JourneyFinder::journeyToJSON() {
+    std::ofstream journey("view/resources/journey.json");
+
+    journey << "{\n  \"paths\": [\n";
+    for(size_t j = 0; j < paths.size(); j++){
+        journey << "    {\n";
+        vector<Edge<NodeInfo>*> pathToPark = paths.at(j).first;
+        vector<Edge<NodeInfo>*> pathToDest = paths.at(j).second;
+        Edge<NodeInfo>
+                *originEdge = pathToPark.at(0),
+                *parkEdge = pathToDest.at(0),
+                *destEdge = pathToDest.at(pathToDest.size() - 1);
+
+        journey << "      \"park\": ["
+        << parkEdge->getOrig()->getPos().getY()
+        << ","
+        << parkEdge->getOrig()->getPos().getX()
+        << "],\n";
+
+        journey << "      \"orig\": ["
+        << originEdge->getOrig()->getPos().getY()
+        << ","
+        << originEdge->getOrig()->getPos().getX()
+        << "],\n";
+
+        journey << "      \"dest\": ["
+        << destEdge->getDest()->getPos().getY()
+        << ","
+        << destEdge->getDest()->getPos().getX()
+        << "],\n";
+
+        journey << "      \"origToPark\": [\n";
+        for(size_t i = 0; i < pathToPark.size() - 1; i++){
+            Edge<NodeInfo>* curEdge = pathToPark.at(i);
+            journey << "         ["
+                    << curEdge->getDest()->getPos().getY()
+                    << "," << curEdge->getDest()->getPos().getX()
+                    << "]";
+
+            if(i == pathToPark.size() - 2) journey << "\n";
+            else journey << ",\n";
+        }
+        journey << "      ],\n";
+
+        journey << "      \"parkToDest\": [\n";
+        for(size_t i = 0; i < pathToDest.size() - 1; i++){
+            Edge<NodeInfo>* curEdge = pathToDest.at(i);
+            journey << "         ["
+                    << curEdge->getDest()->getPos().getY()
+                    << "," << curEdge->getDest()->getPos().getX()
+                    << "]";
+
+            if(i == pathToDest.size() - 2) journey << "\n";
+            else journey << ",\n";
+        }
+        journey << "      ]\n";
+
+        if(j == paths.size() - 1) journey << "    }\n";
+        else journey << "    },\n";
     }
+    journey << "   ]\n}";
+
+}
+
+void JourneyFinder::checkConnectiviy() {
 
 }

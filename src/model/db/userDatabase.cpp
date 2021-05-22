@@ -6,6 +6,7 @@
 #include <exception/userAlreadyExists/userAlreadyExists.h>
 #include <exception/userNotFound/userNotFound.h>
 #include <fstream>
+#include <sstream>
 #include <model/admin/admin.h>
 #include "userDatabase.h"
 
@@ -14,10 +15,12 @@ UserDatabase::UserDatabase(const std::string& path) : path(path) {
     adminManager = new AdminManager();
     std::ifstream stream(path);
     if(!stream) return;
-    while(!stream.eof()){
+    std::string cur;
+    while(std::getline(stream, cur)){
+        std::stringstream ss(cur);
         std::string nickname, password;
         int val;
-        stream >> val >> nickname >> password;
+        ss >> val >> nickname >> password;
         if(val) db.insert(new Admin(nickname, password));
         else db.insert(new User(nickname, password));
     }
