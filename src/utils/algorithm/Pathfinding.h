@@ -55,7 +55,7 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
         if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
             parks.push_back(curr);
 
-        for (auto edge : curr->getOutgoing()) {
+        for (auto edge : curr->getWalking()) {
             Node<T>* dest = edge->getDest();
             auto newDist = curr->getDist() + edge->getCost();
             if (newDist < dest->getDist()) {

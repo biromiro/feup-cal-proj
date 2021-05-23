@@ -22,6 +22,7 @@ class Node {
     T info;
     std::vector<Edge<T> *> outgoing;
     std::vector<Edge<T> *> incoming;
+    std::vector<Edge<T> *> walking;
     bool visited = false;
     Node<T> *path;
     double dist = INF;
@@ -59,6 +60,10 @@ public:
     friend class UndirectedGraph<T>;
     friend class Graph<T>;
     friend class MutablePriorityQueue<Node<T>>;
+
+    void addWalkingEdge(Edge<T> *e1, Edge<T> *e2);
+
+    const vector<Edge<T> *> &getWalking() const;
 };
 
 
@@ -90,6 +95,18 @@ template <class T>
 void Node<T>::addEdge(Edge<T> *e) {
     outgoing.push_back(e);
     e->dest->incoming.push_back(e);
+}
+
+template<class T>
+const vector<Edge<T> *> &Node<T>::getWalking() const {
+    return walking;
+}
+
+template <class T>
+void Node<T>::addWalkingEdge(Edge<T> *e1, Edge<T>*e2) {
+    walking.push_back(e1);
+
+    e2->orig->walking.push_back(e2);
 }
 
 template <class T>

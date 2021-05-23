@@ -29,6 +29,8 @@ public:
     Node<T> *addNode(int ID, const T &in, Position pos);
 
     virtual Edge<T> *addEdge(int srcID, int destID, double cost);
+
+    Edge<T> *addWalkingEdge(int srcID, int destID, double cost);
 };
 
 template <class T>
@@ -59,10 +61,26 @@ Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
     auto d = this->findNode(destID);
     if (s == nullptr || d == nullptr)
         return nullptr;
+    auto *directed = new Edge<T>(s, d, cost);
+    auto *reversed = new Edge<T>(d, s, cost);
+    directed->reverse = reversed;
+    reversed->reverse = directed;
+
+    s->addEdge(directed);
+    s->addWalkingEdge(directed, reversed);
+
+    return directed;
+}
+
+template<class T>
+Edge<T> *Graph<T>::addWalkingEdge(int srcID, int destID, double cost) {
+    auto s = this->findNode(srcID);
+    auto d = this->findNode(destID);
+    if (s == nullptr || d == nullptr)
+        return nullptr;
     auto *e = new Edge<T>(s, d, cost);
     s->addEdge(e);
     return e;
 }
-
 
 #endif //FEUP_CAL_PROJ_GRAPH_TPP

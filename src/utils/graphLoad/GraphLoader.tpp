@@ -16,6 +16,8 @@
 #include "NodeMode.h"
 #include "MapData.h"
 
+#define PARK_FACTOR 30
+
 template <class T>
 class GraphLoader {
 public:
@@ -69,7 +71,7 @@ void GraphLoader<T>::genGraph() {
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
 
-        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % PARK_FACTOR + 1) == 1)
                     ? genRandomPark() : NodeInfo();
 
         if constexpr (std::is_same<T, NodeInfo>::value)
