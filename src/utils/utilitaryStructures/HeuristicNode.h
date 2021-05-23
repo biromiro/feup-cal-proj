@@ -12,6 +12,7 @@ template <class T>
 class HeuristicNode{
 public:
     HeuristicNode(Node<T> *node, Node<T>* dest);
+    HeuristicNode(Node<T> *node, Node<T>* dest, int manhattan);
     void calculateHeuristicDist(Node<T>* destinationNode);
     bool operator<(const HeuristicNode<T> & node) const;
     Node<T> *getCurrentNode() const;
@@ -46,6 +47,12 @@ Node<T> *HeuristicNode<T>::getCurrentNode() const {
 template<class T>
 double HeuristicNode<T>::getHeuristicDist() const {
     return heuristicDist;
+}
+
+template<class T>
+HeuristicNode<T>::HeuristicNode(Node<T> *node, Node<T> *dest, int manhattan) {
+    currentNode = node;
+    heuristicDist = currentNode->getDist() + Distances::getManhattanDistance(currentNode->getPos(), dest->getPos());
 }
 
 struct compare

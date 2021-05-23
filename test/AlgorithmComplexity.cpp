@@ -182,18 +182,31 @@ TEST(ComplexityTest, pathfinding) {
 
     file.open("resultspath.csv");
 
-    file << "NODE SIZE,DIJKSTRA TIME,DIJKSTRA IT,ASTAR TIME,ASTAR IT\n" << std::flush;
+    file << "NODE SIZE,DIJKSTRA TIME, DIJKSTRA MEDIAN, DIJKSTRA IT,ASTAR TIME,ASTAR MEDIAN,ASTAR IT,ASTAR MAN TIME,ASTAR MAN MEDIAN, ASTAR MAN IT\n" << std::flush;
 
     std::vector<Node < NodeInfo>*> parks;
-    std::chrono::duration<double, std::milli> sum_dijkstra_time(0),
-    sum_astar_time(0);
-    int count, sum_dijkstra_count, sum_astar_count;
+    std::vector<double> dijkstraDurations;
+    dijkstraDurations.reserve(PATH_SAMPLES);
+    std::vector<double>astarDurations;
+    astarDurations.reserve(PATH_SAMPLES);
+    std::vector<double>astarManDurations;
+    astarManDurations.reserve(PATH_SAMPLES);
+    std::chrono::duration<double, std::milli> sum_dijkstra_time(0), sum_astar_time(0), sum_man_time(0);
+    int count, sum_dijkstra_count, sum_astar_count, sum_man_count;
+
 
     for (size_t i = PATH_NODE_INC; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
+        dijkstraDurations.clear();
+        astarDurations.clear();
+        astarManDurations.clear();
+
         sum_dijkstra_time = std::chrono::duration<double, std::milli>(0);
         sum_astar_time = std::chrono::duration<double, std::milli>(0);
+        sum_man_time = std::chrono::duration<double, std::milli>(0);
+
         sum_astar_count = 0;
         sum_dijkstra_count = 0;
+        sum_man_count = 0;
 
         for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
             // INCREMENTING NODES
@@ -203,6 +216,7 @@ TEST(ComplexityTest, pathfinding) {
             Pathfinding::dijkstraAdaptation(graph, 0, i-1, count);
             auto t2 = std::chrono::high_resolution_clock::now();
 
+            dijkstraDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
             sum_dijkstra_time += t2 - t1;
             sum_dijkstra_count += count;
 
@@ -210,8 +224,18 @@ TEST(ComplexityTest, pathfinding) {
             Pathfinding::aStarAdaptation<NodeInfo>(graph, 0, i-1, count);
             t2 = std::chrono::high_resolution_clock::now();
 
+            astarDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
             sum_astar_time += t2 - t1;
             sum_astar_count += count;
+
+            t1 = std::chrono::high_resolution_clock::now();
+            Pathfinding::aStarAdaptationManhattan<NodeInfo>(graph, 0, i-1, count);
+            t2 = std::chrono::high_resolution_clock::now();
+
+            astarManDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
+            sum_man_time += t2 - t1;
+            sum_man_count += count;
+
             graph.freeGraph();
 //            // INCREMENTING EDGES
 //            graph = genRandomGraphInfo(BASE_NODES, i);
@@ -240,11 +264,35 @@ TEST(ComplexityTest, pathfinding) {
 
         }
 
+        std::sort(dijkstraDurations.begin(), dijkstraDurations.end());
+        std::sort(astarDurations.begin(), astarDurations.end());
+        std::sort(astarManDurations.begin(), astarManDurations.end());
+
         file << i;
         file << "," << sum_dijkstra_time.count() / PATH_SAMPLES;
+        if(dijkstraDurations.size()%2==0) {
+            file << "," << (dijkstraDurations[dijkstraDurations.size()/2] + dijkstraDurations[dijkstraDurations.size()/2 - 1])/2;
+        } else {
+            file << "," << (dijkstraDurations[dijkstraDurations.size()/2]);
+        }
+
         file << "," << sum_dijkstra_count / PATH_SAMPLES;
         file << "," << sum_astar_time.count() / PATH_SAMPLES;
+        if(astarDurations.size()%2==0) {
+            file << "," << (astarDurations[astarDurations.size()/2] + astarDurations[astarDurations.size()/2 - 1])/2;
+        } else {
+            file << "," << (astarDurations[astarDurations.size()/2]);
+        }
+
         file << "," << sum_astar_count / PATH_SAMPLES;
+        file << "," << sum_man_time.count() / PATH_SAMPLES;
+        if(astarManDurations.size()%2==0) {
+            file << "," << (astarManDurations[astarManDurations.size()/2] + astarManDurations[astarManDurations.size()/2 - 1])/2;
+        } else {
+            file << "," << (astarManDurations[astarManDurations.size()/2]);
+        }
+
+        file << "," << sum_man_count / PATH_SAMPLES;
         file << "\n" << std::flush;
     }
 
