@@ -51,7 +51,20 @@ add_library(cal_lib
         src/utils/algorithm/NearestNeighbour.h
         GraphViewerCpp/include/graphviewer.h
         src/utils/graphLoad/GraphManager.h
-        src/utils/graphLoad/GraphManager.cpp src/utils/utilitaryStructures/utilFunctions.cpp src/utils/utilitaryStructures/utilFunctions.h)
+        src/utils/graphLoad/GraphManager.cpp
+        src/utils/utilitaryStructures/utilFunctions.cpp
+        src/utils/utilitaryStructures/utilFunctions.h
+        src/model/user/user.cpp src/model/user/user.h
+        src/model/admin/admin.cpp src/model/admin/admin.h
+        src/model/admin/adminManager.cpp src/model/admin/adminManager.h
+        src/model/user/userManager.cpp src/model/user/userManager.h
+        src/model/db/userDatabase.cpp src/model/db/userDatabase.h
+        src/auth/currentSession.cpp src/auth/currentSession.h
+        src/exception/userAlreadyExists/userAlreadyExists.cpp src/exception/userAlreadyExists/userAlreadyExists.h
+        src/exception/noNodeWithID/noNodeWithID.cpp src/exception/noNodeWithID/noNodeWithID.h
+        src/exception/noParkFound/noParkFound.cpp src/exception/noParkFound/noParkFound.h
+        src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.cpp src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.h
+        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h src/model/journeyFinder/parkFinalInfo.cpp src/model/journeyFinder/parkFinalInfo.h)
 
 add_executable(feup_cal_proj main.cpp)
 

@@ -36,7 +36,7 @@ MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &node
         }
     }
 
-    std::vector<int> result = MinimumSpanningTrees<int>::dfs(graph, graph.findNode(origin->getID()));
+    std::vector<int> result = MinimumSpanningTrees<T>::dfs(graph, graph.findNode(origin->getID()));
     result.push_back(destination->getID());
 
     return result;
@@ -47,7 +47,8 @@ priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
 MinimumSpanningTrees<T>::graphToQueue(UndirectedGraph<T> &graph) {
     auto queue = std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>();
 
-    for (Node<T> *node : graph.getNodeSet()) {
+    for (auto pair : graph.getNodeSet()) {
+        Node<T>* node = pair.second;
         for (Edge<T> *edge : node->getOutgoing()) {
             queue.push(edge);
         }
@@ -60,8 +61,8 @@ template<class T>
 DisjointSetGroup MinimumSpanningTrees<T>::createSet(UndirectedGraph<T> &graph) {
     DisjointSetGroup result;
 
-    for (Node<T> *node : graph.getNodeSet()) {
-        result.createSet(node->getID());
+    for (auto node : graph.getNodeSet()) {
+        result.createSet(node.second->getID());
     }
 
     return result;
@@ -76,8 +77,8 @@ std::vector<int> MinimumSpanningTrees<T>::dfs(UndirectedGraph<T> &graph, Node<T>
     Node<T> *curNode, *nextNode;
     nodeStack.push(v);
 
-    for (Node<T> *node : graph.getNodeSet()) {
-        node->setVisited(false);
+    for (auto node : graph.getNodeSet()) {
+        node.second->setVisited(false);
     }
 
     while (!nodeStack.empty()) {

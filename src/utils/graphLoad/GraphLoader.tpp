@@ -12,8 +12,11 @@
 #include <ctime>
 #include <utils/graph/Graph.tpp>
 #include <utils/algorithm/Distances.h>
+#include <exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.h>
 #include "NodeMode.h"
 #include "MapData.h"
+
+#define PARK_FACTOR 30
 
 template <class T>
 class GraphLoader {
@@ -41,7 +44,6 @@ GraphLoader<T>::GraphLoader(const std::string& nodes, const std::string& edges, 
 
 template <class T>
 Graph<T> GraphLoader<T>::getGraph() {
-    if(this->randomParkingMode) srand((int)time(0));
 
     Graph<T> graph;
     std::ifstream nodeFile(nodePath);
@@ -64,7 +66,7 @@ Graph<T> GraphLoader<T>::getGraph() {
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
 
-        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % PARK_FACTOR + 1) == 1)
                     ? genRandomPark() : NodeInfo();
 
         if constexpr (std::is_same<T, NodeInfo>::value)
@@ -86,9 +88,9 @@ Graph<T> GraphLoader<T>::getGraph() {
         s >> sep >> node1 >> sep >> node2 >> sep;
         Node<T>* nodeptr1 = graph.findNode(node1);
         Node<T>* nodeptr2 = graph.findNode(node2);
+        if(nodeptr1 == nullptr || nodeptr2 == nullptr) throw IncompatibleNodeToEdgeFile(nodePath, edgePath, "The provided files are not compatible!");
         double cost = Distances::getEuclideanDistance(nodeptr1->getPos(), nodeptr2->getPos());
         graph.addEdge(node1, node2, cost);
-        graph.addEdge(node2, node1, cost);
     }
 
     if(!this->randomParkingMode) {

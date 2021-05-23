@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 #include "graph/Node.tpp"
 #include "algorithm/Distances.h"
 
