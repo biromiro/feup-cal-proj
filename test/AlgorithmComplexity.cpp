@@ -15,10 +15,10 @@
 /// TESTS ///
 
 #define GRAPH_SIZE 120
-#define PATH_NODE_MAX 2048
+#define PATH_NODE_MAX 1024
 #define PATH_NODE_INC 8
 #define SAMPLES 32
-#define PATH_SAMPLES 64
+#define PATH_SAMPLES 256
 #define MIN_POS -10000
 #define MAX_POS 10000
 #define BASE_RADIUS ((MAX_POS)*2)
@@ -182,31 +182,36 @@ TEST(ComplexityTest, pathfinding) {
 
     file.open("resultspath.csv");
 
-    file << "NODE SIZE,DIJKSTRA TIME,ASTAR TIME\n" << std::flush;
+    file << "NODE SIZE,DIJKSTRA TIME,DIJKSTRA IT,ASTAR TIME,ASTAR IT\n" << std::flush;
 
     std::vector<Node < NodeInfo>*> parks;
     std::chrono::duration<double, std::milli> sum_dijkstra_time(0),
     sum_astar_time(0);
+    int count, sum_dijkstra_count, sum_astar_count;
 
     for (size_t i = PATH_NODE_INC; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
         sum_dijkstra_time = std::chrono::duration<double, std::milli>(0);
         sum_astar_time = std::chrono::duration<double, std::milli>(0);
+        sum_astar_count = 0;
+        sum_dijkstra_count = 0;
 
         for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
             // INCREMENTING NODES
             graph = genRandomGraphInfo(i, EDGES_PER_NODE);
 
             auto t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::dijkstraAdaptation(graph, 0, i-1);
+            Pathfinding::dijkstraAdaptation(graph, 0, i-1, count);
             auto t2 = std::chrono::high_resolution_clock::now();
 
             sum_dijkstra_time += t2 - t1;
+            sum_dijkstra_count += count;
 
             t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::aStarAdaptation<NodeInfo>(graph, 0, i-1);
+            Pathfinding::aStarAdaptation<NodeInfo>(graph, 0, i-1, count);
             t2 = std::chrono::high_resolution_clock::now();
 
             sum_astar_time += t2 - t1;
+            sum_astar_count += count;
             graph.freeGraph();
 //            // INCREMENTING EDGES
 //            graph = genRandomGraphInfo(BASE_NODES, i);
@@ -237,7 +242,9 @@ TEST(ComplexityTest, pathfinding) {
 
         file << i;
         file << "," << sum_dijkstra_time.count() / PATH_SAMPLES;
+        file << "," << sum_dijkstra_count / PATH_SAMPLES;
         file << "," << sum_astar_time.count() / PATH_SAMPLES;
+        file << "," << sum_astar_count / PATH_SAMPLES;
         file << "\n" << std::flush;
     }
 
