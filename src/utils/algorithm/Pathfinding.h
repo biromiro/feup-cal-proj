@@ -19,8 +19,6 @@ public:
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
     template <class T>
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest, int &count);
-    template <class T>
-    bool static aStarAdaptationManhattan(Graph<T> &graph, int orig, int dest, int &count);
 
     template <class T>
     bool static dijkstraAdaptation(Graph<T>& graph, int orig, int dest);
@@ -104,41 +102,6 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     }
     return false;
 }
-
-template<class T>
-bool Pathfinding::aStarAdaptationManhattan(Graph<T> &graph, int orig, int dest, int &count) {
-    Node<T>* origin = graph.findNode(orig);
-    Node<T>* destination = graph.findNode(dest);
-
-    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
-
-    count = 0;
-
-    for(auto node: graph.getNodeSet()){
-        node.second->setDist(INF);
-        node.second->setPath(nullptr);
-    }
-    origin->setDist(0);
-    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
-    pq.push(HeuristicNode<T>(origin, destination, 1));
-    while(!pq.empty()){
-        count++;
-        HeuristicNode<T> current = pq.top();
-        pq.pop();
-        if(current.getCurrentNode() == destination) return true;
-        for(Edge<T>* edge: current.getCurrentNode()->getOutgoing()){
-            Node<T>* to = edge->getDest();
-            double cost = current.getCurrentNode()->getDist() + edge->getCost();
-            if(to->getDist() > cost){
-                to->setDist(cost);
-                to->setPath(edge);
-                pq.push(HeuristicNode<T>(to, destination));
-            }
-        }
-    }
-    return false;
-}
-
 
 template<class T>
 bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest, int &count) {

@@ -14,16 +14,11 @@
 
 /// TESTS ///
 
-#define GRAPH_SIZE 120
+#define GRAPH_SIZE 256
 #define PATH_NODE_MAX 1024
 #define PATH_NODE_INC 8
 #define SAMPLES 32
 #define PATH_SAMPLES 256
-#define MIN_POS -10000
-#define MAX_POS 10000
-#define BASE_RADIUS ((MAX_POS)*2)
-#define BASE_NODES 1000
-#define BASE_EDGES 1000
 #define PARK_PERCENTAGE 20
 #define EDGES_PER_NODE 4
 
@@ -189,24 +184,19 @@ TEST(ComplexityTest, pathfinding) {
     dijkstraDurations.reserve(PATH_SAMPLES);
     std::vector<double>astarDurations;
     astarDurations.reserve(PATH_SAMPLES);
-    std::vector<double>astarManDurations;
-    astarManDurations.reserve(PATH_SAMPLES);
-    std::chrono::duration<double, std::milli> sum_dijkstra_time(0), sum_astar_time(0), sum_man_time(0);
-    int count, sum_dijkstra_count, sum_astar_count, sum_man_count;
+    std::chrono::duration<double, std::milli> sum_dijkstra_time(0), sum_astar_time(0);
+    int count, sum_dijkstra_count, sum_astar_count;
 
 
     for (size_t i = PATH_NODE_INC; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
         dijkstraDurations.clear();
         astarDurations.clear();
-        astarManDurations.clear();
 
         sum_dijkstra_time = std::chrono::duration<double, std::milli>(0);
         sum_astar_time = std::chrono::duration<double, std::milli>(0);
-        sum_man_time = std::chrono::duration<double, std::milli>(0);
 
         sum_astar_count = 0;
         sum_dijkstra_count = 0;
-        sum_man_count = 0;
 
         for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
             // INCREMENTING NODES
@@ -228,45 +218,12 @@ TEST(ComplexityTest, pathfinding) {
             sum_astar_time += t2 - t1;
             sum_astar_count += count;
 
-            t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::aStarAdaptationManhattan<NodeInfo>(graph, 0, i-1, count);
-            t2 = std::chrono::high_resolution_clock::now();
-
-            astarManDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
-            sum_man_time += t2 - t1;
-            sum_man_count += count;
-
             graph.freeGraph();
-//            // INCREMENTING EDGES
-//            graph = genRandomGraphInfo(BASE_NODES, i);
-//            parks.clear();
-//
-//            t1 = std::chrono::high_resolution_clock::now();
-//            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
-//            t2 = std::chrono::high_resolution_clock::now();
-//
-//            sum_dijkstra_edges_time += t2 - t1;
-//            graph.freeGraph();
-//
-//            // INCREMENTING EDGES/NODES
-//            graph = genRandomGraphInfo(i, i);
-//            parks.clear();
-//
-//            t1 = std::chrono::high_resolution_clock::now();
-//            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
-//            t2 = std::chrono::high_resolution_clock::now();
-//
-//            sum_dijkstra_edges_nodes_time += t2 - t1;
-//            graph.freeGraph();
-
-
-            // KEEP EDGES PER NODE ALWAYS THE SAME
 
         }
 
         std::sort(dijkstraDurations.begin(), dijkstraDurations.end());
         std::sort(astarDurations.begin(), astarDurations.end());
-        std::sort(astarManDurations.begin(), astarManDurations.end());
 
         file << i;
         file << "," << sum_dijkstra_time.count() / PATH_SAMPLES;
@@ -285,14 +242,6 @@ TEST(ComplexityTest, pathfinding) {
         }
 
         file << "," << sum_astar_count / PATH_SAMPLES;
-        file << "," << sum_man_time.count() / PATH_SAMPLES;
-        if(astarManDurations.size()%2==0) {
-            file << "," << (astarManDurations[astarManDurations.size()/2] + astarManDurations[astarManDurations.size()/2 - 1])/2;
-        } else {
-            file << "," << (astarManDurations[astarManDurations.size()/2]);
-        }
-
-        file << "," << sum_man_count / PATH_SAMPLES;
         file << "\n" << std::flush;
     }
 
