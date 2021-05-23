@@ -84,7 +84,7 @@ size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
     this->parks.push_back(std::vector<ParkFinalInfo>());
     for(Node<NodeInfo>* node: parks){
         float value = node->getInfo().getPrice(time) * costCoeffient + node->getDist() * distanceCoeffient;
-        ParkFinalInfo parkFinalInfo(node->getDist(), value, node->getPos().getX(), node->getPos().getY());
+        ParkFinalInfo parkFinalInfo(node->getDist(), node->getInfo().getPrice(time), node->getPos().getX(), node->getPos().getY());
         this->parks.at(this->parks.size()-1).push_back(parkFinalInfo);
 
         if(value < bestRes){

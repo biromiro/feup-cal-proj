@@ -22,7 +22,7 @@ int main(){
                      "resources/Porto/SCC/porto_strong_edges.txt");
 
     jf.addPointOfInterest(53207);
-    /*jf.addPointOfInterest(209);
+    jf.addPointOfInterest(209);
     jf.addPointOfInterest(21);
     jf.addPointOfInterest(526);
     jf.addPointOfInterest(11658);
@@ -31,9 +31,9 @@ int main(){
     jf.addPointOfInterest(23182);
     jf.addPointOfInterest(50013);
     jf.addPointOfInterest(26779);
-*/
 
-    jf.generateJourney(1, 7313, 5, 200);
+
+    jf.generateJourney(1, 7313, 5, 100);
     /*
 
     Graph<struct NodeInfo> g2;

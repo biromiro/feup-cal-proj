@@ -63,6 +63,8 @@ Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
         return nullptr;
     auto *directed = new Edge<T>(s, d, cost);
     auto *reversed = new Edge<T>(d, s, cost);
+    directed->reverse = reversed;
+    reversed->reverse = directed;
 
     s->addEdge(directed);
     s->addWalkingEdge(directed, reversed);

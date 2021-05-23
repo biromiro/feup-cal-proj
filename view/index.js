@@ -99,7 +99,7 @@ function drawToPark(paths, n) {
         geodesic: true,
         strokeColor: "#FF0000",
         strokeOpacity: 1.0,
-        strokeWeight: 2, 
+        strokeWeight: 1, 
       });
       polyline.setMap(map);
     
@@ -159,8 +159,12 @@ async function animateLine(line, speed, reversed) {
 
 async function animate(lines) {
     for (let i = 0; i < lines.car.length; i++) {
+        lines.car[i].set("strokeWeight", 3);
+
         await animateLine(lines.car[i], 1);
         await animateLine(lines.walk[i], 0.05);
         if (i != lines.car.length - 1) await animateLine(lines.walk[i], 0.05, true);
+
+        lines.car[i].set("strokeWeight", 1);
     }
 }
