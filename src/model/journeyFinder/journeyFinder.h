@@ -9,6 +9,9 @@
 #include <graphLoad/GraphLoader.tpp>
 #include <graphLoad/GraphManager.h>
 #include <utility>
+#include "parkFinalInfo.h"
+
+class ParkFinalInfo;
 
 class JourneyFinder {
 public:
@@ -24,6 +27,7 @@ private:
     GraphLoader<NodeInfo> loader;
     std::vector<size_t> pointsOfInterest;
     std::vector<std::pair<std::vector<Node<NodeInfo>*>, std::vector<Node<NodeInfo>*> >> paths;
+    std::vector<std::vector<ParkFinalInfo>> parks;
     float distanceCoeffient = 0.5;
     float costCoeffient = 0.5;
 };

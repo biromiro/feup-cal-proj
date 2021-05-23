@@ -40,17 +40,37 @@ async function parseFile() {
     return data.paths;
 }
 
-function drawInitialNodes(paths, n) {
-    const park =
-    "images/park_icon.png";
+function drawParks(paths, n) {
+    const infoWindow = new google.maps.InfoWindow();
+    const shape = {coords: [0,0,5], type: "circle"};    
+    paths[n].parks.forEach((p, idx) => {
 
-    new google.maps.Marker({
-        position: { lat: paths[n].park[0], lng: paths[n].park[1] },
-        map,
-        title: "Park",
-        label: `P${n}`,
-        icon: park
+        const marker = new google.maps.Marker({
+            position: { lat: p.pos[0], lng: p.pos[1] },
+            map,
+            title: `P${n}-${idx}`,
+        });
+
+
+        if (p.pos[0] === paths[n].park[0] && p.pos[1] === paths[n].park[1]) {
+            marker.setIcon("images/park_icon.png");
+        } else {
+            marker.setIcon("images/park_visited.png");
+        }
+
+        marker.addListener("click", () => {
+            infoWindow.close();
+            infoWindow.setContent(`<h3>${marker.getTitle()}</h1><p>Distance: ${p.dist} </p><p>Price: ${p.price}</p>`);
+            infoWindow.open(marker.getMap(), marker);
+          });
+      
     });
+
+
+}
+
+function drawInitialNodes(paths, n) {
+    drawParks(paths, n);
 
     new google.maps.Marker({
         position: { lat: paths[n].orig[0], lng: paths[n].orig[1] },

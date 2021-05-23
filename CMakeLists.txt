@@ -64,7 +64,7 @@ add_library(cal_lib
         src/exception/noNodeWithID/noNodeWithID.cpp src/exception/noNodeWithID/noNodeWithID.h
         src/exception/noParkFound/noParkFound.cpp src/exception/noParkFound/noParkFound.h
         src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.cpp src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.h
-        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h)
+        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h src/model/journeyFinder/parkFinalInfo.cpp src/model/journeyFinder/parkFinalInfo.h)
 
 add_executable(feup_cal_proj main.cpp)
 
