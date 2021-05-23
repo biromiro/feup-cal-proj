@@ -15,20 +15,21 @@
 /// TESTS ///
 
 #define GRAPH_SIZE 120
-#define PATH_NODE_MAX 1000
-#define PATH_NODE_INC 6
+#define PATH_NODE_MAX 2048
+#define PATH_NODE_INC 8
 #define SAMPLES 32
-#define PATH_SAMPLES 200
+#define PATH_SAMPLES 64
 #define MIN_POS -10000
 #define MAX_POS 10000
 #define BASE_RADIUS ((MAX_POS)*2)
 #define BASE_NODES 1000
 #define BASE_EDGES 1000
 #define PARK_PERCENTAGE 20
-#define EDGES_PER_NODE 3
+#define EDGES_PER_NODE 4
 
 Graph<int> genRandomGraph(size_t graph_size) {
-    std::uniform_real_distribution<double> distrib(MIN_POS, MAX_POS);
+    std::uniform_real_distribution<double> latDistr(-90, 90);
+    std::uniform_real_distribution<double> longDistr(-180, 180);
     std::random_device rd;
 
     double a = rd() ^(std::chrono::duration_cast<std::chrono::microseconds>(
@@ -38,14 +39,15 @@ Graph<int> genRandomGraph(size_t graph_size) {
     Graph<int> graph;
 
     for (size_t j = 0; j < graph_size; j++) {
-        graph.addNode(j, j, Position(GRID, distrib(rng), distrib(rng)));
+        graph.addNode(j, j, Position(COORDS, latDistr(rng), longDistr(rng)));
     }
 
     return graph;
 }
 
 Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
-    std::uniform_real_distribution<double> distrib(MIN_POS, MAX_POS);
+    std::uniform_real_distribution<double> latDistr(-90, 90);
+    std::uniform_real_distribution<double> longDistr(-180, 180);
     std::uniform_real_distribution<double> parkDistrib(0, 100);
     std::uniform_int_distribution<int> edgeDistrib(0, graph_size - 1);
 
@@ -68,7 +70,7 @@ Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
         info.setMaxCapacity(info.getCurrentCapacity() + parkDistrib(rng));
         info.setPriceFunction([](int, int, int) { return (double) 10; });
 
-        graph.addNode(j, info, Position(GRID, distrib(rng), distrib(rng)));
+        graph.addNode(j, info, Position(COORDS, latDistr(rng), longDistr(rng)));
     }
 
     for(size_t i = 0; i < graph_size; i++) {
@@ -97,6 +99,7 @@ double compareNodes(const Graph<int> &graph, const std::vector<int> &expected, c
 
 TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
+    return;
 
     std::ofstream file;
 
@@ -124,7 +127,13 @@ TEST(ComplexityTest, tspAlgos) {
             Node<int> *origin = graph.findNode(0);
             Node<int> *destination = graph.findNode(i - 1);
 
-            std::vector<Node<int> *> nodeSet = graph.getNodeSet();
+            auto nodeMap = graph.getNodeSet();
+
+            std::vector<Node<int> *> nodeSet;
+
+            for(auto it = nodeMap.begin(); it != nodeMap.end(); it++) {
+                nodeSet.push_back(it->second);
+            }
 
             std::vector<Node<int> *> poi = std::vector<Node<int> *>(nodeSet.begin() + 1, nodeSet.end() - 1);
 
@@ -169,34 +178,29 @@ TEST(ComplexityTest, tspAlgos) {
 
 TEST(ComplexityTest, pathfinding) {
     Graph <NodeInfo> graph;
-    return;
     std::ofstream file;
 
     file.open("resultspath.csv");
 
-    file << "NODE SIZE,DIJKSTRA TIME,DIJ IT,ASTAR TIME,AST IT\n" << std::flush;
+    file << "NODE SIZE,DIJKSTRA TIME,ASTAR TIME\n" << std::flush;
 
     std::vector<Node < NodeInfo>*> parks;
     std::chrono::duration<double, std::milli> sum_dijkstra_time(0),
     sum_astar_time(0);
 
-    for (size_t i = 2; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
+    for (size_t i = PATH_NODE_INC; i <= PATH_NODE_MAX; i += PATH_NODE_INC) {
         sum_dijkstra_time = std::chrono::duration<double, std::milli>(0);
         sum_astar_time = std::chrono::duration<double, std::milli>(0);
 
         for (size_t sample = 0; sample < PATH_SAMPLES; sample++) {
             // INCREMENTING NODES
             graph = genRandomGraphInfo(i, EDGES_PER_NODE);
-            parks.clear();
 
             auto t1 = std::chrono::high_resolution_clock::now();
-            Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, 0, BASE_RADIUS);
+            Pathfinding::dijkstraAdaptation(graph, 0, i-1);
             auto t2 = std::chrono::high_resolution_clock::now();
 
             sum_dijkstra_time += t2 - t1;
-
-            graph.freeGraph();
-            graph = genRandomGraphInfo(i, EDGES_PER_NODE);
 
             t1 = std::chrono::high_resolution_clock::now();
             Pathfinding::aStarAdaptation<NodeInfo>(graph, 0, i-1);

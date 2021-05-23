@@ -37,11 +37,22 @@ TEST(UndirectedGraph, constructor) {
     graph.addNode(2, 1, Position(NodeMode::GRID, 0,5 ));
     graph.addNode(3, 1, Position(NodeMode::GRID, -1,5 ));
 
-    std::vector<Node<int>*> nodes = graph.getNodeSet();
+    auto mapnodes = graph.getNodeSet();
+
+    std::vector<Node<int>*> nodes;
+
+    for(auto it = mapnodes.begin(); it != mapnodes.end(); it++) {
+        nodes.push_back(it->second);
+    }
 
     UndirectedGraph<int> uGraph = UndirectedGraph<int>(nodes);
 
-    nodes = uGraph.getNodeSet();
+    mapnodes = uGraph.getNodeSet();
+
+    nodes.clear();
+    for(auto it = mapnodes.begin(); it != mapnodes.end(); it++) {
+        nodes.push_back(it->second);
+    }
 
     for(size_t i = 0; i < nodes.size(); i++) {
         Node<int> *firstNode = nodes.at(i);

@@ -44,8 +44,7 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
     size_t o = origin;
     for(int i = 0; i < orderedPOI.size(); i++){
         size_t d = orderedPOI.at(i);
-        if(i == orderedPOI.size() - 1) o = calculate(graph, o, d, true, time, maxSearchForPark);
-        else o = calculate(graph, o, d, false, time, maxSearchForPark);
+        o = calculate(graph, o, d, time, maxSearchForPark);
     }
 
     journeyToJSON();
@@ -53,7 +52,7 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
 }
 
 size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
-                                size_t origin, size_t destiny, bool final, size_t time, int maxSearchForPark) {
+                                size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
 
     vector<Node<NodeInfo> *> parks;
     Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, destiny, maxSearchForPark);
@@ -62,10 +61,10 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     vector<Edge<NodeInfo>*> pathToDest, pathToPark;
     size_t bestPark = selectPark(parks, time);
-    //if(!Pathfinding::aStarAdaptation(graph, bestPark, destiny))
-    //     throw NoFoundPath("Couldn't get the ordered path from a park to the destiny!");
 
     Pathfinding::getOrderedPath(graph, destiny, bestPark, pathToDest);
+
+    std::reverse(pathToDest.begin(), pathToDest.end());
 
     if(!Pathfinding::aStarAdaptation(graph, origin, bestPark))
         throw NoFoundPath("Couldn't get the ordered path from the origin to the park!");
@@ -102,8 +101,10 @@ void JourneyFinder::journeyToJSON() {
         vector<Edge<NodeInfo>*> pathToDest = paths.at(j).second;
         Edge<NodeInfo>
                 *originEdge = pathToPark.at(0),
-                *parkEdge = pathToDest.at(0),
+                *parkEdge = pathToPark.at(pathToPark.size() - 1),
                 *destEdge = pathToDest.at(pathToDest.size() - 1);
+
+        if(destEdge == nullptr) destEdge = parkEdge;
 
         journey << "      \"park\": ["
         << parkEdge->getOrig()->getPos().getY()
