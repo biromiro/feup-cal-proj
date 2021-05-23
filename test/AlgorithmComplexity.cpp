@@ -16,8 +16,8 @@
 
 #define GRAPH_SIZE 120
 #define PATH_NODE_MAX 1000
-#define PATH_NODE_INC 16
-#define SAMPLES 25
+#define PATH_NODE_INC 6
+#define SAMPLES 32
 #define PATH_SAMPLES 200
 #define MIN_POS -10000
 #define MAX_POS 10000
@@ -38,7 +38,7 @@ Graph<int> genRandomGraph(size_t graph_size) {
     Graph<int> graph;
 
     for (size_t j = 0; j < graph_size; j++) {
-        graph.addNode(j, j, Position(COORDS, distrib(rng), distrib(rng)));
+        graph.addNode(j, j, Position(GRID, distrib(rng), distrib(rng)));
     }
 
     return graph;
@@ -68,7 +68,7 @@ Graph<NodeInfo> genRandomGraphInfo(size_t graph_size, size_t edge_num) {
         info.setMaxCapacity(info.getCurrentCapacity() + parkDistrib(rng));
         info.setPriceFunction([](int, int, int) { return (double) 10; });
 
-        graph.addNode(j, info, Position(COORDS, distrib(rng), distrib(rng)));
+        graph.addNode(j, info, Position(GRID, distrib(rng), distrib(rng)));
     }
 
     for(size_t i = 0; i < graph_size; i++) {
@@ -97,7 +97,6 @@ double compareNodes(const Graph<int> &graph, const std::vector<int> &expected, c
 
 TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
-    return;
 
     std::ofstream file;
 
@@ -119,6 +118,7 @@ TEST(ComplexityTest, tspAlgos) {
         calcBrute = i <= 12;
 
         for (size_t sample = 0; sample < SAMPLES; sample++) {
+            graph.freeGraph();
             graph = genRandomGraph(i);
 
             Node<int> *origin = graph.findNode(0);
@@ -169,7 +169,7 @@ TEST(ComplexityTest, tspAlgos) {
 
 TEST(ComplexityTest, pathfinding) {
     Graph <NodeInfo> graph;
-
+    return;
     std::ofstream file;
 
     file.open("resultspath.csv");

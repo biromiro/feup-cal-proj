@@ -35,7 +35,6 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     if (maxRadius < 0)
         throw std::invalid_argument("Dijkstra Radius");
 
-
     for(Node<T>* node: graph.getNodeSet()){
         node->setDist(INF);
         node->setPath(nullptr);
@@ -65,6 +64,7 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
             }
         }
     }
+
     return;
 }
 
@@ -85,7 +85,9 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     while(!pq.empty()){
         HeuristicNode<T> current = pq.top();
         pq.pop();
-        if(current.getCurrentNode() == destination) return true;
+        if(current.getCurrentNode() == destination) {
+            return true;
+        }
         for(Edge<T>* edge: current.getCurrentNode()->getOutgoing()){
             Node<T>* to = edge->getDest();
             double cost = current.getCurrentNode()->getDist() + edge->getCost();
@@ -96,6 +98,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
             }
         }
     }
+
     return false;
 }
 
