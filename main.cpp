@@ -20,9 +20,9 @@ int main(){
     JourneyFinder jf("resources/Porto/SCC/porto_strong_nodes_latlng.txt",
                      "resources/Porto/SCC/porto_strong_edges.txt");
 
-    jf.addPointOfInterest(26);
+    jf.addPointOfInterest(53207);
 
-    jf.generateJourney(1, 26796, 5, 1000);
+    jf.generateJourney(1, 1, 5, 200);
     /*srand(time(NULL));
 
     Graph<struct NodeInfo> g2;

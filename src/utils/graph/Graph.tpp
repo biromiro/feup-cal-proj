@@ -8,11 +8,11 @@
 #include "Node.tpp"
 #include "Edge.tpp"
 #include <vector>
+#include <map>
 #include <queue>
 #include <iostream>
 #include <graphLoad/MapData.h>
 #include "MutablePriorityQueue.tpp"
-
 
 /* ================================================================================================
  * Class Graph
@@ -21,11 +21,11 @@
 
 template <class T>
 class Graph {
-    std::vector<Node<T> *> nodeSet;
+    std::map<int, Node<T>*> nodeSet;
 
 public:
     Node<T>* findNode(int id) const;
-    std::vector<Node<T> *> getNodeSet() const;
+    std::map<int, Node<T>*> getNodeSet() const;
     Node<T> *addNode(int ID, const T &in, Position pos);
 
     virtual Edge<T> *addEdge(int srcID, int destID, double cost);
@@ -37,20 +37,19 @@ Node<T> * Graph<T>::addNode(int ID, const T &in, Position pos) {
     if (v != nullptr)
         return v;
     v = new Node<T>(ID, in, pos);
-    nodeSet.push_back(v);
+    nodeSet[ID] = v;
     return v;
 }
 
 template <class T>
-std::vector<Node<T> *> Graph<T>::getNodeSet() const {
+std::map<int, Node<T>*> Graph<T>::getNodeSet() const {
     return nodeSet;
 }
 
 template<class T>
 Node<T> *Graph<T>::findNode(int id) const {
-    for (Node<T>* v : nodeSet)
-        if (v->getID() == id)
-            return v;
+    auto node = nodeSet.find(id);
+    if(node != nodeSet.end()) return node->second;
     return nullptr;
 }
 
@@ -62,11 +61,6 @@ Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
         return nullptr;
     auto *e = new Edge<T>(s, d, cost);
     s->addEdge(e);
-    auto *e2 = new Edge<T>(d, s, cost);
-    d->addEdge(e2);
-
-    e->reverse = e2;
-    e2->reverse = e;
     return e;
 }
 

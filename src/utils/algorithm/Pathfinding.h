@@ -36,10 +36,10 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
         throw std::invalid_argument("Dijkstra Radius");
 
 
-    for(Node<T>* node: graph.getNodeSet()){
-        node->setDist(INF);
-        node->setPath(nullptr);
-        node->setVisited(false);
+    for(auto node: graph.getNodeSet()){
+        node.second->setDist(INF);
+        node.second->setPath(nullptr);
+        node.second->setVisited(false);
     }
 
     std::priority_queue<Node<T> *, std::vector<Node<T> *>, CmpNodePtrs<T>> queue;
@@ -75,9 +75,9 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
 
     if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
 
-    for(Node<T>* node: graph.getNodeSet()){
-        node->setDist(INF);
-        node->setPath(nullptr);
+    for(auto node: graph.getNodeSet()){
+        node.second->setDist(INF);
+        node.second->setPath(nullptr);
     }
     origin->setDist(0);
     std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
