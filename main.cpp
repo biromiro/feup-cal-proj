@@ -11,10 +11,12 @@
 #include <graphLoad/GraphManager.h>
 #include <src/model/db/userDatabase.h>
 #include <model/journeyFinder/journeyFinder.h>
+#include <ui/UIManager.h>
+#include <ui/initialPage/initialPage.h>
 
 int main(){
 
-    srand(time(NULL));
+    /*srand(time(NULL));
     UserDatabase db("resources/database.txt");
 
     JourneyFinder jf("resources/Porto/SCC/porto_strong_nodes_latlng.txt",
@@ -31,9 +33,18 @@ int main(){
     jf.addPointOfInterest(50013);
     jf.addPointOfInterest(26779);
 
-    jf.generateJourney(1, 7313, 5, 200);
-    /*
+    jf.generateJourney(1, 7313, 5, 200);*/
 
+    UserDatabase db("resources/database.txt");
+
+
+    CurrentSession currentSession =  CurrentSession(&db);
+    UIManager ui(currentSession);
+
+    ui.setCurrent(new InitialPage(ui));
+    ui.run();
+
+    /*
     Graph<struct NodeInfo> g2;
 
 
@@ -72,5 +83,6 @@ int main(){
     std::cout << "Second path" << std::endl;
     gv.showPath(vector2, WALKING);
     gv.finish();*/
+
     return 0;
 }

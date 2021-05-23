@@ -43,11 +43,11 @@ bool Connectivity<T>::calculateTarjan() {
     int currentID = 0;
     std::stack<Node<T>*> stack = std::stack<Node<T>*>();
 
-    for(Node<T>* node: currentGraph.getNodeSet())
-        node->setVisited(false);
+    for(auto pair: currentGraph.getNodeSet())
+        pair.second->setVisited(false);
 
-    for(Node<T>* node: currentGraph.getNodeSet())
-        if(!(node->isVisited())) dfs(currentID, node, stack);
+    for(auto pair: currentGraph.getNodeSet())
+        if(!(pair.second->isVisited())) dfs(currentID, pair.second, stack);
 
     return sccs == 1;
 }
