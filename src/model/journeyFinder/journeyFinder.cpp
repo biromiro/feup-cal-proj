@@ -8,6 +8,7 @@
 #include <algorithm/Pathfinding.h>
 #include <exception/noParkFound/noParkFound.h>
 #include <exception/noFoundPath/noFoundPath.h>
+#include <algorithm/Connectivity.tpp>
 #include "journeyFinder.h"
 
 JourneyFinder::JourneyFinder(const string &nodePath, const string &edgePath) :
@@ -17,6 +18,10 @@ void JourneyFinder::addPointOfInterest(size_t newPOI) {
     Graph<NodeInfo> graph = loader.getGraph();
     if(graph.findNode(newPOI) == nullptr) throw NoNodeWithID(newPOI, "There's no such POI node!");
     pointsOfInterest.push_back(newPOI);
+}
+
+void JourneyFinder::clearPointsOfInterest() {
+    pointsOfInterest.clear();
 }
 
 bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
@@ -165,8 +170,11 @@ void JourneyFinder::journeyToJSON() {
     }
     journey << "   ]\n}";
 
+    paths.clear();
 }
 
-void JourneyFinder::checkConnectiviy() {
-
+Connectivity<NodeInfo> JourneyFinder::checkConnectiviy() {
+    Graph<NodeInfo> graph = loader.getGraph();
+    return Connectivity<NodeInfo>(graph);
 }
+

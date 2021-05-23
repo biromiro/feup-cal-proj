@@ -55,6 +55,8 @@ public:
      * @return the nickname of the current user
      */
     [[nodiscard]] std::string getNickname() const;
+
+    UserDatabase* getUserDatabase() const;
 };
 
 #endif //PROJECT_CURRENTSESSION_H

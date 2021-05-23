@@ -34,3 +34,7 @@ const User* CurrentSession::getCurrentUser() const {
 std::string CurrentSession::getNickname() const {
     return currentUser->getNickname();
 }
+
+UserDatabase *CurrentSession::getUserDatabase() const {
+    return userDatabase;
+}
