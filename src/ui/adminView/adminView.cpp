@@ -28,5 +28,15 @@ void AdminView::pageOutput() {
 }
 
 void AdminView::checkConnectivity() {
+    Connectivity<NodeInfo> c = uiManager.getPlatform()->checkConnectiviy();
+
+    std::cout << "The graph is " << (c.isConnected() ? "" : "not ") << "strongly connected." << std::endl;
+    std::cout << "It has " << c.getNumConnectedComponents() << " strongly connected components." << std::endl;
+    if(!c.isConnected())
+        std::cout << "Each strongly connected component has an average of " << c.getAverageNodePerComponent() << " nodes." << std::endl;
+
+    std::cout << "\nType anything to go back." << std::endl;
+    _getch_();
+
 }
 

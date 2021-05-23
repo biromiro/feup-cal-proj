@@ -14,6 +14,7 @@ public:
     explicit Connectivity(Graph<T>& graph);
     bool isConnected();
     int getNumConnectedComponents();
+    float getAverageNodePerComponent();
 private:
     int sccs = -1;
     Graph<T> currentGraph;
@@ -77,6 +78,11 @@ void Connectivity<T>::dfs(int &currentID, Node<T> *node, std::stack<Node<T>*> &s
         stack.pop();
         sccs++;
     }
+}
+
+template<class T>
+float Connectivity<T>::getAverageNodePerComponent() {
+    return ((float) getNumConnectedComponents()) / currentGraph.getNodeSet().size();
 }
 
 

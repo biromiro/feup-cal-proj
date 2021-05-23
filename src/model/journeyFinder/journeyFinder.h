@@ -8,6 +8,7 @@
 
 #include <graphLoad/GraphLoader.tpp>
 #include <graphLoad/GraphManager.h>
+#include <utils/algorithm/Connectivity.tpp>
 #include <utility>
 
 class JourneyFinder {
@@ -16,7 +17,7 @@ public:
     void addPointOfInterest(size_t newPOI);
     bool generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark);
     void clearPointsOfInterest();
-    void checkConnectiviy();
+    Connectivity<NodeInfo> checkConnectiviy();
 private:
     size_t calculate(Graph<NodeInfo>& graph, size_t origin, size_t destiny, size_t time, int maxSearchForPark);
     size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);

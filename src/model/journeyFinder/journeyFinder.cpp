@@ -161,9 +161,8 @@ void JourneyFinder::journeyToJSON() {
     paths.clear();
 }
 
-void JourneyFinder::checkConnectiviy() {
+Connectivity<NodeInfo> JourneyFinder::checkConnectiviy() {
     Graph<NodeInfo> graph = loader.getGraph();
-    Connectivity<NodeInfo> c(graph);
-
+    return Connectivity<NodeInfo>(graph);
 }
 
