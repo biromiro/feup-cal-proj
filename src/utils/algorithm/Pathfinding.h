@@ -23,7 +23,7 @@ public:
 
 
     template <class T>
-            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Edge<T>*>& result);
+            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Node<T>*>& result);
 };
 
 template<class T>
@@ -60,7 +60,7 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
             auto newDist = curr->getDist() + edge->getCost();
             if (newDist < dest->getDist()) {
                 dest->setDist(newDist);
-                dest->setPath(edge);
+                dest->setPath(curr);
                 queue.push(dest);
             }
         }
@@ -100,17 +100,18 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
 }
 
 template<class T>
-bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Edge<T>*>& result) {
-    Node<T>* destination = graph.findNode(dest);
-    Node<T>* source = graph.findNode(origin);
-    Edge<T>* currentEdge = destination->getPath();
-    while(currentEdge != nullptr){
-        if (currentEdge->getOrig() == source)
+bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Node<T>*>& result) {
+    Node<T>* orig = graph.findNode(origin);
+    Node<T>* current = graph.findNode(dest);
+    result.push_back(current);
+    while(current->getPath() != nullptr){
+        Node<T>* next = current->getPath();
+        if (next == orig)
             break;
-        result.push_back(currentEdge);
-        currentEdge = currentEdge->getOrig()->getPath();
+        current = next;
+        result.push_back(current);
     }
-    result.push_back(currentEdge);
+    if(orig != current) result.push_back(orig);
     std::reverse(result.begin(), result.end());
     return true;
 }
@@ -124,9 +125,9 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
         throw std::invalid_argument("Dijkstra Origin/Destination Node");
 
 
-    for(Node<T>* node: graph.getNodeSet()){
-        node->setDist(INF);
-        node->setPath(nullptr);
+    for(auto pair: graph.getNodeSet()){
+        pair.second->setDist(INF);
+        pair.second->setPath(nullptr);
     }
 
     std::priority_queue<Node<T> *, std::vector<Node<T> *>, CmpNodePtrs<T>> queue;
@@ -143,7 +144,7 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
             auto newDist = curr->getDist() + edge->getCost();
             if (newDist < dest->getDist()) {
                 dest->setDist(newDist);
-                dest->setPath(edge);
+                dest->setPath(curr);
                 queue.push(dest);
             }
         }
