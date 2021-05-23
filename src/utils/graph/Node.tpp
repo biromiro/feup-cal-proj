@@ -23,7 +23,7 @@ class Node {
     std::vector<Edge<T> *> outgoing;
     std::vector<Edge<T> *> incoming;
     bool visited = false;
-    Edge<T> *path;
+    Node<T> *path;
     double dist = INF;
     int ID = 0;
     int sccsID = 0;
@@ -40,10 +40,10 @@ public:
     std::vector<Edge<T> *> getIncoming() const;
     std::vector<Edge<T> *> getOutgoing() const;
     void setVisited(bool visited);
-    void setPath(Edge<T> *path);
+    void setPath(Node<T> *path);
     void setDist(double dist);
     [[nodiscard]] bool isVisited() const;
-    Edge<T> *getPath() const;
+    Node<T> *getPath();
     [[nodiscard]] double getDist() const;
     void setID(int newID);
     [[nodiscard]] int getID() const;
@@ -118,7 +118,7 @@ void Node<T>::setVisited(bool newVisited) {
 }
 
 template<class T>
-void Node<T>::setPath(Edge<T> *newPath) {
+void Node<T>::setPath(Node<T> *newPath) {
     Node::path = newPath;
 }
 
@@ -133,7 +133,7 @@ bool Node<T>::isVisited() const {
 }
 
 template<class T>
-Edge<T> *Node<T>::getPath() const {
+Node<T> *Node<T>::getPath() {
     return path;
 }
 

@@ -76,7 +76,7 @@ TEST(Dijkstra, checkPath) {
         }
         else {
             int expected = path[i];
-            int got = n.second->getPath()->getOrig()->getID();
+            int got = n.second->getPath()->getID();
 
             ASSERT_EQ(expected, got);
         }

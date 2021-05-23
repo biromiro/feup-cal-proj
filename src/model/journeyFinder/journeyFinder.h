@@ -23,7 +23,7 @@ private:
 
     GraphLoader<NodeInfo> loader;
     std::vector<size_t> pointsOfInterest;
-    std::vector<std::pair<std::vector<Edge<NodeInfo>*>, std::vector<Edge<NodeInfo>*> >> paths;
+    std::vector<std::pair<std::vector<Node<NodeInfo>*>, std::vector<Node<NodeInfo>*> >> paths;
     float distanceCoeffient = 0.5;
     float costCoeffient = 0.5;
 };

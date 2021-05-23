@@ -92,15 +92,25 @@ double compareNodes(const Graph<int> &graph, const std::vector<int> &expected, c
     return (double) distanceExpected / distanceActual;
 }
 
+double getDistance(const Graph<int> &graph, const std::vector<int> &actual) {
+    double distanceActual = 0;
+
+    for (size_t i = 0; i < actual.size() - 1; i++) {
+        distanceActual += Distances::getEuclideanDistance(graph.findNode(actual.at(i))->getPos(),
+                                                          graph.findNode(actual.at(i + 1))->getPos());
+    }
+
+    return distanceActual;
+}
+
 TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
-    return;
 
     std::ofstream file;
 
     file.open("results.csv");
 
-    file << "GRAPH SIZE,BRUTE FORCE TIME,MST TIME,MST CORRECT,NEAREST TIME,NEAREST CORRECT\n" << std::flush;
+    file << "GRAPH SIZE,BRUTE FORCE TIME,BRUTE FORCE MEDIAN,MST TIME,MST MEDIAN,MST CORRECT,NEAREST TIME,NEAREST MEDIAN,NEAREST CORRECT\n" << std::flush;
 
     std::vector<int> bruteResult;
     std::vector<int> mstResult;
@@ -109,10 +119,21 @@ TEST(ComplexityTest, tspAlgos) {
     double sum_mst_correctness, sum_nearest_correctness;
     std::chrono::duration<double, std::milli> sum_mst_time(
             0), sum_nearest_time(0), sum_brute_time(0);
+    std::vector<double> bruteForceDurations;
+    bruteForceDurations.reserve(SAMPLES);
+    std::vector<double>mstDurations;
+    mstDurations.reserve(SAMPLES);
+    std::vector<double>nearestDurations;
+    nearestDurations.reserve(SAMPLES);
 
     for (size_t i = 2; i <= GRAPH_SIZE; i++) {
         sum_mst_correctness = sum_nearest_correctness = 0;
-        sum_mst_time = sum_nearest_time = sum_brute_time = std::chrono::duration<double, std::milli>(0);
+        sum_mst_time = std::chrono::duration<double, std::milli>(0);
+        sum_nearest_time = std::chrono::duration<double, std::milli>(0);
+        sum_brute_time = std::chrono::duration<double, std::milli>(0);
+        nearestDurations.clear();
+        mstDurations.clear();
+        bruteForceDurations.clear();
         calcBrute = i <= 12;
 
         for (size_t sample = 0; sample < SAMPLES; sample++) {
@@ -137,12 +158,15 @@ TEST(ComplexityTest, tspAlgos) {
             auto t2 = std::chrono::high_resolution_clock::now();
 
             sum_mst_time += t2 - t1;
+            mstDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
 
             t1 = std::chrono::high_resolution_clock::now();
             nearestResult = NearestNeighbour<int>::getTour(poi, origin, destination);
             t2 = std::chrono::high_resolution_clock::now();
 
             sum_nearest_time += t2 - t1;
+            nearestDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
+
 
             bruteResult.clear();
 
@@ -152,19 +176,42 @@ TEST(ComplexityTest, tspAlgos) {
                 t2 = std::chrono::high_resolution_clock::now();
 
                 sum_brute_time += (t2 - t1);
+                bruteForceDurations.push_back(((std::chrono::duration<double, std::milli>) (t2-t1)).count());
 
                 sum_mst_correctness += compareNodes(graph, bruteResult, mstResult);
                 sum_nearest_correctness += compareNodes(graph, bruteResult, nearestResult);
+            } else {
+                sum_mst_correctness += getDistance(graph, mstResult);
+                sum_nearest_correctness += getDistance(graph, nearestResult);
             }
         }
 
         file << i - 2 << ",";
 
-        if (calcBrute) file << sum_brute_time.count() / SAMPLES;
-        file << "," << sum_mst_time.count() / SAMPLES << ",";
-        if (calcBrute) file << sum_mst_correctness / SAMPLES;
-        file << "," << sum_nearest_time.count() / SAMPLES << ",";
-        if (calcBrute) file << sum_nearest_correctness / SAMPLES;
+        if(calcBrute) {
+            file << sum_brute_time.count() / SAMPLES;
+            if(bruteForceDurations.size()%2==0) {
+                file << "," << (bruteForceDurations[bruteForceDurations.size()/2] + bruteForceDurations[bruteForceDurations.size()/2 - 1])/2;
+            } else {
+                file << "," << (bruteForceDurations[bruteForceDurations.size()/2]);
+            }
+        } else {
+            file << ",";
+        }
+        file << "," << sum_mst_time.count() / SAMPLES;
+        if(mstDurations.size()%2==0) {
+            file << "," << (mstDurations[mstDurations.size()/2] + mstDurations[mstDurations.size()/2 - 1])/2;
+        } else {
+            file << "," << (mstDurations[mstDurations.size()/2]);
+        }
+        file << "," << sum_mst_correctness / SAMPLES;
+        file << "," << sum_nearest_time.count() / SAMPLES;
+        if(nearestDurations.size()%2==0) {
+            file << "," << (nearestDurations[nearestDurations.size()/2] + nearestDurations[nearestDurations.size()/2 - 1])/2;
+        } else {
+            file << "," << (nearestDurations[nearestDurations.size()/2]);
+        }
+        file << "," << sum_nearest_correctness / SAMPLES;
         file << "\n" << std::flush;
     }
 
@@ -174,10 +221,11 @@ TEST(ComplexityTest, tspAlgos) {
 TEST(ComplexityTest, pathfinding) {
     Graph <NodeInfo> graph;
     std::ofstream file;
+    return;
 
     file.open("resultspath.csv");
 
-    file << "NODE SIZE,DIJKSTRA TIME, DIJKSTRA MEDIAN, DIJKSTRA IT,ASTAR TIME,ASTAR MEDIAN,ASTAR IT,ASTAR MAN TIME,ASTAR MAN MEDIAN, ASTAR MAN IT\n" << std::flush;
+    file << "NODE SIZE,DIJKSTRA TIME,DIJKSTRA MEDIAN,DIJKSTRA IT,ASTAR TIME,ASTAR MEDIAN,ASTAR IT\n" << std::flush;
 
     std::vector<Node < NodeInfo>*> parks;
     std::vector<double> dijkstraDurations;
