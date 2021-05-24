@@ -4,7 +4,6 @@
 #include "Edge.tpp"
 #include <limits>
 #include <graphLoad/MapData.h>
-#include "MutablePriorityQueue.tpp"
 #include "Position.h"
 
 template <class T> class Graph;
@@ -60,11 +59,10 @@ public:
 
     friend class UndirectedGraph<T>;
     friend class Graph<T>;
-    friend class MutablePriorityQueue<Node<T>>;
 
     void addWalkingEdge(Edge<T> *e1, Edge<T> *e2);
 
-    const vector<Edge<T> *> &getWalking() const;
+    const std::vector<Edge<T> *> &getWalking() const;
 
     void setInfo(NodeInfo nodeInfo);
 };
@@ -101,7 +99,7 @@ void Node<T>::addEdge(Edge<T> *e) {
 }
 
 template<class T>
-const vector<Edge<T> *> &Node<T>::getWalking() const {
+const std::vector<Edge<T> *> &Node<T>::getWalking() const {
     return walking;
 }
 
@@ -123,12 +121,12 @@ T Node<T>::getInfo() const {
 }
 
 template <class T>
-vector<Edge<T> *>  Node<T>::getIncoming() const {
+std::vector<Edge<T> *>  Node<T>::getIncoming() const {
     return this->incoming;
 }
 
 template <class T>
-vector<Edge<T> *>  Node<T>::getOutgoing() const {
+std::vector<Edge<T> *>  Node<T>::getOutgoing() const {
     return this->outgoing;
 }
 

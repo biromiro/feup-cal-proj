@@ -28,13 +28,12 @@ add_library(cal_lib
         src/utils/graph/Node.tpp
         src/utils/graph/Edge.tpp
         src/utils/graph/Graph.tpp
-        src/utils/graph/MutablePriorityQueue.tpp
         src/utils/graphLoad/GraphLoader.tpp
         src/utils/graph/Position.cpp src/utils/graph/Position.h
         src/utils/graphLoad/NodeMode.h
         src/utils/utilitaryStructures/HeuristicNode.h
         src/utils/algorithm/Distances.cpp src/utils/algorithm/Distances.h
-        src/utils/algorithm/Pathfinding.cpp src/utils/algorithm/Pathfinding.h
+        src/utils/algorithm/Pathfinding.h
         src/utils/graphLoad/MapData.h
         src/utils/disjointSet/DisjointSet.h
         src/utils/disjointSet/DisjointSetGroup.h src/utils/disjointSet/DisjointSetGroup.cpp
@@ -46,8 +45,6 @@ add_library(cal_lib
         src/utils/utilitaryStructures/utilFunctions.h
         src/model/user/user.cpp src/model/user/user.h
         src/model/admin/admin.cpp src/model/admin/admin.h
-        src/model/admin/adminManager.cpp src/model/admin/adminManager.h
-        src/model/user/userManager.cpp src/model/user/userManager.h
         src/model/db/userDatabase.cpp src/model/db/userDatabase.h
         src/auth/currentSession.cpp src/auth/currentSession.h
         src/exception/userAlreadyExists/userAlreadyExists.cpp src/exception/userAlreadyExists/userAlreadyExists.h
@@ -59,9 +56,7 @@ add_library(cal_lib
 
 add_executable(myjourney main.cpp)
 
-add_executable(feup_cal_proj_tests tests.cpp
-        test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp 
-        test/TravelingSalesmanTest.cpp test/NearestNeighbourTest.cpp test/AlgorithmComplexity.cpp)
+add_executable(feup_cal_proj_tests tests.cpp test/AlgorithmComplexity.cpp)
 
 target_link_libraries(myjourney cal_lib)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)

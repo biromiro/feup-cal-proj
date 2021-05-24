@@ -12,7 +12,6 @@
 #include <queue>
 #include <iostream>
 #include <graphLoad/MapData.h>
-#include "MutablePriorityQueue.tpp"
 
 /* ================================================================================================
  * Class Graph

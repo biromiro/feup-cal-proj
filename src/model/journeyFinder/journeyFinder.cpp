@@ -9,9 +9,10 @@
 #include <exception/noParkFound/noParkFound.h>
 #include <exception/noFoundPath/noFoundPath.h>
 #include <algorithm/Connectivity.tpp>
+#include <algorithm/NearestNeighbour.h>
 #include "journeyFinder.h"
 
-JourneyFinder::JourneyFinder(const string &nodePath, const string &edgePath) :
+JourneyFinder::JourneyFinder(const std::string &nodePath, const std::string &edgePath) :
 loader(GraphLoader<NodeInfo>(nodePath, edgePath, NodeMode::COORDS)) {}
 
 void JourneyFinder::addPointOfInterest(size_t newPOI) {
@@ -43,7 +44,7 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
     if(vec.size() < 8)
         orderedPOI = TravelingSalesman<NodeInfo>::bruteForce(vec, orig, dest);
     else
-        orderedPOI = MinimumSpanningTrees<NodeInfo>::calculateTreeKruskal(vec, orig, dest);
+        orderedPOI = NearestNeighbour<NodeInfo>::getTour(vec, orig, dest);
 
     this->parks = std::vector<std::vector<ParkFinalInfo>>();
 
@@ -60,13 +61,13 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
 size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
                                 size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
 
-    vector<Node<NodeInfo> *> parks;
+    std::vector<Node<NodeInfo> *> parks;
     checkConnectiviy().isConnected();
     Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, destiny, maxSearchForPark);
     if(parks.empty())
         throw NoParkFound(destiny, "No parks were found.");
 
-    vector<Node<NodeInfo>*> pathToDest, pathToPark;
+    std::vector<Node<NodeInfo>*> pathToDest, pathToPark;
     size_t bestPark = selectPark(parks, time);
 
     Pathfinding::getOrderedPath(graph, destiny, bestPark, pathToDest);
@@ -78,14 +79,14 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     Pathfinding::getOrderedPath(graph, origin, bestPark, pathToPark);
 
-    std::pair<std::vector<Node<NodeInfo>*>, vector<Node<NodeInfo>*>> pair(pathToPark, pathToDest);
+    std::pair<std::vector<Node<NodeInfo>*>, std::vector<Node<NodeInfo>*>> pair(pathToPark, pathToDest);
 
     paths.push_back(pair);
 
     return bestPark;
 }
 
-size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
+size_t JourneyFinder::selectPark(std::vector<Node<NodeInfo>*>& parks, size_t time) {
     size_t bestPark = 0;
     float bestRes = INF;
     this->parks.push_back(std::vector<ParkFinalInfo>());
@@ -111,8 +112,8 @@ void JourneyFinder::journeyToJSON() {
     journey << "{\n  \"paths\": [\n";
     for(size_t j = 0; j < paths.size(); j++){
         journey << "    {\n";
-        vector<Node<NodeInfo>*> pathToPark = paths.at(j).first;
-        vector<Node<NodeInfo>*> pathToDest = paths.at(j).second;
+        std::vector<Node<NodeInfo>*> pathToPark = paths.at(j).first;
+        std::vector<Node<NodeInfo>*> pathToDest = paths.at(j).second;
         Node<NodeInfo>
                 *originNode = pathToPark.at(0),
                 *parkNode = pathToPark.at(pathToPark.size() - 1),

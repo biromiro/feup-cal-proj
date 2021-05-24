@@ -11,8 +11,6 @@
 #include "userDatabase.h"
 
 UserDatabase::UserDatabase(const std::string& path) : path(path) {
-    userManager = new UserManager();
-    adminManager = new AdminManager();
     std::ifstream stream(path);
     if(!stream) return;
     std::string cur;
@@ -71,8 +69,6 @@ UserDatabase::~UserDatabase() {
         stream << " " << user->getNickname() << " " << user->getPassword() << "\n";
         delete user;
     }
-    delete userManager;
-    delete adminManager;
 }
 
 

@@ -10,8 +10,6 @@
 #include <set>
 #include <unordered_set>
 #include <model/user/user.h>
-#include <model/user/userManager.h>
-#include <model/admin/adminManager.h>
 
 /**
  * Hash for the unordered set of users
@@ -43,8 +41,6 @@ public:
     virtual ~UserDatabase();
 
 private:
-    UserManager* userManager;
-    AdminManager* adminManager;
     std::string path;
     userDB db;
 };

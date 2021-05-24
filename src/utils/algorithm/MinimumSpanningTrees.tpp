@@ -49,7 +49,7 @@ MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &node
 }
 
 template<class T>
-priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
+std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>
 MinimumSpanningTrees<T>::graphToQueue(UndirectedGraph<T> &graph) {
     auto queue = std::priority_queue<Edge<T> *, std::vector<Edge<T> *>, CmpEdgePtrs<T>>();
 

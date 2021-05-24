@@ -27,7 +27,7 @@ public:
 
 
     template <class T>
-            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, vector<Node<T>*>& result);
+            bool static getOrderedPath(Graph<T>& graph, int origin, int dest, std::vector<Node<T>*>& result);
 };
 
 template<class T>
@@ -86,7 +86,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
         node.second->setPath(nullptr);
     }
     origin->setDist(0);
-    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
+    std::priority_queue<HeuristicNode<T>, std::vector<HeuristicNode<T>>, compare> pq{};
     pq.push(HeuristicNode<T>(origin, destination));
     while(!pq.empty()){
         HeuristicNode<T> current = pq.top();
@@ -119,7 +119,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest, int &coun
         node.second->setPath(nullptr);
     }
     origin->setDist(0);
-    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
+    std::priority_queue<HeuristicNode<T>, std::vector<HeuristicNode<T>>, compare> pq{};
     pq.push(HeuristicNode<T>(origin, destination));
     while(!pq.empty()){
         count++;
@@ -141,7 +141,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest, int &coun
 
 
 template<class T>
-bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Node<T>*>& result) {
+bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, std::vector<Node<T>*>& result) {
     Node<T>* orig = graph.findNode(origin);
     Node<T>* current = graph.findNode(dest);
     result.push_back(current);

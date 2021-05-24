@@ -30,7 +30,7 @@ public:
 
 private:
     size_t calculate(Graph<NodeInfo>& graph, size_t origin, size_t destiny, size_t time, int maxSearchForPark);
-    size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);
+    size_t selectPark(std::vector<Node<NodeInfo> *>& parks, size_t time);
     void journeyToJSON();
     GraphLoader<NodeInfo> loader;
     std::set<size_t> pointsOfInterest;
