@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(feup_cal_proj)
+project(myjourney)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -67,11 +67,11 @@ add_library(cal_lib
         src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h src/ui/UIManager.cpp src/ui/UIManager.h src/ui/UI.h src/ui/initialPage/initialPage.cpp src/ui/initialPage/initialPage.h src/ui/loginPage/loginPage.cpp src/ui/loginPage/loginPage.h src/ui/registerPage/registerPage.cpp src/ui/registerPage/registerPage.h src/ui/adminView/adminView.cpp src/ui/adminView/adminView.h src/ui/userView/userView.cpp src/ui/userView/userView.h
         src/model/journeyFinder/parkFinalInfo.cpp src/model/journeyFinder/parkFinalInfo.h)
 
-add_executable(feup_cal_proj main.cpp)
+add_executable(myjourney main.cpp)
 
 add_executable(feup_cal_proj_tests tests.cpp
         test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp 
         test/TravelingSalesmanTest.cpp test/NearestNeighbourTest.cpp)
 
-target_link_libraries(feup_cal_proj cal_lib graphviewer)
+target_link_libraries(myjourney cal_lib graphviewer)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)

@@ -6,7 +6,12 @@ async function sleep(ms) {
   }
 
 async function initMap() {
-    const paths = await parseFile();
+    let paths;
+    try {
+        paths = await parseFile();   
+    } catch (error) {
+        paths = await parseSample();
+    }
 
     const mapOptions = {
         zoom: 18,
@@ -36,6 +41,13 @@ async function initSymbol() {
 async function parseFile() {
 
     const data = await (await fetch("resources/journey.json")).json();
+    console.log(data);
+    return data.paths;
+}
+
+async function parseSample() {
+
+    const data = await (await fetch("resources/sample.json")).json();
     console.log(data);
     return data.paths;
 }

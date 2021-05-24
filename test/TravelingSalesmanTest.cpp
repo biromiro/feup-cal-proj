@@ -3,11 +3,12 @@
 //
 
 #include <gtest/gtest.h>
-#include "src/utils/algorithm/TravelingSalesman.h"
+
 #include "graph/Graph.tpp"
+#include "src/utils/algorithm/TravelingSalesman.h"
 
 /// TESTS ///
-
+/*
 TEST(TravelingSalesman, bruteForce) {
     Graph<int> graph;
 
@@ -50,3 +51,4 @@ TEST(TravelingSalesman, bruteForce) {
     ASSERT_EQ(1, shortestPath.at(3));
     ASSERT_EQ(2, shortestPath.at(4));
 }
+*/
