@@ -7,8 +7,6 @@
 #include <iostream>
 #include <algorithm/Connectivity.tpp>
 #include <algorithm/Pathfinding.h>
-#include <graphviewer.h>
-#include <graphLoad/GraphManager.h>
 #include <src/model/db/userDatabase.h>
 #include <model/journeyFinder/journeyFinder.h>
 #include <ui/UIManager.h>
