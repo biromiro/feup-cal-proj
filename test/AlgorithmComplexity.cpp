@@ -107,7 +107,6 @@ TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
 
     std::ofstream file;
-    return;
 
     file.open("results.csv");
 
@@ -220,7 +219,6 @@ TEST(ComplexityTest, tspAlgos) {
 }
 
 TEST(ComplexityTest, indivBrute) {
-    return;
     auto graph = genRandomGraph(13);
 
     Node<int> *origin = graph.findNode(0);
@@ -239,12 +237,13 @@ TEST(ComplexityTest, indivBrute) {
     auto t1 = std::chrono::high_resolution_clock::now();
     TravelingSalesman<int>::bruteForce(poi, origin, destination);
     auto t2 = std::chrono::high_resolution_clock::now();
+
+    std::cout << (t2-t1).count() << std::endl;
 }
 
 TEST(ComplexityTest, pathfinding) {
     Graph <NodeInfo> graph;
     std::ofstream file;
-    return;
 
     file.open("resultspath.csv");
 
@@ -336,7 +335,6 @@ int inverse_ackermann(int n) {
 
 
 TEST(complex, ackermann) {
-
     std::ofstream file;
 
     file.open("ackermann.csv");
