@@ -14,7 +14,6 @@
 
 int main(){
 
-
     UserDatabase db("resources/database.txt");
 
     CurrentSession currentSession =  CurrentSession(&db);

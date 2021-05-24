@@ -9,6 +9,10 @@ template<class T>
 std::vector<int>
 MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &nodes, Node<T> *origin,
                                               Node<T> *destination) {
+    if(nodes.empty()) {
+        return {origin->getID(), destination->getID()};
+    }
+
     int edgesAccepted = 0;
     std::vector<Node<T>*> origNodes = nodes;
     origNodes.push_back(origin);
@@ -38,6 +42,8 @@ MinimumSpanningTrees<T>::calculateTreeKruskal(const std::vector<Node<T> *> &node
 
     std::vector<int> result = MinimumSpanningTrees<T>::dfs(graph, graph.findNode(origin->getID()));
     result.push_back(destination->getID());
+
+    graph.freeGraph();
 
     return result;
 }

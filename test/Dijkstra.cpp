@@ -72,14 +72,14 @@ TEST(Dijkstra, checkPath) {
     int i = 0;
     for (auto n : g.getNodeSet()) {
         std::cout << i << std::endl;
-        ASSERT_EQ(distances[i], n->getDist());
+        ASSERT_EQ(distances[i], n.second->getDist());
         int pathIdx = path[i];
         if (i == 0) {
             ASSERT_EQ(nullptr, g.getNodeSet().at(0)->getPath());
         }
         else {
             int expected = path[i];
-            int got = n->getPath()->getOrig()->getID();
+            int got = n.second->getPath()->getID();
 
             ASSERT_EQ(expected, got);
         }

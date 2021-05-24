@@ -61,7 +61,7 @@ add_executable(myjourney main.cpp)
 
 add_executable(feup_cal_proj_tests tests.cpp
         test/DisjointSetTest.cpp test/UndirectedGraphTest.cpp test/MinimumSpanningTreesTest.cpp test/Dijkstra.cpp 
-        test/TravelingSalesmanTest.cpp test/NearestNeighbourTest.cpp)
+        test/TravelingSalesmanTest.cpp test/NearestNeighbourTest.cpp test/AlgorithmComplexity.cpp)
 
 target_link_libraries(myjourney cal_lib)
 target_link_libraries(feup_cal_proj_tests cal_lib gtest_main gmock_main)
