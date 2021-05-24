@@ -107,6 +107,7 @@ TEST(ComplexityTest, tspAlgos) {
     Graph<int> graph;
 
     std::ofstream file;
+    return;
 
     file.open("results.csv");
 
@@ -216,6 +217,27 @@ TEST(ComplexityTest, tspAlgos) {
     }
 
     file.close();
+}
+
+TEST(ComplexityTest, indivBrute) {
+    auto graph = genRandomGraph(13);
+
+    Node<int> *origin = graph.findNode(0);
+    Node<int> *destination = graph.findNode(i - 1);
+
+    auto nodeMap = graph.getNodeSet();
+
+    std::vector<Node<int> *> nodeSet;
+
+    for(auto it = nodeMap.begin(); it != nodeMap.end(); it++) {
+        nodeSet.push_back(it->second);
+    }
+
+    std::vector<Node<int> *> poi = std::vector<Node<int> *>(nodeSet.begin() + 1, nodeSet.end() - 1);
+
+    auto t1 = std::chrono::high_resolution_clock::now();
+    TravelingSalesman<int>::bruteForce(poi, origin, destination);
+    auto t2 = std::chrono::high_resolution_clock::now();
 }
 
 TEST(ComplexityTest, pathfinding) {
