@@ -199,3 +199,11 @@ NodeInfo JourneyFinder::updateParkCapacity(size_t id, int cap) {
     return nodeInfo;
 }
 
+void JourneyFinder::removePark(size_t id) {
+    Node<NodeInfo>* node = loader.getGraph().findNode(id);
+
+    if (node == nullptr || node->getInfo().getType() == NodeType::NORMAL)
+        throw NoParkFound(id, "No park found");
+
+    node->setInfo(NodeInfo());
+}

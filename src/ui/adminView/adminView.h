@@ -39,6 +39,7 @@ private:
      */
     static void pageOutput() ;
 
+    void removePark();
     void checkConnectivity();
 };
 

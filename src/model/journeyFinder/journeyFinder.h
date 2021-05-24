@@ -24,6 +24,8 @@ public:
 
     NodeInfo updateParkCapacity(size_t i, int i1);
 
+    void removePark(size_t i);
+
 private:
     size_t calculate(Graph<NodeInfo>& graph, size_t origin, size_t destiny, size_t time, int maxSearchForPark);
     size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);
