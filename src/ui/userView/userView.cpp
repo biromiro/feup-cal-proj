@@ -47,13 +47,26 @@ void UserView::generateJourney() {
     size_t origin, destiny;
     char answer = 0;
     do{
-        std::cout << "Please insert the origin node ID: ";
-        origin = inputNumber();
-        std::cout << "Please insert the destiny node ID: ";
-        destiny = inputNumber();
+        std::cout << "Choose mode: ID(1), LatLong (2 - might be slower):";
+
+        int choice = inputNumber();
+
+
+        if (choice == 2) {
+            std::cout << "Insert origin node: \n";
+            origin = this->askLatLong();
+            std::cout << "Insert destiny node: \n";
+            destiny = this->askLatLong();
+        } else {
+            std::cout << "Please insert the origin node ID: ";
+            origin = inputNumber();
+            std::cout << "Please insert the destiny node ID: ";
+            destiny = inputNumber();
+        }
+
         try{
             uiManager.getPlatform()->generateJourney(origin, destiny, myTime, myMaxRange);
-            std::cout << "Journey successfully generated. Please check out the server for a animated preview!\n";
+            std::cout << "MyJourney successfully generated. Please check out the server for an animated preview!\n";
             std::cout << "0 to re-generate.";
         } catch(std::exception &e){
             std::cerr << e.what();
@@ -69,8 +82,18 @@ void UserView::addPOI() {
     size_t poi;
     char answer = 0;
     do{
-        std::cout << "Please insert the POI node ID: ";
-        poi = inputNumber();
+        std::cout << "Choose mode: ID(1), LatLong (2 - might be slower):";
+
+        int choice = inputNumber();
+
+        if (choice == 2) {
+        std::cout << "Insert POI node:\n";
+            poi = this->askLatLong();
+        } else {
+            std::cout << "Please insert the POI node ID: ";
+            poi = inputNumber();
+        }
+
         try{
             uiManager.getPlatform()->addPointOfInterest(poi);
             std::cout << "POI successfully added!\n";
@@ -118,4 +141,17 @@ void UserView::feedBack() {
     }
 
     _getch_();
+}
+
+size_t UserView::askLatLong() {
+    double lat, lng;
+
+    std::cout << "Please insert latitude: ";
+    std::cin >> lat;
+
+    std::cout << "Please insert longitude: ";
+    std::cin >> lng;
+    std::cout << std::endl;
+
+    return uiManager.getPlatform()->findNode(lat, lng);
 }

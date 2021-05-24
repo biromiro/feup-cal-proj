@@ -207,3 +207,24 @@ void JourneyFinder::removePark(size_t id) {
 
     node->setInfo(NodeInfo());
 }
+
+size_t JourneyFinder::findNode(double lat, double lng) {
+
+    std::map<int, Node<NodeInfo> *> map = loader.getGraph().getNodeSet();
+
+    Position target(NodeMode::COORDS, lat, lng);
+
+    size_t best = -1;
+    double bestDist = INFINITY;
+
+    for (auto const& [key, val] : map) {
+        double dist = Distances::getEuclideanDistance(target, val->getPos());
+        if (dist < bestDist) {
+            best = key;
+            bestDist = dist;
+        }
+    }
+
+    return best;
+
+}
