@@ -11,83 +11,54 @@
 #include "graph/Node.tpp"
 #include "algorithm/Distances.h"
 
-struct intPairHasher {
-    std::size_t operator()(const pair<int,int> &k) const
-    {
-        std::size_t hash = 0;
-
-        std::hash<int> hasher;
-        hash ^= hasher(k.first) + 0x9e3779b9 + (hash<<6) + (hash>>2);
-        hash ^= hasher(k.second) + 0x9e3779b9 + (hash<<6) + (hash>>2);
-
-        return hash;
-    }
-};
-
 template <class T>
 class TravelingSalesman {
-private:
-    static double calculateDistance(std::unordered_map<std::pair<int, int>, double, intPairHasher> &distances, Node<T>* first, Node<T>* second);
 public:
     static std::vector<int> bruteForce(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination);
 };
 
 template<class T>
 std::vector<int> TravelingSalesman<T>::bruteForce(std::vector<Node<T>*> poi, Node<T>* origin, Node<T>* destination) {
-    std::vector<Node<T>*> shortest_path;
-    std::unordered_map<std::pair<int, int>, double, intPairHasher> distances;
+    std::vector<Node<T> *> shortest_path;
     double shortest_distance = std::numeric_limits<double>::infinity();
 
-    if(poi.empty()) return {};
+    if (poi.empty()) return {origin->getID(), destination->getID()};
+
+    std::sort(poi.begin(), poi.end());
 
     do {
-        Node<T>* firstNode,* secondNode;
+        Node<T> *firstNode, *secondNode;
 
         double distance = 0;
         firstNode = origin;
         secondNode = poi.front();
-        distance +=  TravelingSalesman<T>::calculateDistance(distances, firstNode, secondNode);
-        for(size_t i = 0; i < poi.size() - 1; i++) {
+        distance += Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
+        for (size_t i = 0; i < poi.size() - 1; i++) {
             firstNode = poi.at(i);
-            secondNode = poi.at(i+1);
+            secondNode = poi.at(i + 1);
 
-            distance +=  TravelingSalesman<T>::calculateDistance(distances, firstNode, secondNode);
+            distance += Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
         }
         firstNode = poi.back();
         secondNode = destination;
-        distance +=  TravelingSalesman<T>::calculateDistance(distances, firstNode, secondNode);
+        distance += Distances::getEuclideanDistance(firstNode->getPos(), secondNode->getPos());
 
-        if(distance <= shortest_distance) {
+        if (distance < shortest_distance) {
             shortest_distance = distance;
-            shortest_path = poi;
+            shortest_path = std::vector<Node<T> *>(poi.begin(), poi.end());
         }
 
-    } while(std::next_permutation(poi.begin(), poi.end()));
+    } while (std::next_permutation(poi.begin(), poi.end()));
 
     std::vector<int> shortest_id;
 
-    for(Node<T>* node : shortest_path) {
+    shortest_id.push_back(origin->getID());
+    for (Node<T> *node : shortest_path) {
         shortest_id.push_back(node->getID());
     }
+    shortest_id.push_back(destination->getID());
 
     return shortest_id;
 }
-
-template<class T>
-double TravelingSalesman<T>::calculateDistance(std::unordered_map<std::pair<int, int>, double, intPairHasher> &distances, Node<T>* first, Node<T>* second) {
-    std::pair<int, int> pair  = std::minmax(first->getID(), second->getID());
-    auto it = distances.find(pair);
-    double distance;
-
-    if(it == distances.end()) {
-        distance = Distances::getEuclideanDistance(first->getPos(), second->getPos());
-        distances[pair] = distance;
-    } else {
-        distance = it->second;
-    }
-
-    return distance;
-}
-
 
 #endif //FEUP_CAL_PROJ_TRAVELINGSALESMAN_H

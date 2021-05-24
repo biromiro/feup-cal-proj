@@ -17,9 +17,13 @@ public:
 
     template <class T>
     bool static aStarAdaptation(Graph<T>& graph, int orig, int dest);
+    template <class T>
+    bool static aStarAdaptation(Graph<T>& graph, int orig, int dest, int &count);
 
     template <class T>
     bool static dijkstraAdaptation(Graph<T>& graph, int orig, int dest);
+    template <class T>
+    bool static dijkstraAdaptation(Graph<T>& graph, int orig, int dest, int &count);
 
 
     template <class T>
@@ -34,7 +38,6 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
         throw std::invalid_argument("Invalid destiny node!");
     if (maxRadius < 0)
         throw std::invalid_argument("Invalid maximum radius!");
-
 
     for(auto node: graph.getNodeSet()){
         node.second->setDist(INF);
@@ -65,6 +68,7 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
             }
         }
     }
+
     return;
 }
 
@@ -91,13 +95,48 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
             double cost = current.getCurrentNode()->getDist() + edge->getCost();
             if(to->getDist() > cost){
                 to->setDist(cost);
-                to->setPath(edge);
+                to->setPath(current.getCurrentNode());
                 pq.push(HeuristicNode<T>(to, destination));
             }
         }
     }
     return false;
 }
+
+template<class T>
+bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest, int &count) {
+    Node<T>* origin = graph.findNode(orig);
+    Node<T>* destination = graph.findNode(dest);
+
+    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
+
+    count = 0;
+
+    for(auto node: graph.getNodeSet()){
+        node.second->setDist(INF);
+        node.second->setPath(nullptr);
+    }
+    origin->setDist(0);
+    std::priority_queue<HeuristicNode<T>, vector<HeuristicNode<T>>, compare> pq{};
+    pq.push(HeuristicNode<T>(origin, destination));
+    while(!pq.empty()){
+        count++;
+        HeuristicNode<T> current = pq.top();
+        pq.pop();
+        if(current.getCurrentNode() == destination) return true;
+        for(Edge<T>* edge: current.getCurrentNode()->getOutgoing()){
+            Node<T>* to = edge->getDest();
+            double cost = current.getCurrentNode()->getDist() + edge->getCost();
+            if(to->getDist() > cost){
+                to->setDist(cost);
+                to->setPath(current.getCurrentNode());
+                pq.push(HeuristicNode<T>(to, destination));
+            }
+        }
+    }
+    return false;
+}
+
 
 template<class T>
 bool Pathfinding::getOrderedPath(Graph<T> &graph, int origin, int dest, vector<Node<T>*>& result) {
@@ -124,6 +163,43 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
     if (origin == nullptr || destination == nullptr)
         throw std::invalid_argument("Dijkstra Origin/Destination Node");
 
+    for(auto pair: graph.getNodeSet()){
+        pair.second->setDist(INF);
+        pair.second->setPath(nullptr);
+    }
+
+    std::priority_queue<Node<T> *, std::vector<Node<T> *>, CmpNodePtrs<T>> queue;
+    Node<T>* curr = origin;
+
+    curr->setDist(0);
+    queue.push(curr);
+
+
+    while (!queue.empty()) {
+        curr = queue.top(); queue.pop();
+        if(curr == destination) break;
+        for (auto edge : curr->getOutgoing()) {
+            Node<T>* dest = edge->getDest();
+            auto newDist = curr->getDist() + edge->getCost();
+            if (newDist < dest->getDist()) {
+                dest->setDist(newDist);
+                dest->setPath(curr);
+                queue.push(dest);
+            }
+        }
+    }
+    return true;
+}
+
+template <class T>
+bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest, int &count) {
+    Node<T>* origin = graph.findNode(orig);
+    Node<T>* destination = graph.findNode(dest);
+
+    if (origin == nullptr || destination == nullptr)
+        throw std::invalid_argument("Dijkstra Origin/Destination Node");
+
+    count = 0;
 
     for(auto pair: graph.getNodeSet()){
         pair.second->setDist(INF);
@@ -137,6 +213,7 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
     queue.push(curr);
 
     while (!queue.empty()) {
+        count++;
         curr = queue.top(); queue.pop();
         if(curr == destination) break;
         for (auto edge : curr->getOutgoing()) {

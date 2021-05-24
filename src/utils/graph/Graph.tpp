@@ -24,6 +24,7 @@ class Graph {
     std::map<int, Node<T>*> nodeSet;
 
 public:
+    void freeGraph();
     Node<T>* findNode(int id) const;
     std::map<int, Node<T>*> getNodeSet() const;
     Node<T> *addNode(int ID, const T &in, Position pos);
@@ -83,4 +84,14 @@ Edge<T> *Graph<T>::addWalkingEdge(int srcID, int destID, double cost) {
     return e;
 }
 
+template<class T>
+void Graph<T>::freeGraph() {
+    for(auto& node : nodeSet) {
+        std::vector<Edge<T>*> out = node.second->getOutgoing();
+        for(Edge<T>* outgoing : out) {
+            delete outgoing;
+        }
+        delete node.second;
+    }
+}
 #endif //FEUP_CAL_PROJ_GRAPH_TPP

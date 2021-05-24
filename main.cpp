@@ -14,8 +14,11 @@
 #include <ui/UIManager.h>
 #include <ui/initialPage/initialPage.h>
 
-int main(){
 
+#include <random>
+#include <chrono>
+
+int main(){
     UserDatabase db("resources/database.txt");
 
     CurrentSession currentSession =  CurrentSession(&db);
