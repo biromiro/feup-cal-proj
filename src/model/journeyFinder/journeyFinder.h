@@ -9,6 +9,7 @@
 #include <graphLoad/GraphLoader.tpp>
 #include <utils/algorithm/Connectivity.tpp>
 #include <utility>
+#include <set>
 #include "parkFinalInfo.h"
 
 class ParkFinalInfo;
@@ -32,7 +33,7 @@ private:
     size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);
     void journeyToJSON();
     GraphLoader<NodeInfo> loader;
-    std::vector<size_t> pointsOfInterest;
+    std::set<size_t> pointsOfInterest;
     std::vector<std::pair<std::vector<Node<NodeInfo>*>, std::vector<Node<NodeInfo>*> >> paths;
     std::vector<std::vector<ParkFinalInfo>> parks;
     float distanceCoeffient = 0.5;

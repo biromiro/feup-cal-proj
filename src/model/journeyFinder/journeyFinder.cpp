@@ -17,7 +17,7 @@ loader(GraphLoader<NodeInfo>(nodePath, edgePath, NodeMode::COORDS)) {}
 void JourneyFinder::addPointOfInterest(size_t newPOI) {
     Graph<NodeInfo> graph = loader.getGraph();
     if(graph.findNode(newPOI) == nullptr) throw NoNodeWithID(newPOI, "There's no such POI node!");
-    pointsOfInterest.push_back(newPOI);
+    pointsOfInterest.insert(newPOI);
 }
 
 void JourneyFinder::clearPointsOfInterest() {
@@ -40,17 +40,15 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
     Node<NodeInfo>* orig = graph.findNode(origin);
     Node<NodeInfo>* dest = graph.findNode(destiny);
 
-    if(pointsOfInterest.size() < 8)
+    if(vec.size() < 8)
         orderedPOI = TravelingSalesman<NodeInfo>::bruteForce(vec, orig, dest);
     else
         orderedPOI = MinimumSpanningTrees<NodeInfo>::calculateTreeKruskal(vec, orig, dest);
 
-    orderedPOI.push_back(destiny);
-
     this->parks = std::vector<std::vector<ParkFinalInfo>>();
 
     size_t o = origin;
-    for(int i = 0; i < orderedPOI.size(); i++){
+    for(int i = 1; i < orderedPOI.size(); i++){
         size_t d = orderedPOI.at(i);
         o = calculate(graph, o, d, time, maxSearchForPark);
     }
