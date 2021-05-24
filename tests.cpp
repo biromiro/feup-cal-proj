@@ -7,13 +7,6 @@
 #include "gtest/gtest.h"
 
 int main(int argc, char **argv) {
-    Graph<string> g;
-
-    GraphLoader<string> gLoader("resources/OtherMaps/GridGraphs/4x4/nodes.txt",
-                                "resources/OtherMaps/GridGraphs/4x4/edges.txt",
-                                NodeMode::GRID);
-    g = gLoader.getGraph();
-
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
