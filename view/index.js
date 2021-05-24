@@ -61,14 +61,13 @@ async function initSymbol() {
 async function parseFile() {
 
     const data = await (await fetch("resources/journey.json")).json();
-    console.log(data);
+    console.log("Success:", data);
     return data.paths;
 }
 
 async function parseSample() {
-
     const data = await (await fetch("resources/sample.json")).json();
-    console.log(data);
+    console.log("Failed: ", data);
     return data.paths;
 }
 
