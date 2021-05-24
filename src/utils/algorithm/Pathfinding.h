@@ -74,7 +74,8 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     Node<T>* origin = graph.findNode(orig);
     Node<T>* destination = graph.findNode(dest);
 
-    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
+    if(origin == nullptr || destination == nullptr)
+        throw std::invalid_argument("Invalid Origin/Destination points!");
 
     for(auto node: graph.getNodeSet()){
         node.second->setDist(INF);
@@ -92,7 +93,7 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
             double cost = current.getCurrentNode()->getDist() + edge->getCost();
             if(to->getDist() > cost){
                 to->setDist(cost);
-                to->setPath(edge);
+                to->setPath(current.getCurrentNode());
                 pq.push(HeuristicNode<T>(to, destination));
             }
         }
@@ -124,7 +125,6 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
 
     if (origin == nullptr || destination == nullptr)
         throw std::invalid_argument("Dijkstra Origin/Destination Node");
-
 
     for(auto pair: graph.getNodeSet()){
         pair.second->setDist(INF);

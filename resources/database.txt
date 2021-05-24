@@ -1,6 +1,6 @@
 0 a a
 0 dusto dusto
-0 biro mirobiro
 0 cr kk
-1 pp dd
+0 biro mirobiro
 1 biromiro mirobiro
+1 pp dd

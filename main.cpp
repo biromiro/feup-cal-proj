@@ -16,6 +16,7 @@
 
 int main(){
 
+
     UserDatabase db("resources/database.txt");
 
     CurrentSession currentSession =  CurrentSession(&db);
@@ -23,6 +24,7 @@ int main(){
 
     ui.setCurrent(new InitialPage(ui));
     ui.run();
+
 
     return 0;
 }

@@ -27,6 +27,7 @@ void JourneyFinder::clearPointsOfInterest() {
 bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
     Graph<NodeInfo> graph = loader.getGraph();
     if(graph.findNode(origin) == nullptr) throw NoNodeWithID(origin, "There's no such origin node!");
+    if(graph.findNode(destiny) == nullptr) throw NoNodeWithID(origin, "There's no such destination node!");
 
     std::vector<Node<NodeInfo>*> vec;
     std::vector<int> orderedPOI;
@@ -62,6 +63,7 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
                                 size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
 
     vector<Node<NodeInfo> *> parks;
+    checkConnectiviy().isConnected();
     Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, destiny, maxSearchForPark);
     if(parks.empty())
         throw NoParkFound(destiny, "No parks were found.");
@@ -73,7 +75,7 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     std::reverse(pathToDest.begin(), pathToDest.end());
 
-    if(!Pathfinding::dijkstraAdaptation(graph, origin, bestPark))
+    if(!Pathfinding::aStarAdaptation(graph, origin, bestPark))
         throw NoFoundPath("Couldn't get the ordered path from the origin to the park!");
 
     Pathfinding::getOrderedPath(graph, origin, bestPark, pathToPark);
@@ -119,21 +121,21 @@ void JourneyFinder::journeyToJSON() {
                 *destNode = pathToDest.at(pathToDest.size() - 1);
 
         journey << "      \"park\": ["
-        << parkNode->getPos().getY()
-        << ","
         << parkNode->getPos().getX()
+        << ","
+        << parkNode->getPos().getY()
         << "],\n";
 
         journey << "      \"orig\": ["
-        << originNode->getPos().getY()
-        << ","
         << originNode->getPos().getX()
+        << ","
+        << originNode->getPos().getY()
         << "],\n";
 
         journey << "      \"dest\": ["
-        << destNode->getPos().getY()
-        << ","
         << destNode->getPos().getX()
+        << ","
+        << destNode->getPos().getY()
         << "],\n";
 
         journey << "      \"parks\": [\n";
@@ -148,8 +150,8 @@ void JourneyFinder::journeyToJSON() {
         for(size_t i = 1; i < pathToPark.size() - 1; i++){
             Node<NodeInfo>* curNode = pathToPark.at(i);
             journey << "         ["
-                    << curNode->getPos().getY()
-                    << "," << curNode->getPos().getX()
+                    << curNode->getPos().getX()
+                    << "," << curNode->getPos().getY()
                     << "]";
 
             if(i == pathToPark.size() - 2) journey << "\n";
@@ -161,8 +163,8 @@ void JourneyFinder::journeyToJSON() {
         for(size_t i = 1; i < pathToDest.size() - 1; i++){
             Node<NodeInfo>* curNode = pathToDest.at(i);
             journey << "         ["
-                    << curNode->getPos().getY()
-                    << "," << curNode->getPos().getX()
+                    << curNode->getPos().getX()
+                    << "," << curNode->getPos().getY()
                     << "]";
 
             if(i == pathToDest.size() - 2) journey << "\n";

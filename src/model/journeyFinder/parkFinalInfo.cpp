@@ -13,8 +13,8 @@ void ParkFinalInfo::toJson(std::ofstream &journey) {
             << "         \"currCap\": " << currCap << ",\n"
             << "         \"maxCap\": " << maxCap << ",\n"
             << "         \"pos\": ["
-            << y
-            << "," << x
+            << x
+            << "," << y
             << "]\n"
             << "        }";
 }

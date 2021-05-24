@@ -31,50 +31,6 @@ InitialPage::InitialPage(UIManager &uiManager) : uiManager(uiManager){
     maps["Penafiel_FULL"] = std::pair<std::string,std::string>(
             "resources/Penafiel/Full/penafiel_full_nodes_latlng.txt",
             "resources/Penafiel/Full/penafiel_full_edges.txt");
-
-    maps["Aveiro"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Aveiro/nodes_lat_lon_aveiro.txt",
-            "resources/OtherMaps/PortugalMaps/Aveiro/edges_aveiro.txt");
-
-    maps["Braga"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Braga/nodes_lat_lon_braga.txt",
-            "resources/OtherMaps/PortugalMaps/Braga/edges_braga.txt");
-
-    maps["Coimbra"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Coimbra/nodes_lat_lon_coimbra.txt",
-            "resources/OtherMaps/PortugalMaps/Coimbra/edges_coimbra.txt");
-
-    maps["Ermesinde"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Ermesinde/nodes_lat_lon_ermesinde.txt",
-            "resources/OtherMaps/PortugalMaps/Ermesinde/edges_ermesinde.txt");
-
-    maps["Fafe"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Fafe/nodes_lat_lon_fafe.txt",
-            "resources/OtherMaps/PortugalMaps/Fafe/edges_fafe.txt");
-
-    maps["Gondomar"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Gondomar/nodes_lat_lon_gondomar.txt",
-            "resources/OtherMaps/PortugalMaps/Gondomar/edges_gondomar.txt");
-
-    maps["Lisboa"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Lisboa/nodes_lat_lon_lisboa.txt",
-            "resources/OtherMaps/PortugalMaps/Lisboa/edges_lisboa.txt");
-
-    maps["Maia"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Maia/nodes_lat_lon_maia.txt",
-            "resources/OtherMaps/PortugalMaps/Maia/edges_maia.txt");
-
-    maps["Porto"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Porto/nodes_lat_lon_porto.txt",
-            "resources/OtherMaps/PortugalMaps/Porto/edges_porto.txt");
-
-    maps["Portugal"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Portugal/nodes_lat_lon_portugal.txt",
-            "resources/OtherMaps/PortugalMaps/Portugal/edges_portugal.txt");
-
-    maps["Viseu"] = std::pair<std::string,std::string>(
-            "resources/OtherMaps/PortugalMaps/Viseu/nodes_lat_lon_viseu.txt",
-            "resources/OtherMaps/PortugalMaps/Viseu/edges_viseu.txt");
 }
 
 void InitialPage::run() {
