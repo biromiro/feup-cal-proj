@@ -8,10 +8,10 @@
 #include "Node.tpp"
 #include "Edge.tpp"
 #include <vector>
+#include <map>
 #include <queue>
 #include <iostream>
-#include "MutablePriorityQueue.tpp"
-
+#include <graphLoad/MapData.h>
 
 /* ================================================================================================
  * Class Graph
@@ -20,13 +20,17 @@
 
 template <class T>
 class Graph {
-    std::vector<Node<T> *> nodeSet;
+    std::map<int, Node<T>*> nodeSet;
 
 public:
+    void freeGraph();
     Node<T>* findNode(int id) const;
-    std::vector<Node<T> *> getNodeSet() const;
+    std::map<int, Node<T>*> getNodeSet() const;
     Node<T> *addNode(int ID, const T &in, Position pos);
-    Edge<T> *addEdge(int srcID, int destID, double cost);
+
+    virtual Edge<T> *addEdge(int srcID, int destID, double cost);
+
+    Edge<T> *addWalkingEdge(int srcID, int destID, double cost);
 };
 
 template <class T>
@@ -35,27 +39,43 @@ Node<T> * Graph<T>::addNode(int ID, const T &in, Position pos) {
     if (v != nullptr)
         return v;
     v = new Node<T>(ID, in, pos);
-    nodeSet.push_back(v);
+    nodeSet[ID] = v;
     return v;
 }
 
 template <class T>
-std::vector<Node<T> *> Graph<T>::getNodeSet() const {
+std::map<int, Node<T>*> Graph<T>::getNodeSet() const {
     return nodeSet;
 }
 
 template<class T>
 Node<T> *Graph<T>::findNode(int id) const {
-    for (Node<T>* v : nodeSet)
-        if (v->getID() == id)
-            return v;
+    auto node = nodeSet.find(id);
+    if(node != nodeSet.end()) return node->second;
     return nullptr;
 }
 
 template<class T>
 Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
-    auto s = findNode(srcID);
-    auto d = findNode(destID);
+    auto s = this->findNode(srcID);
+    auto d = this->findNode(destID);
+    if (s == nullptr || d == nullptr)
+        return nullptr;
+    auto *directed = new Edge<T>(s, d, cost);
+    auto *reversed = new Edge<T>(d, s, cost);
+    directed->reverse = reversed;
+    reversed->reverse = directed;
+
+    s->addEdge(directed);
+    s->addWalkingEdge(directed, reversed);
+
+    return directed;
+}
+
+template<class T>
+Edge<T> *Graph<T>::addWalkingEdge(int srcID, int destID, double cost) {
+    auto s = this->findNode(srcID);
+    auto d = this->findNode(destID);
     if (s == nullptr || d == nullptr)
         return nullptr;
     auto *e = new Edge<T>(s, d, cost);
@@ -63,5 +83,14 @@ Edge<T> *Graph<T>::addEdge(int srcID, int destID, double cost) {
     return e;
 }
 
-
+template<class T>
+void Graph<T>::freeGraph() {
+    for(auto& node : nodeSet) {
+        std::vector<Edge<T>*> out = node.second->getOutgoing();
+        for(Edge<T>* outgoing : out) {
+            delete outgoing;
+        }
+        delete node.second;
+    }
+}
 #endif //FEUP_CAL_PROJ_GRAPH_TPP

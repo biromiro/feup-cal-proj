@@ -10,4 +10,9 @@ enum NodeMode{
     GRID
 };
 
+enum TravelType{
+    WALKING,
+    TRAVEL
+};
+
 #endif //FEUP_CAL_PROJ_NODEMODE_H

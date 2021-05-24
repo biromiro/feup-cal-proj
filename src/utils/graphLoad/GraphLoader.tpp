@@ -12,13 +12,16 @@
 #include <ctime>
 #include <utils/graph/Graph.tpp>
 #include <utils/algorithm/Distances.h>
+#include <exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.h>
 #include "NodeMode.h"
-#include <direct.h>
-#include <windows.h>
+#include "MapData.h"
+
+#define PARK_FACTOR 15
 
 template <class T>
 class GraphLoader {
 public:
+    GraphLoader();
     GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode, const std::string& parks = "");
     Graph<T> getGraph();
 private:
@@ -26,9 +29,11 @@ private:
     std::string edgePath;
     std::string parksPath;
     NodeMode mode;
+    Graph<T> graph;
     bool randomParkingMode = false;
-
+    NodeInfo genRandomPark();
     void setRandomParkingMode();
+    void genGraph();
 };
 
 template <class T>
@@ -38,10 +43,11 @@ GraphLoader<T>::GraphLoader(const std::string& nodes, const std::string& edges, 
     this->mode = mode;
     this->parksPath = parks;
     if(parks == "") setRandomParkingMode();
+    genGraph();
 }
 
 template <class T>
-Graph<T> GraphLoader<T>::getGraph() {
+void GraphLoader<T>::genGraph() {
     if(this->randomParkingMode) srand((int)time(0));
 
     Graph<T> graph;
@@ -60,13 +66,19 @@ Graph<T> GraphLoader<T>::getGraph() {
     std::getline(nodeFile, line);
 
     for(; nodeNumber > 0; nodeNumber--){
-        std::string var = "";
-        if(this->randomParkingMode && ((rand() % 10 + 1) == 1)) var = "PARKING";
         std::getline(nodeFile, line);
         std::stringstream s(line);
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
-        graph.addNode(nodeID, var, pos);
+
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % PARK_FACTOR + 1) == 1)
+                    ? genRandomPark() : NodeInfo();
+
+        if constexpr (std::is_same<T, NodeInfo>::value)
+            graph.addNode(nodeID, nodeInfo, pos);
+        else
+            graph.addNode(nodeID, T(), pos);
+
     }
 
     int edgeNumber;
@@ -81,6 +93,7 @@ Graph<T> GraphLoader<T>::getGraph() {
         s >> sep >> node1 >> sep >> node2 >> sep;
         Node<T>* nodeptr1 = graph.findNode(node1);
         Node<T>* nodeptr2 = graph.findNode(node2);
+        if(nodeptr1 == nullptr || nodeptr2 == nullptr) throw IncompatibleNodeToEdgeFile(nodePath, edgePath, "The provided files are not compatible!");
         double cost = Distances::getEuclideanDistance(nodeptr1->getPos(), nodeptr2->getPos());
         graph.addEdge(node1, node2, cost);
     }
@@ -89,13 +102,37 @@ Graph<T> GraphLoader<T>::getGraph() {
         // Todo , read from file parking lots and info
     }
 
-    return graph;
+    this->graph = graph;
 }
 
 template<class T>
 void GraphLoader<T>::setRandomParkingMode() {
     this->randomParkingMode = true;
 }
+
+template<class T>
+NodeInfo GraphLoader<T>::genRandomPark() {
+    int maxCap = rand() % 40 +1;
+    int currCap = rand() % maxCap + 1;
+
+    double priceFactor = (rand() % 10) / 100.0;  // Euro per minute [0, 10] cents
+    double capPrice = (rand() % 10) / 100.0; // Extra Euro per capacity percentage [0, 10] cents
+
+    NodeInfo info(maxCap, currCap,
+                  [priceFactor, capPrice](int x, int y, int z) {
+                      return priceFactor*x + capPrice*y/z;
+                  });
+    return info;
+
+}
+
+template<class T>
+Graph<T> GraphLoader<T>::getGraph() {
+    return graph;
+}
+
+template<class T>
+GraphLoader<T>::GraphLoader() = default;
 
 
 #endif //FEUP_CAL_PROJ_GRAPHLOADER_TPP

@@ -10,8 +10,8 @@
 class Position {
 public:
     explicit Position(NodeMode mode, double val1, double val2);
-    double getX();
-    double getY();
+    double getX() const;
+    double getY() const;
     NodeMode getMode();
 private:
     NodeMode mode;
