@@ -13,7 +13,7 @@ void RegisterPage::run() {
 }
 
 void RegisterPage::pageOutput() {
-    std::cout << "** Welcome to JourneyFinder! **" << std::endl;
+    std::cout << "** Welcome to MyJourney! **" << std::endl;
 }
 
 bool RegisterPage::userRegister()  {

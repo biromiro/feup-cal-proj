@@ -40,7 +40,7 @@ void UserView::run() {
 }
 
 void UserView::pageOutput() const {
-    std::cout << "** JourneyFinder **" << uiManager.getCurrentSession().getNickname() << "**\n" << std::endl;
+    std::cout << "** MyJourney! **" << uiManager.getCurrentSession().getNickname() << "**\n" << std::endl;
 }
 
 void UserView::generateJourney() {

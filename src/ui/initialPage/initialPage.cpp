@@ -124,7 +124,7 @@ void InitialPage::run() {
 }
 
 void InitialPage::pageOutput() {
-    std::cout << "** Welcome to JourneyFinder! **" << std::endl;
+    std::cout << "** Welcome to MyJourney! **" << std::endl;
     std::cout << "\n\t1 - Login" << std::endl;
     std::cout << "\t2 - Register" << std::endl;
     std::cout << "\t0 - Quit and Save" << std::endl;

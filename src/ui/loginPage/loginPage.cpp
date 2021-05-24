@@ -41,5 +41,5 @@ void LoginPage::run() {
 }
 
 void LoginPage::pageOutput() {
-    std::cout << "** Welcome to JourneyFinder! **" << std::endl;
+    std::cout << "** Welcome to MyJourney! **" << std::endl;
 }

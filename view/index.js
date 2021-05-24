@@ -18,11 +18,31 @@ async function initMap() {
         center: { lat: paths[0].orig[0], lng: paths[0].orig[1] },
     };
     map = await new google.maps.Map(document.getElementById("map"), mapOptions);
- 
+    await initClickEvent();
     await initSymbol();
 
     const lines = draw(paths);
     await animate(lines);
+}
+
+async function initClickEvent() {
+    let infoWindow = new google.maps.InfoWindow();
+
+      map.addListener("click", (mapsMouseEvent) => {
+        // Close the current InfoWindow.
+        infoWindow.close();
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow({
+          position: mapsMouseEvent.latLng,
+        });
+        const pos = mapsMouseEvent.latLng;
+        console.log(pos);
+        infoWindow.setContent(
+            `<p> ${pos.lat()}</p><p>${pos.lng()}</p>`,
+        );
+        infoWindow.open(map);
+      });
+    
 }
 
 async function initSymbol() {
@@ -74,6 +94,7 @@ function drawParks(paths, n) {
             infoWindow.close();
             infoWindow.setContent(
                 `<h3>${marker.getTitle()}</h1>
+                 <p> ${p.pos[0]}, ${p.pos[1]}</p>
                  <p>ID: ${p.id} </p>
                  <p>Distance: ${p.dist} </p>
                  <p>Current capacity: ${p.currCap} </p>

@@ -28,7 +28,7 @@ void AdminView::run() {
 }
 
 void AdminView::pageOutput() {
-    std::cout << "** JourneyFinder ** ADMINISTRATION **" << std::endl;
+    std::cout << "** MyJourney! ** ADMINISTRATION **" << std::endl;
 }
 
 void AdminView::checkConnectivity() {
