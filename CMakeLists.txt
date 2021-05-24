@@ -64,7 +64,8 @@ add_library(cal_lib
         src/exception/noNodeWithID/noNodeWithID.cpp src/exception/noNodeWithID/noNodeWithID.h
         src/exception/noParkFound/noParkFound.cpp src/exception/noParkFound/noParkFound.h
         src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.cpp src/exception/incompatibleNodeToEdgeFile/incompatibleNodeToEdgeFile.h
-        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h)
+        src/exception/userNotFound/userNotFound.cpp src/exception/userNotFound/userNotFound.h src/model/journeyFinder/journeyFinder.cpp src/model/journeyFinder/journeyFinder.h src/exception/noFoundPath/noFoundPath.cpp src/exception/noFoundPath/noFoundPath.h src/ui/UIManager.cpp src/ui/UIManager.h src/ui/UI.h src/ui/initialPage/initialPage.cpp src/ui/initialPage/initialPage.h src/ui/loginPage/loginPage.cpp src/ui/loginPage/loginPage.h src/ui/registerPage/registerPage.cpp src/ui/registerPage/registerPage.h src/ui/adminView/adminView.cpp src/ui/adminView/adminView.h src/ui/userView/userView.cpp src/ui/userView/userView.h
+        src/model/journeyFinder/parkFinalInfo.cpp src/model/journeyFinder/parkFinalInfo.h)
 
 add_executable(feup_cal_proj main.cpp)
 

@@ -35,9 +35,9 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     Node<T>* origin = graph.findNode(orig);
 
     if (origin == nullptr)
-        throw std::invalid_argument("Dijkstra Origin Node");
+        throw std::invalid_argument("Invalid destiny node!");
     if (maxRadius < 0)
-        throw std::invalid_argument("Dijkstra Radius");
+        throw std::invalid_argument("Invalid maximum radius!");
 
     for(auto node: graph.getNodeSet()){
         node.second->setDist(INF);
@@ -58,7 +58,7 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
         if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
             parks.push_back(curr);
 
-        for (auto edge : curr->getOutgoing()) {
+        for (auto edge : curr->getWalking()) {
             Node<T>* dest = edge->getDest();
             auto newDist = curr->getDist() + edge->getCost();
             if (newDist < dest->getDist()) {

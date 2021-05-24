@@ -8,6 +8,7 @@
 #include <algorithm/Pathfinding.h>
 #include <exception/noParkFound/noParkFound.h>
 #include <exception/noFoundPath/noFoundPath.h>
+#include <algorithm/Connectivity.tpp>
 #include "journeyFinder.h"
 
 JourneyFinder::JourneyFinder(const string &nodePath, const string &edgePath) :
@@ -17,6 +18,10 @@ void JourneyFinder::addPointOfInterest(size_t newPOI) {
     Graph<NodeInfo> graph = loader.getGraph();
     if(graph.findNode(newPOI) == nullptr) throw NoNodeWithID(newPOI, "There's no such POI node!");
     pointsOfInterest.push_back(newPOI);
+}
+
+void JourneyFinder::clearPointsOfInterest() {
+    pointsOfInterest.clear();
 }
 
 bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
@@ -81,8 +86,12 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
     size_t bestPark = 0;
     float bestRes = INF;
+    this->parks.push_back(std::vector<ParkFinalInfo>());
     for(Node<NodeInfo>* node: parks){
         float value = node->getInfo().getPrice(time) * costCoeffient + node->getDist() * distanceCoeffient;
+        ParkFinalInfo parkFinalInfo(node->getDist(), node->getInfo().getPrice(time), node->getPos().getX(), node->getPos().getY());
+        this->parks.at(this->parks.size()-1).push_back(parkFinalInfo);
+
         if(value < bestRes){
             bestRes = value;
             bestPark = node->getID();
@@ -122,6 +131,14 @@ void JourneyFinder::journeyToJSON() {
         << destNode->getPos().getX()
         << "],\n";
 
+        journey << "      \"parks\": [\n";
+        for(size_t i = 0; i < parks.at(j).size(); i++){
+            parks.at(j).at(i).toJson(journey);
+            if(i == parks.at(j).size() - 1) journey << "\n";
+            else journey << ",\n";
+        }
+        journey << "      ],\n";
+
         journey << "      \"origToPark\": [\n";
         for(size_t i = 1; i < pathToPark.size() - 1; i++){
             Node<NodeInfo>* curNode = pathToPark.at(i);
@@ -153,8 +170,11 @@ void JourneyFinder::journeyToJSON() {
     }
     journey << "   ]\n}";
 
+    paths.clear();
 }
 
-void JourneyFinder::checkConnectiviy() {
-
+Connectivity<NodeInfo> JourneyFinder::checkConnectiviy() {
+    Graph<NodeInfo> graph = loader.getGraph();
+    return Connectivity<NodeInfo>(graph);
 }
+

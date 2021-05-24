@@ -16,9 +16,12 @@
 #include "NodeMode.h"
 #include "MapData.h"
 
+#define PARK_FACTOR 30
+
 template <class T>
 class GraphLoader {
 public:
+    GraphLoader();
     GraphLoader(const std::string& nodes, const std::string& edges, NodeMode mode, const std::string& parks = "");
     Graph<T> getGraph();
 private:
@@ -26,9 +29,11 @@ private:
     std::string edgePath;
     std::string parksPath;
     NodeMode mode;
+    Graph<T> graph;
     bool randomParkingMode = false;
     NodeInfo genRandomPark();
     void setRandomParkingMode();
+    void genGraph();
 };
 
 template <class T>
@@ -38,10 +43,11 @@ GraphLoader<T>::GraphLoader(const std::string& nodes, const std::string& edges, 
     this->mode = mode;
     this->parksPath = parks;
     if(parks == "") setRandomParkingMode();
+    genGraph();
 }
 
 template <class T>
-Graph<T> GraphLoader<T>::getGraph() {
+void GraphLoader<T>::genGraph() {
     if(this->randomParkingMode) srand((int)time(0));
 
     Graph<T> graph;
@@ -65,7 +71,7 @@ Graph<T> GraphLoader<T>::getGraph() {
         s >> sep >> nodeID >> sep >> x >> sep >> y >> sep;
         Position pos(mode, x, y);
 
-        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % 10 + 1) == 1)
+        NodeInfo nodeInfo = this->randomParkingMode && ((rand() % PARK_FACTOR + 1) == 1)
                     ? genRandomPark() : NodeInfo();
 
         if constexpr (std::is_same<T, NodeInfo>::value)
@@ -96,7 +102,7 @@ Graph<T> GraphLoader<T>::getGraph() {
         // Todo , read from file parking lots and info
     }
 
-    return graph;
+    this->graph = graph;
 }
 
 template<class T>
@@ -119,6 +125,14 @@ NodeInfo GraphLoader<T>::genRandomPark() {
     return info;
 
 }
+
+template<class T>
+Graph<T> GraphLoader<T>::getGraph() {
+    return graph;
+}
+
+template<class T>
+GraphLoader<T>::GraphLoader() = default;
 
 
 #endif //FEUP_CAL_PROJ_GRAPHLOADER_TPP
