@@ -15,11 +15,12 @@ This also helps the user to find the best parking spot according to several para
 
 #### Google Test
 
-[Google Test](https://github.com/google/googletest) is a unit testing library for the C++ programming language, based on the xUnit architecture.
+[Google Test](https://github.com/google/googletest)
 
 ### Requirements
 
 * **CMake 3.17** or higher
+* **C++ 17** or higher
 * **Python** to run the http local server (can be used other services like [Node http-server](https://www.npmjs.com/package/http-server) or [VSCode Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer))
 
 ### Linux
@@ -32,10 +33,6 @@ To compile in a windows environment, run ```winbuild.bat``` . The output files w
 
 ## Running
 
-### Using CLION
-
-Make sure to choose working directory to be the root folder, so that the program writes data to the folder view/resources. You can open a http server under this folder and open the browser to view the result.
-
 ### Running in Linux
 
 First run ```./server.sh``` and in another terminal run ```./run.sh```.
@@ -44,11 +41,16 @@ First run ```./server.sh``` and in another terminal run ```./run.sh```.
 
 First run ```.\server.bat``` and in another terminal run ```.\run.bat```.
 
+### Running in Clion
+
+Make sure to choose working directory to be the root folder, so that the program writes data to the folder view/resources. You can open a http server under this view folder and open the browser to view the result.
+
+
 ### Google Maps API
 
-In order to run the viewer, you need to aquire an API Key and replace `YOURAPIKEY` with it it under [index.html](view/index.html#L14)
+In order to run the viewer, you need to acquire an API Key and replace `YOURAPIKEY` with it it under [index.html](view/index.html#L14)
 
-## Examples
+## Screenshots and Gifs
 
 ![Interface](docs/images/ui1.png)
 
