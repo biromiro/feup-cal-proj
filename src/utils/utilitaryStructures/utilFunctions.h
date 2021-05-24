@@ -36,8 +36,6 @@ void resetTermios();
 char getch_(int echo);
 #endif
 
-void ms_sleep(int sleepMs);
-
 /**
  * Gets a char from the keyboard
  *

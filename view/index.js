@@ -6,18 +6,43 @@ async function sleep(ms) {
   }
 
 async function initMap() {
-    const paths = await parseFile();
+    let paths;
+    try {
+        paths = await parseFile();   
+    } catch (error) {
+        paths = await parseSample();
+    }
 
     const mapOptions = {
         zoom: 18,
         center: { lat: paths[0].orig[0], lng: paths[0].orig[1] },
     };
     map = await new google.maps.Map(document.getElementById("map"), mapOptions);
- 
+    await initClickEvent();
     await initSymbol();
 
     const lines = draw(paths);
     await animate(lines);
+}
+
+async function initClickEvent() {
+    let infoWindow = new google.maps.InfoWindow();
+
+      map.addListener("click", (mapsMouseEvent) => {
+        // Close the current InfoWindow.
+        infoWindow.close();
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow({
+          position: mapsMouseEvent.latLng,
+        });
+        const pos = mapsMouseEvent.latLng;
+        console.log(pos);
+        infoWindow.setContent(
+            `<p> ${pos.lat()}</p><p>${pos.lng()}</p>`,
+        );
+        infoWindow.open(map);
+      });
+    
 }
 
 async function initSymbol() {
@@ -36,6 +61,13 @@ async function initSymbol() {
 async function parseFile() {
 
     const data = await (await fetch("resources/journey.json")).json();
+    console.log(data);
+    return data.paths;
+}
+
+async function parseSample() {
+
+    const data = await (await fetch("resources/sample.json")).json();
     console.log(data);
     return data.paths;
 }
@@ -60,7 +92,14 @@ function drawParks(paths, n) {
 
         marker.addListener("click", () => {
             infoWindow.close();
-            infoWindow.setContent(`<h3>${marker.getTitle()}</h1><p>Distance: ${p.dist} </p><p>Price: ${p.price}</p>`);
+            infoWindow.setContent(
+                `<h3>${marker.getTitle()}</h1>
+                 <p> ${p.pos[0]}, ${p.pos[1]}</p>
+                 <p>ID: ${p.id} </p>
+                 <p>Distance: ${p.dist} </p>
+                 <p>Current capacity: ${p.currCap} </p>
+                 <p>Max capacity: ${p.maxCap} </p>
+                 <p>Price: ${p.price}</p>`);
             infoWindow.open(marker.getMap(), marker);
           });
       

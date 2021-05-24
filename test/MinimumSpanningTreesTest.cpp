@@ -3,10 +3,11 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "src/utils/algorithm/MinimumSpanningTrees.h"
 
 /// TESTS ///
-
+/*
 TEST(MinimumSpanningTrees, kruskal) {
     Graph<int> graph;
 
@@ -30,3 +31,4 @@ TEST(MinimumSpanningTrees, kruskal) {
     ASSERT_EQ(5, result.at(5));
 
 }
+*/

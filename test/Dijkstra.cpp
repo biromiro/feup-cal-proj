@@ -1,13 +1,16 @@
 //
 // Created by andremoreira9 on 5/10/21.
 //
-#include <gtest/gtest.h>
-#include <graphLoad/MapData.h>
-#include <graph/Graph.tpp>
 #include <algorithm/Pathfinding.h>
+#include <graphLoad/MapData.h>
+#include <gtest/gtest.h>
+
+#include <graph/Graph.tpp>
+
 #include "src/utils/disjointSet/DisjointSetGroup.h"
 #include "src/utils/graph/Node.tpp"
 
+/*
 void setup(Graph<NodeInfo> &g) {
     g.addNode(1, NodeInfo(), Position(NodeMode::GRID, 1, 1));
     g.addNode(2, NodeInfo(2, 1,
@@ -108,3 +111,4 @@ TEST(Dijkstra, checkParkRadius) {
     ASSERT_EQ(1, parks.size());
     ASSERT_EQ(2, parks.at(0)->getID());
 }
+*/

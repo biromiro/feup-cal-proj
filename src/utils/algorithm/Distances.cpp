@@ -20,8 +20,8 @@ double Distances::getManhattanDistance(Position pos1, Position pos2) {
 }
 
 double Distances::getEuclideanDistanceCoords(Position pos1, Position pos2) {
-    double dy = dMeridian * std::abs(pos1.getX() - pos2.getX()) / 180;
-    double dx = dEquator * ( std::abs(pos1.getY() - pos2.getY()) / 360 ) * cos((pos1.getX() + pos2.getX())/2);
+    double dy = dMeridian * std::abs(pos1.getY() - pos2.getY()) / 180;
+    double dx = dEquator * ( std::abs(pos1.getX() - pos2.getX()) / 360 ) * cos((pos1.getY() + pos2.getY())/2);
     return sqrt(pow(dx, 2) + pow(dy, 2)) * 1000.0;
 }
 
@@ -30,8 +30,8 @@ double Distances::getEuclideanDistanceGrid(Position pos1, Position pos2) {
 }
 
 double Distances::getManhattanDistanceCoords(Position pos1, Position pos2) {
-    double dy = dMeridian * std::abs(pos1.getX() - pos2.getX()) / 180;
-    double dx = dEquator * ( std::abs(pos1.getY() - pos2.getY()) / 360 ) * cos((pos1.getX() + pos2.getX())/2);
+    double dy = dMeridian * std::abs(pos1.getY() - pos2.getY()) / 180;
+    double dx = dEquator * ( std::abs(pos1.getX() - pos2.getX()) / 360 ) * cos((pos1.getY() + pos2.getY())/2);
     return (dx + dy) * 1000.0;
 }
 

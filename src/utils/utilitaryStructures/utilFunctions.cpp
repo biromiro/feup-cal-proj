@@ -6,10 +6,6 @@
 #include <sstream>
 #include "utilFunctions.h"
 
-void ms_sleep(int sleepMs) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(sleepMs));
-}
-
 #ifdef TERMIOS_GETCH
 static struct termios old, current;
 

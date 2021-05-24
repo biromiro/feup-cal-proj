@@ -8,11 +8,15 @@ void AdminView::run() {
     do{
         pageOutput();
         std::cout << "\n1 - Check graph's connectivity" << std::endl;
+        std::cout << "\n2 - Remove park" << std::endl;
         std::cout << "0 - Logout" << std::endl;
         answer = _getch_();
         switch (answer) {
             case '1':
                 checkConnectivity();
+                break;
+            case '2':
+                removePark();
                 break;
             case '0':
                 uiManager.getCurrentSession().logout();
@@ -24,7 +28,7 @@ void AdminView::run() {
 }
 
 void AdminView::pageOutput() {
-    std::cout << "** JourneyFinder ** ADMINISTRATION **" << std::endl;
+    std::cout << "** MyJourney! ** ADMINISTRATION **" << std::endl;
 }
 
 void AdminView::checkConnectivity() {
@@ -38,5 +42,19 @@ void AdminView::checkConnectivity() {
     std::cout << "\nType anything to go back." << std::endl;
     _getch_();
 
+}
+
+void AdminView::removePark() {
+    std::cout << "Please insert the park id: ";
+    size_t park = inputNumber();
+
+    try{
+        uiManager.getPlatform()->removePark(park);
+        std::cout << "\nDeleted park!\n";
+    } catch(std::exception &e){
+        std::cerr << e.what();
+    }
+
+    _getch_();
 }
 

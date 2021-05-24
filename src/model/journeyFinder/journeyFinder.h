@@ -7,7 +7,6 @@
 
 
 #include <graphLoad/GraphLoader.tpp>
-#include <graphLoad/GraphManager.h>
 #include <utils/algorithm/Connectivity.tpp>
 #include <utility>
 #include "parkFinalInfo.h"
@@ -21,6 +20,13 @@ public:
     bool generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark);
     void clearPointsOfInterest();
     Connectivity<NodeInfo> checkConnectiviy();
+
+    NodeInfo updateParkCapacity(size_t i, int i1);
+
+    void removePark(size_t i);
+
+    size_t findNode(double d, double d1);
+
 private:
     size_t calculate(Graph<NodeInfo>& graph, size_t origin, size_t destiny, size_t time, int maxSearchForPark);
     size_t selectPark(vector<Node<NodeInfo> *>& parks, size_t time);

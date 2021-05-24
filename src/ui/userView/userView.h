@@ -49,6 +49,9 @@ private:
 
     void clearPOI();
 
+    void feedBack();
+
+    size_t askLatLong();
 };
 
 #endif //PROJECT_VIEWERVIEW_H

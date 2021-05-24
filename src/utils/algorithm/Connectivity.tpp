@@ -82,7 +82,7 @@ void Connectivity<T>::dfs(int &currentID, Node<T> *node, std::stack<Node<T>*> &s
 
 template<class T>
 float Connectivity<T>::getAverageNodePerComponent() {
-    return ((float) getNumConnectedComponents()) / currentGraph.getNodeSet().size();
+    return currentGraph.getNodeSet().size() / ((float) getNumConnectedComponents());
 }
 
 

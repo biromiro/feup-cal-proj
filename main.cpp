@@ -7,18 +7,13 @@
 #include <iostream>
 #include <algorithm/Connectivity.tpp>
 #include <algorithm/Pathfinding.h>
-#include <graphviewer.h>
-#include <graphLoad/GraphManager.h>
 #include <src/model/db/userDatabase.h>
 #include <model/journeyFinder/journeyFinder.h>
 #include <ui/UIManager.h>
 #include <ui/initialPage/initialPage.h>
 
-
-#include <random>
-#include <chrono>
-
 int main(){
+
     UserDatabase db("resources/database.txt");
 
     CurrentSession currentSession =  CurrentSession(&db);
@@ -26,6 +21,7 @@ int main(){
 
     ui.setCurrent(new InitialPage(ui));
     ui.run();
+
 
     return 0;
 }

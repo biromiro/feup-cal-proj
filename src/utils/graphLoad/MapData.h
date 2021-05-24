@@ -60,6 +60,10 @@ public:
         NodeInfo::priceFunction = priceFunction;
     }
 
+    bool validPark() {
+        return currentCapacity < maxCapacity;
+    }
+
 private:
     int maxCapacity;
     int currentCapacity;

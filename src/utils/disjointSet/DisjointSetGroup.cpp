@@ -2,6 +2,7 @@
 // Created by nunoa on 08/05/21.
 //
 
+#include <cstddef>
 #include "DisjointSetGroup.h"
 
 DisjointSet* DisjointSetGroup::createSet(int id) {

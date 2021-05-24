@@ -115,11 +115,11 @@ NodeInfo GraphLoader<T>::genRandomPark() {
     int maxCap = rand() % 40 +1;
     int currCap = rand() % maxCap + 1;
 
-    NodeInfo info(maxCap, currCap,
-                  [](int x, int y, int z) {
-                      double priceFactor = (rand() % 10) / 100; // Euro per minute [0, 10] cents
-                      double capPrice = (rand() % 10) / 100; // Extra Euro per capacity percentage [0, 10] cents
+    double priceFactor = (rand() % 10) / 100.0;  // Euro per minute [0, 10] cents
+    double capPrice = (rand() % 10) / 100.0; // Extra Euro per capacity percentage [0, 10] cents
 
+    NodeInfo info(maxCap, currCap,
+                  [priceFactor, capPrice](int x, int y, int z) {
                       return priceFactor*x + capPrice*y/z;
                   });
     return info;

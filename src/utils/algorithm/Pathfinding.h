@@ -52,10 +52,11 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     queue.push(curr);
 
     while (!queue.empty()) {
-        if(curr->getDist() > maxRadius && !parks.empty()) break;
+        if(curr->getDist() > maxRadius &&
+            (!parks.empty() && parks.at(parks.size()-1)->getInfo().validPark())) break;
         curr = queue.top(); queue.pop();
         NodeInfo info = (NodeInfo)curr->getInfo();
-        if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
+        if (info.getType() == NodeType::PARK)
             parks.push_back(curr);
 
         for (auto edge : curr->getWalking()) {
@@ -77,7 +78,8 @@ bool Pathfinding::aStarAdaptation(Graph<T> &graph, int orig, int dest) {
     Node<T>* origin = graph.findNode(orig);
     Node<T>* destination = graph.findNode(dest);
 
-    if(origin == nullptr || destination == nullptr) throw std::invalid_argument("Invalid Origin/Destination points!");
+    if(origin == nullptr || destination == nullptr)
+        throw std::invalid_argument("Invalid Origin/Destination points!");
 
     for(auto node: graph.getNodeSet()){
         node.second->setDist(INF);
@@ -163,6 +165,7 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest) {
     if (origin == nullptr || destination == nullptr)
         throw std::invalid_argument("Dijkstra Origin/Destination Node");
 
+
     for(auto pair: graph.getNodeSet()){
         pair.second->setDist(INF);
         pair.second->setPath(nullptr);
@@ -200,6 +203,7 @@ bool Pathfinding::dijkstraAdaptation(Graph<T> &graph, int orig, int dest, int &c
         throw std::invalid_argument("Dijkstra Origin/Destination Node");
 
     count = 0;
+
 
     for(auto pair: graph.getNodeSet()){
         pair.second->setDist(INF);

@@ -27,6 +27,7 @@ void JourneyFinder::clearPointsOfInterest() {
 bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
     Graph<NodeInfo> graph = loader.getGraph();
     if(graph.findNode(origin) == nullptr) throw NoNodeWithID(origin, "There's no such origin node!");
+    if(graph.findNode(destiny) == nullptr) throw NoNodeWithID(origin, "There's no such destination node!");
 
     std::vector<Node<NodeInfo>*> vec;
     std::vector<int> orderedPOI;
@@ -46,6 +47,8 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
 
     orderedPOI.push_back(destiny);
 
+    this->parks = std::vector<std::vector<ParkFinalInfo>>();
+
     size_t o = origin;
     for(int i = 0; i < orderedPOI.size(); i++){
         size_t d = orderedPOI.at(i);
@@ -60,6 +63,7 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
                                 size_t origin, size_t destiny, size_t time, int maxSearchForPark) {
 
     vector<Node<NodeInfo> *> parks;
+    checkConnectiviy().isConnected();
     Pathfinding::dijkstraAdaptation<NodeInfo>(graph, parks, destiny, maxSearchForPark);
     if(parks.empty())
         throw NoParkFound(destiny, "No parks were found.");
@@ -71,7 +75,7 @@ size_t JourneyFinder::calculate(Graph<NodeInfo>& graph,
 
     std::reverse(pathToDest.begin(), pathToDest.end());
 
-    if(!Pathfinding::dijkstraAdaptation(graph, origin, bestPark))
+    if(!Pathfinding::aStarAdaptation(graph, origin, bestPark))
         throw NoFoundPath("Couldn't get the ordered path from the origin to the park!");
 
     Pathfinding::getOrderedPath(graph, origin, bestPark, pathToPark);
@@ -89,10 +93,13 @@ size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
     this->parks.push_back(std::vector<ParkFinalInfo>());
     for(Node<NodeInfo>* node: parks){
         float value = node->getInfo().getPrice(time) * costCoeffient + node->getDist() * distanceCoeffient;
-        ParkFinalInfo parkFinalInfo(node->getDist(), node->getInfo().getPrice(time), node->getPos().getX(), node->getPos().getY());
+        ParkFinalInfo parkFinalInfo(node->getID(), node->getDist(), node->getInfo().getPrice(time),
+                                    node->getInfo().getCurrentCapacity(),
+                                    node->getInfo().getMaxCapacity(),
+                                    node->getPos().getX(), node->getPos().getY());
         this->parks.at(this->parks.size()-1).push_back(parkFinalInfo);
 
-        if(value < bestRes){
+        if(value < bestRes && node->getInfo().validPark()){
             bestRes = value;
             bestPark = node->getID();
         }
@@ -114,21 +121,21 @@ void JourneyFinder::journeyToJSON() {
                 *destNode = pathToDest.at(pathToDest.size() - 1);
 
         journey << "      \"park\": ["
-        << parkNode->getPos().getY()
-        << ","
         << parkNode->getPos().getX()
+        << ","
+        << parkNode->getPos().getY()
         << "],\n";
 
         journey << "      \"orig\": ["
-        << originNode->getPos().getY()
-        << ","
         << originNode->getPos().getX()
+        << ","
+        << originNode->getPos().getY()
         << "],\n";
 
         journey << "      \"dest\": ["
-        << destNode->getPos().getY()
-        << ","
         << destNode->getPos().getX()
+        << ","
+        << destNode->getPos().getY()
         << "],\n";
 
         journey << "      \"parks\": [\n";
@@ -143,8 +150,8 @@ void JourneyFinder::journeyToJSON() {
         for(size_t i = 1; i < pathToPark.size() - 1; i++){
             Node<NodeInfo>* curNode = pathToPark.at(i);
             journey << "         ["
-                    << curNode->getPos().getY()
-                    << "," << curNode->getPos().getX()
+                    << curNode->getPos().getX()
+                    << "," << curNode->getPos().getY()
                     << "]";
 
             if(i == pathToPark.size() - 2) journey << "\n";
@@ -156,8 +163,8 @@ void JourneyFinder::journeyToJSON() {
         for(size_t i = 1; i < pathToDest.size() - 1; i++){
             Node<NodeInfo>* curNode = pathToDest.at(i);
             journey << "         ["
-                    << curNode->getPos().getY()
-                    << "," << curNode->getPos().getX()
+                    << curNode->getPos().getX()
+                    << "," << curNode->getPos().getY()
                     << "]";
 
             if(i == pathToDest.size() - 2) journey << "\n";
@@ -178,3 +185,48 @@ Connectivity<NodeInfo> JourneyFinder::checkConnectiviy() {
     return Connectivity<NodeInfo>(graph);
 }
 
+NodeInfo JourneyFinder::updateParkCapacity(size_t id, int cap) {
+     Node<NodeInfo>* node = loader.getGraph().findNode(id);
+
+    if (node == nullptr || node->getInfo().getType() == NodeType::NORMAL)
+        throw NoParkFound(id, "No park found");
+
+
+    NodeInfo nodeInfo = node->getInfo();
+    nodeInfo.setCurrentCapacity(
+            std::max(0, std::min(cap, node->getInfo().getMaxCapacity())));
+
+    node->setInfo(nodeInfo);
+
+    return nodeInfo;
+}
+
+void JourneyFinder::removePark(size_t id) {
+    Node<NodeInfo>* node = loader.getGraph().findNode(id);
+
+    if (node == nullptr || node->getInfo().getType() == NodeType::NORMAL)
+        throw NoParkFound(id, "No park found");
+
+    node->setInfo(NodeInfo());
+}
+
+size_t JourneyFinder::findNode(double lat, double lng) {
+
+    std::map<int, Node<NodeInfo> *> map = loader.getGraph().getNodeSet();
+
+    Position target(NodeMode::COORDS, lat, lng);
+
+    size_t best = -1;
+    double bestDist = INFINITY;
+
+    for (auto const& [key, val] : map) {
+        double dist = Distances::getEuclideanDistance(target, val->getPos());
+        if (dist < bestDist) {
+            best = key;
+            bestDist = dist;
+        }
+    }
+
+    return best;
+
+}

@@ -3,12 +3,13 @@
 //
 
 #include <gtest/gtest.h>
+
 #include "src/utils/disjointSet/DisjointSet.h"
 #include "src/utils/disjointSet/DisjointSetGroup.h"
 #include "src/utils/graph/Node.tpp"
 
 /// TESTS ///
-
+/*
 TEST(DisjointSet, SetType) {
     auto type = DisjointSet(1);
 
@@ -49,3 +50,4 @@ TEST(DisjointSet, DisjointSet) {
     EXPECT_EQ(sets.front(), nodeSet.findSet(nodes.at(1)));
     EXPECT_EQ(sets.front(), nodeSet.findSet(nodes.at(2)));
 }
+*/
