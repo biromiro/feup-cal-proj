@@ -16,7 +16,7 @@
 #include "NodeMode.h"
 #include "MapData.h"
 
-#define PARK_FACTOR 30
+#define PARK_FACTOR 15
 
 template <class T>
 class GraphLoader {
