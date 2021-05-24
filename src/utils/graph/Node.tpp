@@ -3,6 +3,7 @@
 
 #include "Edge.tpp"
 #include <limits>
+#include <graphLoad/MapData.h>
 #include "MutablePriorityQueue.tpp"
 #include "Position.h"
 
@@ -64,6 +65,8 @@ public:
     void addWalkingEdge(Edge<T> *e1, Edge<T> *e2);
 
     const vector<Edge<T> *> &getWalking() const;
+
+    void setInfo(NodeInfo nodeInfo);
 };
 
 
@@ -207,6 +210,11 @@ const Position &Node<T>::getPos() const {
 template<class T>
 void Node<T>::setPos(const Position &pos) {
     Node::pos = pos;
+}
+
+template<class T>
+void Node<T>::setInfo(NodeInfo nodeInfo) {
+    this->info = nodeInfo;
 }
 
 template<class T>

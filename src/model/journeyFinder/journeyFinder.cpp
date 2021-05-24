@@ -46,6 +46,8 @@ bool JourneyFinder::generateJourney(size_t origin, size_t destiny, size_t time, 
 
     orderedPOI.push_back(destiny);
 
+    this->parks = std::vector<std::vector<ParkFinalInfo>>();
+
     size_t o = origin;
     for(int i = 0; i < orderedPOI.size(); i++){
         size_t d = orderedPOI.at(i);
@@ -89,10 +91,13 @@ size_t JourneyFinder::selectPark(vector<Node<NodeInfo>*>& parks, size_t time) {
     this->parks.push_back(std::vector<ParkFinalInfo>());
     for(Node<NodeInfo>* node: parks){
         float value = node->getInfo().getPrice(time) * costCoeffient + node->getDist() * distanceCoeffient;
-        ParkFinalInfo parkFinalInfo(node->getDist(), node->getInfo().getPrice(time), node->getPos().getX(), node->getPos().getY());
+        ParkFinalInfo parkFinalInfo(node->getID(), node->getDist(), node->getInfo().getPrice(time),
+                                    node->getInfo().getCurrentCapacity(),
+                                    node->getInfo().getMaxCapacity(),
+                                    node->getPos().getX(), node->getPos().getY());
         this->parks.at(this->parks.size()-1).push_back(parkFinalInfo);
 
-        if(value < bestRes){
+        if(value < bestRes && node->getInfo().validPark()){
             bestRes = value;
             bestPark = node->getID();
         }
@@ -176,5 +181,21 @@ void JourneyFinder::journeyToJSON() {
 Connectivity<NodeInfo> JourneyFinder::checkConnectiviy() {
     Graph<NodeInfo> graph = loader.getGraph();
     return Connectivity<NodeInfo>(graph);
+}
+
+NodeInfo JourneyFinder::updateParkCapacity(size_t id, int cap) {
+     Node<NodeInfo>* node = loader.getGraph().findNode(id);
+
+    if (node == nullptr || node->getInfo().getType() == NodeType::NORMAL)
+        throw NoParkFound(id, "No park found");
+
+
+    NodeInfo nodeInfo = node->getInfo();
+    nodeInfo.setCurrentCapacity(
+            std::max(0, std::min(cap, node->getInfo().getMaxCapacity())));
+
+    node->setInfo(nodeInfo);
+
+    return nodeInfo;
 }
 

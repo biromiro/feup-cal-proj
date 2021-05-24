@@ -60,7 +60,13 @@ function drawParks(paths, n) {
 
         marker.addListener("click", () => {
             infoWindow.close();
-            infoWindow.setContent(`<h3>${marker.getTitle()}</h1><p>Distance: ${p.dist} </p><p>Price: ${p.price}</p>`);
+            infoWindow.setContent(
+                `<h3>${marker.getTitle()}</h1>
+                 <p>ID: ${p.id} </p>
+                 <p>Distance: ${p.dist} </p>
+                 <p>Current capacity: ${p.currCap} </p>
+                 <p>Max capacity: ${p.maxCap} </p>
+                 <p>Price: ${p.price}</p>`);
             infoWindow.open(marker.getMap(), marker);
           });
       

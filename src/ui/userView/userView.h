@@ -49,6 +49,7 @@ private:
 
     void clearPOI();
 
+    void feedBack();
 };
 
 #endif //PROJECT_VIEWERVIEW_H

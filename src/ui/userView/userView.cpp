@@ -8,8 +8,9 @@ void UserView::run() {
         pageOutput();
         std::cout << "1 - Generate MyJourney!\n";
         std::cout << "2 - Add a point of interest\n";
-        std::cout << "3 - My Configurations\n";
-        std::cout << "4 - Clear my POI\n";
+        std::cout << "3 - Update a park's capacity information\n";
+        std::cout << "4 - My Configurations\n";
+        std::cout << "5 - Clear my POI\n";
         std::cout << "0 - Logout" << std::endl;
         answer = _getch_();
         switch (answer) {
@@ -20,9 +21,12 @@ void UserView::run() {
                 addPOI();
                 break;
             case '3':
-                setConfigs();
+                feedBack();
                 break;
             case '4':
+                setConfigs();
+                break;
+            case '5':
                 clearPOI();
                 break;
             case '0':
@@ -98,4 +102,20 @@ void UserView::setConfigs() {
 
 void UserView::clearPOI() {
     uiManager.getPlatform()->clearPointsOfInterest();
+}
+
+void UserView::feedBack() {
+    std::cout << "Please insert the park id: ";
+    size_t park = inputNumber();
+
+    std::cout << "\nPlease insert the current capacity: ";
+    int cap = inputNumber();
+    try{
+        NodeInfo node = uiManager.getPlatform()->updateParkCapacity(park, cap);
+        std::cout << "\nUpdated capacity to " << node.getCurrentCapacity() << "/" << node.getMaxCapacity() << "!\n";
+    } catch(std::exception &e){
+        std::cerr << e.what();
+    }
+
+    _getch_();
 }

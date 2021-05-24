@@ -10,11 +10,14 @@
 class ParkFinalInfo {
     double dist;
     double price;
+    int currCap;
+    int maxCap;
     double x;
     double y;
-
+    size_t id;
 public:
-    ParkFinalInfo(double dist, double price, double x, double y) : dist(dist), price(price), x(x), y(y) {}
+    ParkFinalInfo(size_t id, double dist, double price, int currCap, int maxCap, double x, double y) :
+        id(id), dist(dist), price(price), currCap(currCap), maxCap(maxCap), x(x), y(y) {}
 
 
     void toJson(std::ofstream &journey);

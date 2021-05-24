@@ -49,10 +49,11 @@ void Pathfinding::dijkstraAdaptation(Graph<NodeInfo> &graph, std::vector<Node<No
     queue.push(curr);
 
     while (!queue.empty()) {
-        if(curr->getDist() > maxRadius && !parks.empty()) break;
+        if(curr->getDist() > maxRadius && (!parks.empty() ||
+            parks.at(parks.size()-1)->getInfo().validPark())) break;
         curr = queue.top(); queue.pop();
         NodeInfo info = (NodeInfo)curr->getInfo();
-        if (info.getType() == NodeType::PARK && info.getCurrentCapacity() < info.getMaxCapacity())
+        if (info.getType() == NodeType::PARK)
             parks.push_back(curr);
 
         for (auto edge : curr->getWalking()) {
