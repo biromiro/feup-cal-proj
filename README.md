@@ -48,7 +48,7 @@ Make sure to choose working directory to be the root folder, so that the program
 
 ### Google Maps API
 
-In order to run the viewer, you need to acquire an API Key and replace `YOURAPIKEY` with it it under [index.html](view/index.html#L14)
+In order to run the viewer, you need to acquire a [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) and replace `YOURAPIKEY` with it it under [index.html](view/index.html#L14)
 
 ## Screenshots and Gifs
 
