@@ -220,10 +220,11 @@ TEST(ComplexityTest, tspAlgos) {
 }
 
 TEST(ComplexityTest, indivBrute) {
+    return;
     auto graph = genRandomGraph(13);
 
     Node<int> *origin = graph.findNode(0);
-    Node<int> *destination = graph.findNode(i - 1);
+    Node<int> *destination = graph.findNode(13 - 1);
 
     auto nodeMap = graph.getNodeSet();
 
@@ -313,6 +314,37 @@ TEST(ComplexityTest, pathfinding) {
 
         file << "," << sum_astar_count / PATH_SAMPLES;
         file << "\n" << std::flush;
+    }
+
+    file.close();
+}
+
+int ackermann(int n, int m) {
+    return (n == 0) ? m+1 : (m == 0) ? ackermann(n-1,1) : ackermann(n-1,ackermann(n,m-1));
+}
+
+int ackermann(int n) {
+    return ackermann(n, n);
+}
+
+int inverse_ackermann(int n) {
+    int i = 1;
+    while(ackermann(i, 1) < log2(n)) i++;
+
+    return i;
+}
+
+
+TEST(complex, ackermann) {
+
+    std::ofstream file;
+
+    file.open("ackermann.csv");
+
+    file << "ackerman\n" << std::flush;
+
+    for(int n = 0; n <= GRAPH_SIZE-2; n++) {
+        file << inverse_ackermann(n) << "\n" << std::flush;
     }
 
     file.close();
