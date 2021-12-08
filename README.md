@@ -7,7 +7,7 @@ This also helps the user to find the best parking spot according to several para
 
 ### Report related to this project
 
-[Report](docs/report.pdf)
+[Report](/docs/Second\ Delivery/report.pdf)
 
 ## Compiling
 
